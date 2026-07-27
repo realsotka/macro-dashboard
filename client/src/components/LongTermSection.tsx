@@ -30,9 +30,14 @@ export default function LongTermSection() {
           <h2 className="text-sm font-semibold text-[hsl(var(--foreground))]">🔭 Лонг-терм аналіз</h2>
           <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">Горизонт 3–6 місяців · Макро-структура · Цикловий контекст</p>
         </div>
-        <span className="text-xs text-[hsl(var(--muted-foreground))] px-2 py-1 bg-[hsl(var(--muted))] rounded">
-          📥 оновлюється щопонеділка
-        </span>
+        <div className="flex flex-col items-end gap-1">
+          <span className="text-xs text-[hsl(var(--muted-foreground))] px-2 py-1 bg-[hsl(var(--muted))] rounded">
+            📥 оновлюється щопонеділка
+          </span>
+          <span className="text-[10px] text-[hsl(var(--muted-foreground))]/60 px-2">
+            📌 Статичний аналіз — оновлюється кроном щопонеділка, не в реальному часі
+          </span>
+        </div>
       </div>
 
       {/* BTC Macro Framework */}

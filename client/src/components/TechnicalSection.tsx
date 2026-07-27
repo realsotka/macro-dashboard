@@ -7,7 +7,10 @@ interface OkxData {
   frAvg: number; frCur: number; frPos: number; frTotal: number;
   oiList: { date: string; oi: number }[];
   oiChg: number;
-  weekly: { t: string; o: number; h: number; l: number; c: number }[];
+  weekly: { t: string; dateRange: string; o: number; h: number; l: number; c: number }[];
+}
+interface BinanceFR {
+  frAvg: number; frCur: number; frPos: number; frTotal: number;
 }
 
 function Sparkline({ values }: { values: number[] }) {
@@ -87,10 +90,17 @@ export default function TechnicalSection({ report }: { report: any }) {
       const price = closes[closes.length - 1];
       const ema21 = emaFn(closes.slice(-21), 21);
       const ema50 = emaFn(closes, 50);
-      const weekly = weeklyRaw.data.map((c: any) => ({
-        t: new Date(parseInt(c[0])).toLocaleDateString("uk-UA", { day: "2-digit", month: "2-digit" }),
-        o: parseFloat(c[1]), h: parseFloat(c[2]), l: parseFloat(c[3]), c: parseFloat(c[4]),
-      })).reverse();
+      const weekly = weeklyRaw.data.map((c: any) => {
+        const openTs = parseInt(c[0]);
+        const openDate = new Date(openTs);
+        const closeDate = new Date(openTs + 6 * 24 * 60 * 60 * 1000);
+        const fmt = (d: Date) => d.toLocaleDateString("uk-UA", { day: "2-digit", month: "2-digit" });
+        return {
+          t: fmt(openDate),
+          dateRange: `${fmt(openDate)}–${fmt(closeDate)}`,
+          o: parseFloat(c[1]), h: parseFloat(c[2]), l: parseFloat(c[3]), c: parseFloat(c[4]),
+        };
+      }).reverse();
       const rates = frRaw.data.map((f: any) => parseFloat(f.fundingRate) * 100);
       const frAvg = rates.reduce((a: number, b: number) => a + b, 0) / rates.length;
       const frCur = rates[0];
@@ -103,6 +113,29 @@ export default function TechnicalSection({ report }: { report: any }) {
       const oiPrev = oiList[0]?.oi || 0;
       const oiChg = oiPrev > 0 ? ((oiCur / oiPrev - 1) * 100) : 0;
       return { price, ema21, ema50, frAvg, frCur, frPos, frTotal: rates.length, oiList, oiChg, weekly };
+    },
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
+  // Binance funding rate — public API, no key needed
+  const { data: bnFR } = useQuery<BinanceFR>({
+    queryKey: ["/binance/fr"],
+    queryFn: async () => {
+      async function bnFetch(path: string) {
+        const url = `https://fapi.binance.com${path}`;
+        try { const r = await fetch(url, { mode: "cors" }); if (r.ok) return r.json(); } catch {}
+        try { const r = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(url)}`); if (r.ok) return r.json(); } catch {}
+        const r2 = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`); return r2.json();
+      }
+      const data: any[] = await bnFetch("/fapi/v1/fundingRate?symbol=BTCUSDT&limit=21");
+      const rates = data.map((d: any) => parseFloat(d.fundingRate) * 100);
+      return {
+        frAvg: rates.reduce((a, b) => a + b, 0) / rates.length,
+        frCur: rates[0],
+        frPos: rates.filter(r => r > 0).length,
+        frTotal: rates.length,
+      };
     },
     staleTime: 5 * 60 * 1000,
     retry: 1,
@@ -214,26 +247,52 @@ export default function TechnicalSection({ report }: { report: any }) {
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
           <span>🔥</span> Funding Rate
-          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">OKX · 7d (21 period по 8 год)</span>
+          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">7d (21 period по 8 год)</span>
         </h2>
-        <div className="grid grid-cols-3 gap-3 mb-4">
+
+        {/* OKX + Binance side-by-side */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
           {[
-            { label: "7d середній", value: d ? `${d.frAvg >= 0 ? "+" : ""}${d.frAvg.toFixed(4)}%` : `${(report.btc_fr_avg_7d || 0) >= 0 ? "+" : ""}${(report.btc_fr_avg_7d || 0).toFixed(4)}%`, sub: "avg 8h periods" },
-            { label: "Поточний", value: d ? `${d.frCur >= 0 ? "+" : ""}${d.frCur.toFixed(4)}%` : "н/д", sub: "остання 8h" },
-            { label: "Позитивних", value: d ? `${Math.round(d.frPos / d.frTotal * 100)}% (${d.frPos}/${d.frTotal})` : "н/д", sub: "bullish periods" },
-          ].map((c, i) => (
-            <div key={i} className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-4">
-              <div className="text-xs text-[hsl(var(--muted-foreground))] mb-1">{c.label}</div>
-              <div className="num text-lg font-semibold text-[hsl(var(--foreground))]">{c.value}</div>
-              <div className="text-xs text-[hsl(var(--muted-foreground))] mt-1">{c.sub}</div>
+            { name: "🟠 OKX", sub: "BTC-USDT-SWAP", data: d ? { avg: d.frAvg, cur: d.frCur, pos: d.frPos, total: d.frTotal } : null, fallbackAvg: report.btc_fr_avg_7d },
+            { name: "🟡 Binance", sub: "BTCUSDT PERP", data: bnFR ? { avg: bnFR.frAvg, cur: bnFR.frCur, pos: bnFR.frPos, total: bnFR.frTotal } : null, fallbackAvg: null },
+          ].map((exch, ei) => (
+            <div key={ei} className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-semibold text-[hsl(var(--foreground))]">{exch.name}</span>
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">{exch.sub}</span>
+                {!exch.data && <span className="text-[10px] text-[hsl(var(--muted-foreground))] ml-auto">— завантаження...</span>}
+              </div>
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {[
+                  { label: "7d середній", value: exch.data ? `${exch.data.avg >= 0 ? "+" : ""}${exch.data.avg.toFixed(4)}%` : exch.fallbackAvg != null ? `${exch.fallbackAvg >= 0 ? "+" : ""}${exch.fallbackAvg.toFixed(4)}%` : "н/д" },
+                  { label: "Поточний", value: exch.data ? `${exch.data.cur >= 0 ? "+" : ""}${exch.data.cur.toFixed(4)}%` : "н/д" },
+                  { label: "Позитивних", value: exch.data ? `${Math.round(exch.data.pos / exch.data.total * 100)}%` : "н/д" },
+                ].map((c, i) => (
+                  <div key={i}>
+                    <div className="text-[10px] text-[hsl(var(--muted-foreground))] mb-0.5">{c.label}</div>
+                    <div className="num text-sm font-semibold text-[hsl(var(--foreground))]">{c.value}</div>
+                  </div>
+                ))}
+              </div>
+              {exch.data && <FRBadge val={exch.data.avg} />}
             </div>
           ))}
         </div>
-        {d && (
+
+        {/* Divergence alert */}
+        {d && bnFR && Math.abs(d.frAvg - bnFR.frAvg) > 0.002 && (
+          <div className="flex items-center gap-2 p-3 mb-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-xs text-yellow-400">
+            ⚠️ Дивергенція OKX vs Binance: {Math.abs(d.frAvg - bnFR.frAvg).toFixed(4)}% — можливий арбітраж між біржами
+          </div>
+        )}
+
+        {(d || bnFR) && (
           <div className="flex items-center gap-3 p-3 bg-[hsl(var(--muted))] rounded-lg">
-            <FRBadge val={d.frAvg} />
+            <FRBadge val={(d?.frAvg ?? bnFR?.frAvg ?? 0)} />
             <span className="text-xs text-[hsl(var(--muted-foreground))]">
-              Funding нейтральний — немає ознак перегріву лонгів (&gt;0.01%) або панічних шортів (&lt;-0.005%). Простір для руху вгору є.
+              {(d?.frAvg ?? bnFR?.frAvg ?? 0) > 0.008 ? "Перегрів лонгів — підвищений ризик корекції вниз."
+                : (d?.frAvg ?? bnFR?.frAvg ?? 0) < -0.005 ? "Панічні шорти — можливий шорт-сквіз."
+                : "Нейтральний фандинг — немає ознак перегріву лонгів або панічних шортів. Простір для руху вгору є."}
             </span>
           </div>
         )}

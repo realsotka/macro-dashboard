@@ -220,7 +220,7 @@ Q тому   16.06   23.06   14.07   21.07
 | 28.07 | Durable Goods Orders (Jun)   | Попередній: прогноз +0.3% після -4.5%             |
 | 29.07 | Consumer Confidence (Jul)    | Важливо після Jobs+PMI strength                   |
 | 30.07 | **FOMC Rate Decision**       | 🔑 Ключова подія: пауза vs. hawkish сигнал        |
-| 30.07 | **Powell Press Conference**  | Риторика про інфляцію та dot plot                 |
+| 30.07 | **Warsh Press Conference**  | Риторика про інфляцію та dot plot                 |
 | 31.07 | ECI (Employment Cost Q2)     | Зарплатна інфляція — прямий вплив на dot plot     |
 | 01.08 | ISM Manufacturing (Jul)      | Перший підсумковий PMI липня                       |
 | 01.08 | PCE (Jun)                    | Улюблений індикатор ФРС                           |

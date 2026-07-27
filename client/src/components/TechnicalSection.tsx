@@ -52,16 +52,19 @@ function FRBadge({ val }: { val: number }) {
   return <span className="text-xs px-2 py-0.5 rounded bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]">🟡 Нейтральний</span>;
 }
 
-export default function TechnicalSection({ state: report }: { state: any }) {
+export default function TechnicalSection({ report }: { report: any }) {
   const { data: okx, isLoading, error } = useQuery<OkxData>({
     queryKey: ["/api/okx/btc"],
     queryFn: async () => {
+      // Use allorigins CORS proxy to avoid CORS block on GitHub Pages
+      const proxyUrl = (url: string) =>
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
       const BASE = "https://www.okx.com";
       const [dailyRaw, weeklyRaw, frRaw, oiRaw] = await Promise.all([
-        fetch(`${BASE}/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1D&limit=55`).then(r => r.json()),
-        fetch(`${BASE}/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=9`).then(r => r.json()),
-        fetch(`${BASE}/api/v5/public/funding-rate-history?instId=BTC-USDT-SWAP&limit=21`).then(r => r.json()),
-        fetch(`${BASE}/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1D&limit=7&instId=BTC-USDT-SWAP`).then(r => r.json()),
+        fetch(proxyUrl(`${BASE}/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1D&limit=55`)).then(r => r.json()),
+        fetch(proxyUrl(`${BASE}/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=9`)).then(r => r.json()),
+        fetch(proxyUrl(`${BASE}/api/v5/public/funding-rate-history?instId=BTC-USDT-SWAP&limit=21`)).then(r => r.json()),
+        fetch(proxyUrl(`${BASE}/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1D&limit=7&instId=BTC-USDT-SWAP`)).then(r => r.json()),
       ]);
       const closes = dailyRaw.data.map((c: any) => parseFloat(c[4])).reverse();
       const emaFn = (prices: number[], p: number) => {
@@ -89,16 +92,15 @@ export default function TechnicalSection({ state: report }: { state: any }) {
       const oiChg = oiPrev > 0 ? ((oiCur / oiPrev - 1) * 100) : 0;
       return { price, ema21, ema50, frAvg, frCur, frPos, frTotal: rates.length, oiList, oiChg, weekly };
     },
-    staleTime: 5 * 60 * 1000, // 5 min cache
-    retry: 2,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
   });
 
+  // Always fall back to state.json data if OKX fails or is loading
   const d = okx;
-
-  // Use report fallback if OKX fails
-  const price = d?.price ?? report.btc_price ?? 0;
-  const ema21 = d?.ema21 ?? report.btc_ema21 ?? 0;
-  const ema50 = d?.ema50 ?? report.btc_ema50 ?? 0;
+  const price = d?.price ?? report?.btc_price ?? 0;
+  const ema21 = d?.ema21 ?? report?.btc_ema21 ?? 0;
+  const ema50 = d?.ema50 ?? report?.btc_ema50 ?? 0;
 
   return (
     <div className="p-6 space-y-8 max-w-5xl">

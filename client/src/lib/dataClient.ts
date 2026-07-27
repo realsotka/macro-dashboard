@@ -5,6 +5,7 @@ export const DATA_URLS = {
   state:    `${REPO}/public/data/state.json`,
   analyses: `${REPO}/public/data/analyses.json`,
   report:   `${REPO}/public/data/latest_report.md`,
+  trades:   `${REPO}/public/data/trades.json`,
 };
 
 // Cache busting — append timestamp rounded to 5 min so data refreshes every 5 min
@@ -30,4 +31,10 @@ export async function fetchReport() {
   const res = await fetch(bustUrl(DATA_URLS.report));
   if (!res.ok) return "";
   return res.text();
+}
+
+export async function fetchTrades() {
+  const res = await fetch(bustUrl(DATA_URLS.trades));
+  if (!res.ok) throw new Error("trades.json fetch failed");
+  return res.json();
 }

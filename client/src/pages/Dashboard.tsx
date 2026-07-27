@@ -6,15 +6,17 @@ import MacroSection from "@/components/MacroSection";
 import TechnicalSection from "@/components/TechnicalSection";
 import MidTermSection from "@/components/MidTermSection";
 import LongTermSection from "@/components/LongTermSection";
+import TradingSection from "@/components/TradingSection";
 import ReportModal from "@/components/ReportModal";
 
-type Section = "macro" | "technical" | "mid" | "long";
+type Section = "macro" | "technical" | "mid" | "long" | "trading";
 
 const NAV_ITEMS: { id: Section; label: string; icon: string; sublabel: string }[] = [
   { id: "macro",     label: "Макро",      icon: "📊", sublabel: "TIPS · ETF · COT" },
   { id: "technical", label: "Технічний",  icon: "📐", sublabel: "EMAs · FR · OI" },
   { id: "mid",       label: "Мід-терм",   icon: "🎯", sublabel: "2–4 тижні" },
   { id: "long",      label: "Лонг-терм",  icon: "🔭", sublabel: "3–6 місяців" },
+  { id: "trading",   label: "Paper Trade", icon: "💸", sublabel: "Pos · PnL · Stats" },
 ];
 
 function RegimeBadge({ regime, score, confidence }: { regime: string; score?: number; confidence?: number }) {
@@ -172,6 +174,7 @@ export default function Dashboard() {
               {active === "technical" && <TechnicalSection report={report} />}
               {active === "mid"       && <MidTermSection />}
               {active === "long"      && <LongTermSection />}
+              {active === "trading"   && <TradingSection />}
             </>
           ) : (
             <div className="flex items-center justify-center h-full text-[hsl(var(--muted-foreground))]">

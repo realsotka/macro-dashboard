@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark finance theme — deep navy/slate */
+    --background: 220 20% 8%;
+    --foreground: 210 15% 90%;
+
+    --card: 220 18% 11%;
+    --card-foreground: 210 15% 90%;
+
+    --popover: 220 18% 11%;
+    --popover-foreground: 210 15% 90%;
+
+    --primary: 199 80% 52%;      /* Cyan accent */
+    --primary-foreground: 220 20% 8%;
+
+    --secondary: 220 15% 16%;
+    --secondary-foreground: 210 15% 75%;
+
+    --muted: 220 15% 14%;
+    --muted-foreground: 210 10% 50%;
+
+    --accent: 199 80% 52%;
+    --accent-foreground: 220 20% 8%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 18%;
+    --input: 220 15% 16%;
+    --ring: 199 80% 52%;
+
+    --radius: 0.5rem;
+
+    /* Custom semantic colors */
+    --color-green: 142 70% 45%;
+    --color-red: 0 72% 55%;
+    --color-yellow: 43 90% 55%;
+    --color-blue: 210 80% 58%;
+    --color-cyan: 199 80% 52%;
+    --color-orange: 25 90% 55%;
+
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Numeric values always tabular */
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: 0.875rem;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: hsl(220 15% 25%); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(220 15% 35%); }
+}

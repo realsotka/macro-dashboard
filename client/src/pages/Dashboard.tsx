@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { RefreshCw } from "lucide-react";
 import { fetchState } from "@/lib/dataClient";
 import MacroSection from "@/components/MacroSection";
 import TechnicalSection from "@/components/TechnicalSection";
@@ -45,12 +46,21 @@ function RegimeBadge({ regime, score, confidence }: { regime: string; score?: nu
 export default function Dashboard() {
   const [active, setActive] = useState<Section>("macro");
   const [reportOpen, setReportOpen] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: report, isLoading } = useQuery({
     queryKey: ["state"],
     queryFn: fetchState,
     staleTime: 5 * 60 * 1000,
   });
+
+  async function handleRefresh() {
+    setRefreshing(true);
+    await queryClient.invalidateQueries();
+    await queryClient.refetchQueries();
+    setRefreshing(false);
+  }
 
   return (
     <div className="dashboard flex h-full bg-[hsl(var(--background))]">
@@ -137,6 +147,16 @@ export default function Dashboard() {
                 BTC ${report.btc_price.toLocaleString("en-US", { maximumFractionDigits: 0 })}
               </span>
             )}
+            <button
+              data-testid="btn-refresh"
+              onClick={handleRefresh}
+              disabled={refreshing}
+              title="Оновити всі дані"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))] hover:bg-[hsl(var(--secondary))] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors disabled:opacity-50 text-xs"
+            >
+              <RefreshCw size={13} className={refreshing ? "animate-spin" : ""} />
+              {refreshing ? "Оновлення..." : "Оновити"}
+            </button>
           </div>
         </header>
 

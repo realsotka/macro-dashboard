@@ -56,15 +56,27 @@ export default function TechnicalSection({ report }: { report: any }) {
   const { data: okx, isLoading, error } = useQuery<OkxData>({
     queryKey: ["/api/okx/btc"],
     queryFn: async () => {
-      // Use allorigins CORS proxy to avoid CORS block on GitHub Pages
-      const proxyUrl = (url: string) =>
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
       const BASE = "https://www.okx.com";
+      // Try direct fetch first (works in most browsers), fallback to CORS proxy
+      async function okxFetch(path: string) {
+        try {
+          const r = await fetch(`${BASE}${path}`, { mode: "cors" });
+          if (r.ok) return r.json();
+        } catch {}
+        // Fallback: corsproxy.io
+        try {
+          const r = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(BASE + path)}`);
+          if (r.ok) return r.json();
+        } catch {}
+        // Fallback 2: allorigins
+        const r2 = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(BASE + path)}`);
+        return r2.json();
+      }
       const [dailyRaw, weeklyRaw, frRaw, oiRaw] = await Promise.all([
-        fetch(proxyUrl(`${BASE}/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1D&limit=55`)).then(r => r.json()),
-        fetch(proxyUrl(`${BASE}/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=9`)).then(r => r.json()),
-        fetch(proxyUrl(`${BASE}/api/v5/public/funding-rate-history?instId=BTC-USDT-SWAP&limit=21`)).then(r => r.json()),
-        fetch(proxyUrl(`${BASE}/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1D&limit=7&instId=BTC-USDT-SWAP`)).then(r => r.json()),
+        okxFetch("/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1D&limit=55"),
+        okxFetch("/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=9"),
+        okxFetch("/api/v5/public/funding-rate-history?instId=BTC-USDT-SWAP&limit=21"),
+        okxFetch("/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1D&limit=7&instId=BTC-USDT-SWAP"),
       ]);
       const closes = dailyRaw.data.map((c: any) => parseFloat(c[4])).reverse();
       const emaFn = (prices: number[], p: number) => {

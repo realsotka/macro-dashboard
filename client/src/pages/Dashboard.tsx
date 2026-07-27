@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchState, fetchReport } from "@/lib/dataClient";
+import { apiRequest } from "@/lib/queryClient";
+import type { Report, Analysis } from "@shared/schema";
 import MacroSection from "@/components/MacroSection";
 import TechnicalSection from "@/components/TechnicalSection";
 import MidTermSection from "@/components/MidTermSection";
@@ -16,17 +17,29 @@ const NAV_ITEMS: { id: Section; label: string; icon: string; sublabel: string }[
   { id: "long",      label: "Лонг-терм",  icon: "🔭", sublabel: "3–6 місяців" },
 ];
 
-function RegimeBadge({ regime }: { regime: string }) {
+function RegimeBadge({ regime, score, confidence }: { regime: string; score?: number; confidence?: number }) {
   const map: Record<string, { color: string; label: string; emoji: string }> = {
-    "risk-on":  { color: "bg-green-500/15 text-green-400 border-green-500/30",   label: "Risk-On",  emoji: "🟢" },
-    "neutral":  { color: "bg-yellow-500/15 text-yellow-400 border-yellow-500/30", label: "Neutral", emoji: "🟡" },
-    "risk-off": { color: "bg-red-500/15 text-red-400 border-red-500/30",          label: "Risk-Off", emoji: "🔴" },
+    "risk-on":       { color: "bg-green-500/15 text-green-400 border-green-500/30",   label: "Risk-On",       emoji: "🟢" },
+    "neutral-up":    { color: "bg-yellow-500/15 text-yellow-400 border-yellow-500/30", label: "Neutral ↑",    emoji: "🟡" },
+    "neutral-down":  { color: "bg-orange-500/15 text-orange-400 border-orange-500/30", label: "Neutral ↓",    emoji: "🟡" },
+    "neutral":       { color: "bg-yellow-500/15 text-yellow-400 border-yellow-500/30", label: "Neutral",      emoji: "🟡" },
+    "risk-off":      { color: "bg-red-500/15 text-red-400 border-red-500/30",          label: "Risk-Off",     emoji: "🔴" },
   };
   const s = map[regime] || map["neutral"];
+  const confLabel = confidence !== undefined
+    ? confidence >= 60 ? "High" : confidence >= 30 ? "Med" : "Low"
+    : null;
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium ${s.color}`}>
-      {s.emoji} {s.label}
-    </span>
+    <div className="flex items-center gap-2">
+      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium ${s.color}`}>
+        {s.emoji} {s.label}
+      </span>
+      {score !== undefined && (
+        <span className="text-xs text-[hsl(var(--muted-foreground))]">
+          {score}/100 · {confLabel}
+        </span>
+      )}
+    </div>
   );
 }
 
@@ -34,19 +47,9 @@ export default function Dashboard() {
   const [active, setActive] = useState<Section>("macro");
   const [reportOpen, setReportOpen] = useState(false);
 
-  // Load state.json from GitHub
-  const { data: state, isLoading } = useQuery({
-    queryKey: ["state"],
-    queryFn: fetchState,
-    staleTime: 5 * 60 * 1000,
-    retry: 2,
-  });
-
-  // Load report markdown from GitHub
-  const { data: reportMd = "" } = useQuery({
-    queryKey: ["reportMd"],
-    queryFn: fetchReport,
-    staleTime: 60 * 60 * 1000,
+  const { data: report, isLoading } = useQuery<Report>({
+    queryKey: ["/api/reports/latest"],
+    queryFn: () => apiRequest("GET", "/api/reports/latest").then(r => r.json()),
   });
 
   return (
@@ -92,22 +95,17 @@ export default function Dashboard() {
           ))}
         </nav>
 
-        {/* Report button + last updated */}
-        <div className="p-3 border-t border-[hsl(var(--border))] space-y-2">
-          {state && (
+        {/* Report button */}
+        <div className="p-3 border-t border-[hsl(var(--border))]">
+          {report && (
             <button
               data-testid="btn-open-report"
               onClick={() => setReportOpen(true)}
               className="w-full px-3 py-2 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--secondary))] text-xs text-[hsl(var(--muted-foreground))] transition-colors text-left"
             >
               <div className="font-medium text-[hsl(var(--foreground))]">📄 Повний звіт</div>
-              <div className="mt-0.5">{state.last_run}</div>
+              <div className="mt-0.5">{report.date}</div>
             </button>
-          )}
-          {state?.last_updated_daily && (
-            <div className="px-1 text-[10px] text-[hsl(var(--muted-foreground))]">
-              🔄 Дані: {state.last_updated_daily}
-            </div>
           )}
         </div>
       </aside>
@@ -120,17 +118,23 @@ export default function Dashboard() {
             <h1 className="text-sm font-semibold text-[hsl(var(--foreground))]">
               {NAV_ITEMS.find(n => n.id === active)?.label}
             </h1>
-            {!isLoading && state && <RegimeBadge regime={state.market_regime || "neutral"} />}
+            {!isLoading && report && (
+              <RegimeBadge
+                regime={report.market_regime}
+                score={report.composite_score ?? undefined}
+                confidence={report.confidence ?? undefined}
+              />
+            )}
           </div>
           <div className="flex items-center gap-4">
-            {state && (
+            {report && (
               <span className="text-xs text-[hsl(var(--muted-foreground))]">
-                Тиждень {state.week_label || ""} · {state.last_run}
+                Тиждень {report.week_label} · {report.date}
               </span>
             )}
-            {state?.btc_price && (
+            {report?.btc_price && (
               <span className="num text-sm font-medium text-[hsl(var(--foreground))]">
-                BTC ${Number(state.btc_price).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                BTC ${report.btc_price.toLocaleString("en-US", { maximumFractionDigits: 0 })}
               </span>
             )}
           </div>
@@ -140,12 +144,12 @@ export default function Dashboard() {
         <main className="flex-1 overflow-y-auto overscroll-contain">
           {isLoading ? (
             <div className="flex items-center justify-center h-full text-[hsl(var(--muted-foreground))]">
-              Завантаження даних з GitHub...
+              Завантаження...
             </div>
-          ) : state ? (
+          ) : report ? (
             <>
-              {active === "macro"     && <MacroSection state={state} />}
-              {active === "technical" && <TechnicalSection state={state} />}
+              {active === "macro"     && <MacroSection report={report} />}
+              {active === "technical" && <TechnicalSection report={report} />}
               {active === "mid"       && <MidTermSection />}
               {active === "long"      && <LongTermSection />}
             </>
@@ -158,12 +162,11 @@ export default function Dashboard() {
       </div>
 
       {/* Full report modal */}
-      {state && (
+      {report && (
         <ReportModal
           open={reportOpen}
           onClose={() => setReportOpen(false)}
-          reportMd={reportMd}
-          date={state.last_run}
+          report={report}
         />
       )}
     </div>

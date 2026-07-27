@@ -1,4 +1,4 @@
-
+import type { Report } from "@shared/schema";
 
 function Sparkline({ values, colors }: { values: (number | null)[]; colors?: string[] }) {
   const valid = values.filter(v => v !== null) as number[];
@@ -45,7 +45,7 @@ function ImpactBadge({ val }: { val: number | null | undefined }) {
   return <span className="text-yellow-400">🟡</span>;
 }
 
-export default function MacroSection({ state: report }: { state: any }) {
+export default function MacroSection({ report }: { report: Report }) {
   const pw = (report as any).prior_week;
 
   // ETF flow color
@@ -53,8 +53,85 @@ export default function MacroSection({ state: report }: { state: any }) {
   const etfColor = etfFlow >= 0 ? "text-green-400" : "text-red-400";
   const etfSign = etfFlow >= 0 ? "+" : "";
 
+  // Composite score data
+  const compScore   = (report as any).composite_score as number | undefined;
+  const macroScore  = (report as any).macro_score  as number | undefined;
+  const cotScore    = (report as any).cot_score    as number | undefined;
+  const techScore   = (report as any).tech_score   as number | undefined;
+  const confidence  = (report as any).confidence   as number | undefined;
+  const bias        = (report as any).bias_text    as string | undefined;
+  const oversold    = (report as any).oversold_bounce as boolean | undefined;
+
   return (
     <div className="p-6 space-y-8 max-w-5xl">
+
+      {/* ── COMPOSITE SCORE ── */}
+      {compScore !== undefined && (
+        <section className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
+              🧮 COMPOSITE SCORE
+            </h2>
+            <div className="flex items-center gap-3">
+              {oversold && (
+                <span className="text-xs px-2 py-0.5 bg-yellow-500/15 border border-yellow-500/30 text-yellow-400 rounded-full">
+                  ⚠️ OVERSOLD BOUNCE POSSIBLE
+                </span>
+              )}
+              <span className="num text-2xl font-bold text-[hsl(var(--foreground))]">{compScore}/100</span>
+              {confidence !== undefined && (
+                <span className={`text-xs px-2 py-1 rounded-full border font-medium ${
+                  confidence >= 60 ? 'bg-cyan-500/15 text-cyan-400 border-cyan-500/30' :
+                  confidence >= 30 ? 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30' :
+                                     'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))]'
+                }`}>
+                  {confidence >= 60 ? 'High' : confidence >= 30 ? 'Medium' : 'Low'} · {confidence}%
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Score breakdown */}
+          <div className="grid grid-cols-3 gap-3 mb-4">
+            {([
+              { label: 'Macro', score: macroScore, weight: '40%', icon: '📊' },
+              { label: 'COT',   score: cotScore,   weight: '30%', icon: '📐' },
+              { label: 'Tech',  score: techScore,  weight: '30%', icon: '⚙️' },
+            ] as const).map(({ label, score: s, weight, icon }) => (
+              <div key={label} className="rounded p-3 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-[hsl(var(--muted-foreground))]">{icon} {label}</span>
+                  <span className="text-xs text-[hsl(var(--muted-foreground))]">{weight}</span>
+                </div>
+                <div className="num text-lg font-bold text-[hsl(var(--foreground))]">{s ?? '—'}</div>
+                {s !== undefined && (
+                  <div className="mt-2 h-1.5 rounded-full bg-[hsl(var(--border))]">
+                    <div
+                      className={`h-1.5 rounded-full transition-all ${
+                        s >= 60 ? 'bg-green-500' : s >= 40 ? 'bg-yellow-500' : 'bg-red-500'
+                      }`}
+                      style={{ width: `${s}%` }}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Score scale */}
+          <div className="flex items-center gap-1 text-xs text-[hsl(var(--muted-foreground))]">
+            <span className="text-red-400">🔴 &lt;42</span>
+            <span className="mx-1">·</span>
+            <span className="text-orange-400">🟡↓ 42–51</span>
+            <span className="mx-1">·</span>
+            <span className="text-yellow-400">🟡↑ 52–64</span>
+            <span className="mx-1">·</span>
+            <span className="text-green-400">🟢 ≥65</span>
+            {bias && <span className="ml-auto italic">Bias: {bias}</span>}
+          </div>
+        </section>
+      )}
+
       {/* ── BLOCK 1: TIPS ── */}
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">

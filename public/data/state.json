@@ -10,7 +10,7 @@
   "spy_close": 746.0,
   "qqq_close": 700.0,
   "vix": 18.58,
-  "market_regime": "neutral",
+  "market_regime": "neutral-up",
   "cot_btc_net_pos": -7949,
   "cot_btc_percentile": 78,
   "cot_btc_percentile_lf_1y": 85.6,
@@ -88,5 +88,12 @@
   "btc_fr_current": 0.0053,
   "btc_oi_current": 3062156,
   "btc_oi_chg_wow": -4.12,
-  "btc_weekly_structure": "HH/HL"
+  "btc_weekly_structure": "HH/HL",
+  "composite_score": 52.5,
+  "macro_score": 45,
+  "cot_score": 60,
+  "tech_score": 55,
+  "confidence": 5,
+  "bias_text": "Hawkish макро стримує, але COT 78-й percentile + техніка вище EMA дають бичачий нахил",
+  "oversold_bounce": false
 }

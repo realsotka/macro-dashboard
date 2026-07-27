@@ -1,6 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { fetchTrades } from "@/lib/dataClient";
 import { TrendingUp, TrendingDown, Minus, Target, Shield, BarChart2, AlertCircle } from "lucide-react";
+
+// ── live clock — shows price + seconds since last update ──────
+function LiveClock({ price }: { price?: number | null }) {
+  const [sec, setSec] = useState(0);
+  useEffect(() => {
+    setSec(0);
+  }, [price]);
+  useEffect(() => {
+    const id = setInterval(() => setSec(s => s + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
+  if (!price) return null;
+  return (
+    <span className="flex items-center gap-1.5 text-xs font-normal ml-auto">
+      <span className={`w-1.5 h-1.5 rounded-full ${sec < 5 ? 'bg-green-400 animate-pulse' : 'bg-green-400/60'}`} />
+      <span className="text-green-400">Live OKX · ${price.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+      <span className="text-[hsl(var(--muted-foreground))]">· {sec}s тому</span>
+    </span>
+  );
+}
 
 // ── tiny sparkline ──────────────────────────────────────────────
 function Spark({ values }: { values: number[] }) {
@@ -128,8 +149,8 @@ export default function TradingSection() {
       } catch {}
       return null;
     },
-    refetchInterval: 30_000, // refresh every 30s
-    staleTime: 30_000,
+    refetchInterval: 10_000, // refresh every 10s
+    staleTime: 10_000,
   });
 
   if (isLoading) return (
@@ -204,12 +225,7 @@ export default function TradingSection() {
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-3 flex items-center gap-2">
           <Target size={14} className="text-cyan-400" /> Поточна позиція
-          {livePrice && (
-            <span className="flex items-center gap-1 text-xs text-green-400 font-normal ml-auto">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              Live OKX · ${livePrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}
-            </span>
-          )}
+          <LiveClock price={livePrice} />
         </h2>
 
         {pos && pos.status === "open" ? (

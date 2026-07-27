@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-import type { Report, Analysis } from "@shared/schema";
+import { fetchState } from "@/lib/dataClient";
 import MacroSection from "@/components/MacroSection";
 import TechnicalSection from "@/components/TechnicalSection";
 import MidTermSection from "@/components/MidTermSection";
@@ -47,9 +46,10 @@ export default function Dashboard() {
   const [active, setActive] = useState<Section>("macro");
   const [reportOpen, setReportOpen] = useState(false);
 
-  const { data: report, isLoading } = useQuery<Report>({
-    queryKey: ["/api/reports/latest"],
-    queryFn: () => apiRequest("GET", "/api/reports/latest").then(r => r.json()),
+  const { data: report, isLoading } = useQuery({
+    queryKey: ["state"],
+    queryFn: fetchState,
+    staleTime: 5 * 60 * 1000,
   });
 
   return (

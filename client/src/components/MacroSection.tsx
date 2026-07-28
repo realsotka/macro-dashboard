@@ -68,6 +68,11 @@ export default function MacroSection({ report }: { report: Report }) {
   const mstrMnav    = (report as any).mstr_mnav_cur    as number | undefined;
   const mstrMnavWow = (report as any).mstr_mnav_wow    as number | undefined;
   const mstrBought  = (report as any).mstr_btc_purchased_week as number | undefined;
+  // MVRV SHORT filter
+  const mvrvVal      = (report as any).mvrv        as number | undefined;
+  const tradeSignal  = (report as any).trade_signal as string | undefined;
+  const mvrvActive   = mvrvVal !== undefined && mvrvVal < 1.3;
+  const composite    = (report as any).composite_score as number | undefined;
 
   return (
     <div className="p-6 space-y-8 max-w-5xl">
@@ -175,6 +180,27 @@ export default function MacroSection({ report }: { report: Report }) {
                     ? `✅ Купили ${mstrBought.toLocaleString()} BTC`
                     : '⏸️ Пауза в купівлях'}
                 </span>
+              )}
+            </div>
+          )}
+
+          {/* MVRV SHORT filter row */}
+          {mvrvVal !== undefined && (
+            <div className="flex items-center gap-3 p-2.5 mb-3 rounded-lg bg-[hsl(var(--muted)/0.3)] border border-[hsl(var(--border))]">
+              <span className="text-xs text-[hsl(var(--muted-foreground))]">🔍 MVRV Short-фільтр:</span>
+              <span className={`text-xs font-bold num ${
+                mvrvActive ? 'text-yellow-400' : 'text-[hsl(var(--muted-foreground))]'
+              }`}>
+                {mvrvVal.toFixed(3)}
+              </span>
+              <span className="text-xs text-[hsl(var(--muted-foreground))] mx-1">·</span>
+              <span className={`text-xs font-semibold ${
+                mvrvActive ? 'text-yellow-400' : 'text-green-400'
+              }`}>
+                {mvrvActive ? '🔴 ACTIVE (< 1.3) — SHORT блоковано' : '🟢 INACTIVE (≥ 1.3)'}
+              </span>
+              {tradeSignal === 'FLAT_MVRV_FILTER' && composite !== undefined && composite < 42 && (
+                <span className="text-xs text-yellow-300 ml-1">· risk-off → FLAT</span>
               )}
             </div>
           )}

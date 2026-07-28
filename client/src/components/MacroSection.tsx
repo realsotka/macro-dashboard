@@ -546,71 +546,137 @@ export default function MacroSection({ report }: { report: Report }) {
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
           <span className="text-red-400">🔻</span> БЛОК 5 — COT / ІНСТИТУЦІЙНЕ ПОЗИЦІОНУВАННЯ
           <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">
-            Equilibriumm · CFTC {report.cot_date}
+            CFTC Direct · TFF Futures Only · {(report as any).cot_date ?? 'н/д'}
           </span>
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
-          <KpiCard
-            label="BTC Percentile"
-            value={`${report.cot_btc_percentile}-й`}
-            sub="Large Spec (screener)"
-            color={report.cot_btc_percentile && report.cot_btc_percentile > 80 ? "text-red-400" : report.cot_btc_percentile && report.cot_btc_percentile > 60 ? "text-yellow-400" : "text-green-400"}
-          />
-          <KpiCard label="BTC Z-Score" value={`+${report.cot_btc_zscore?.toFixed(2)}`} sub="Large Spec" color="text-yellow-400" />
-          <KpiCard
-            label="TOP-4 Long"
-            value={`${report.cot_btc_top4_long?.toFixed(1)}%`}
-            sub="Concentration ⚠ DANGEROUS"
-            color="text-red-400"
-          />
-          <KpiCard label="BTC OI" value={`${(report.cot_btc_oi || 0).toLocaleString()}`} sub="контрактів CME" />
-        </div>
+        {/* Top KPI row */}
+        {(() => {
+          const r = report as any;
+          const pct = r.cot_btc_percentile as number | undefined;
+          const z   = r.cot_btc_zscore   as number | undefined;
+          const wci = r.cot_wci_26w       as number | undefined;
+          const sig = r.cot_8signal       as string | undefined;
+          const pctColor = pct == null ? '' : pct > 80 ? 'text-red-400' : pct > 60 ? 'text-yellow-400' : pct > 40 ? 'text-[hsl(var(--foreground))]' : 'text-green-400';
+          const wciColor = wci == null ? '' : wci < 20 ? 'text-green-400' : wci > 80 ? 'text-red-400' : 'text-yellow-400';
+          const sigColor = sig === 'Strong Bullish' || sig === 'Accumulation' ? 'text-green-400'
+            : sig === 'Strong Bearish' || sig === 'Distribution' ? 'text-red-400'
+            : 'text-yellow-400';
+          return (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+              <KpiCard
+                label="Lev Funds Percentile"
+                value={pct != null ? `${pct}%` : '—'}
+                sub="52w · >80=ведмежа зона"
+                color={pctColor}
+              />
+              <KpiCard
+                label="COT Score"
+                value={r.cot_score != null ? `${r.cot_score}/100` : '—'}
+                sub={z != null ? `z-score ${z > 0 ? '+' : ''}${z.toFixed(3)}` : 'Lev Funds z-score'}
+                color={r.cot_score >= 60 ? 'text-green-400' : r.cot_score >= 40 ? 'text-yellow-400' : 'text-red-400'}
+              />
+              <KpiCard
+                label="WCI 26w"
+                value={wci != null ? `${wci}%` : '—'}
+                sub="<20=бичачий, >80=ведмежий"
+                color={wciColor}
+              />
+              <KpiCard
+                label="8 COT Signal"
+                value={sig ?? '—'}
+                sub="алгоритм Lev Funds"
+                color={sigColor}
+              />
+            </div>
+          );
+        })()}
 
-        <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[hsl(var(--border))]">
-                <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Інструмент</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Net Pos</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Percentile</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Z-Score</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">WoW Δ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { name: "BTC CME", net: -7949, pct: report.cot_btc_percentile, z: report.cot_btc_zscore, wow: -458 },
-                { name: "E-Mini S&P 500", net: -322865, pct: report.cot_sp500_percentile, z: 0.48, wow: 42137 },
-                { name: "Micro NQ-100", net: -158974, pct: 28, z: -0.59, wow: 2629 },
-                { name: "UST 10Y", net: -879706, pct: report.cot_ust10y_percentile, z: -0.88, wow: -48031 },
-                { name: "Gold", net: 124831, pct: report.cot_gold_percentile, z: -0.06, wow: 4052 },
-              ].map((row, i) => {
-                const pctColor = row.pct == null ? "" : row.pct > 80 ? "text-red-400" : row.pct > 60 ? "text-yellow-400" : row.pct > 40 ? "text-[hsl(var(--foreground))]" : "text-green-400";
-                return (
-                  <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
-                    <td className="px-4 py-2.5 text-xs text-[hsl(var(--foreground))]">{row.name}</td>
-                    <td className={`px-4 py-2.5 text-right num text-xs ${row.net < 0 ? "text-red-400" : "text-green-400"}`}>
-                      {row.net.toLocaleString()}
-                    </td>
-                    <td className={`px-4 py-2.5 text-right num font-semibold ${pctColor}`}>
-                      {row.pct != null ? `${row.pct}-й` : "н/д"}
-                    </td>
-                    <td className={`px-4 py-2.5 text-right num ${row.z && row.z > 0 ? "text-yellow-400" : "text-green-400"}`}>
-                      {row.z != null ? (row.z > 0 ? `+${row.z.toFixed(2)}` : row.z.toFixed(2)) : "н/д"}
-                    </td>
-                    <td className={`px-4 py-2.5 text-right num ${row.wow > 0 ? "text-green-400" : "text-red-400"}`}>
-                      {row.wow > 0 ? `▲ +${row.wow.toLocaleString()}` : `▼ ${row.wow.toLocaleString()}`}
-                    </td>
+        {/* Main metrics table */}
+        {(() => {
+          const r = report as any;
+          const rows = [
+            { label: 'Net позиція (Lev Funds)',  value: r.cot_net_lev != null ? r.cot_net_lev.toLocaleString() : '—', color: r.cot_net_lev < 0 ? 'text-red-400' : 'text-green-400', hint: 'Leveraged Funds = хедж-фонди/CTAs' },
+            { label: 'Net позиція (Asset Mgr)',  value: r.cot_net_asset != null ? r.cot_net_asset.toLocaleString() : '—', color: r.cot_net_asset >= 0 ? 'text-green-400' : 'text-red-400', hint: 'Великий buy-side, пенсійні фонди' },
+            { label: 'Percentile Lev Funds 52w', value: r.cot_btc_percentile != null ? `${r.cot_btc_percentile}%` : '—', color: r.cot_btc_percentile > 80 ? 'text-red-400' : r.cot_btc_percentile > 60 ? 'text-yellow-400' : 'text-green-400', hint: '>80% = перепродано спекулянтами' },
+            { label: 'Z-Score 52w',              value: r.cot_btc_zscore != null ? (r.cot_btc_zscore > 0 ? `+${r.cot_btc_zscore.toFixed(3)}` : `${r.cot_btc_zscore.toFixed(3)}`) : '—', color: r.cot_btc_zscore > 1 ? 'text-red-400' : r.cot_btc_zscore > 0 ? 'text-yellow-400' : 'text-green-400', hint: 'Відхилення від середнього 52w' },
+            { label: 'WCI 26w',                  value: r.cot_wci_26w != null ? `${r.cot_wci_26w}%` : '—', color: r.cot_wci_26w < 20 ? 'text-green-400' : r.cot_wci_26w > 80 ? 'text-red-400' : 'text-yellow-400', hint: 'Williams Commercial Index · <20=bull' },
+            { label: 'Net/OI%',                  value: r.cot_net_oi_pct != null ? `${r.cot_net_oi_pct}%` : '—', color: r.cot_net_oi_pct < -20 ? 'text-red-400' : r.cot_net_oi_pct > 10 ? 'text-green-400' : 'text-yellow-400', hint: 'Вага нет-позиції відносно OI' },
+            { label: 'Asset Mgr Percentile',     value: r.cot_asset_percentile != null ? `${r.cot_asset_percentile}%` : '—', color: r.cot_asset_percentile < 20 ? 'text-green-400' : r.cot_asset_percentile > 70 ? 'text-red-400' : 'text-yellow-400', hint: 'Великий buy-side позиціонування 52w' },
+            { label: 'Sentiment Divergence',     value: r.cot_sentiment_divergence != null ? `${r.cot_sentiment_divergence}%` : '—', color: r.cot_sentiment_divergence > 70 ? 'text-yellow-400' : 'text-[hsl(var(--foreground))]', hint: '|Lev%−Asset%| · >90=сильний сигнал' },
+            { label: 'Position Velocity',        value: r.cot_velocity != null ? (r.cot_velocity > 0 ? `▲ +${r.cot_velocity.toLocaleString()}` : `▼ ${r.cot_velocity.toLocaleString()}`) : '—', color: r.cot_velocity > 0 ? 'text-green-400' : 'text-red-400', hint: 'Зміна нет за тиждень (1-ша похідна)' },
+            { label: 'Acceleration',             value: r.cot_accel != null ? (r.cot_accel > 0 ? `+${r.cot_accel.toLocaleString()}` : `${r.cot_accel.toLocaleString()}`) : '—', color: r.cot_accel > 0 ? 'text-green-400' : 'text-red-400', hint: '>0 = уповільнення ведмежого тренду' },
+            { label: 'Concentration Top-4 Long', value: r.cot_conc_top4_long != null ? `${r.cot_conc_top4_long}%` : '—', color: r.cot_conc_top4_long > 55 ? 'text-yellow-400' : 'text-[hsl(var(--foreground))]', hint: '% OI в руках 4 найбільших' },
+            { label: 'Concentration Top-4 Short',value: r.cot_conc_top4_short != null ? `${r.cot_conc_top4_short}%` : '—', color: 'text-[hsl(var(--foreground))]', hint: '% OI в шортах Top-4' },
+          ];
+          return (
+            <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden mb-4">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[hsl(var(--border))]">
+                    <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium w-56">Метрика</th>
+                    <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Значення</th>
+                    <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Пояснення</th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                </thead>
+                <tbody>
+                  {rows.map((row, i) => (
+                    <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
+                      <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">{row.label}</td>
+                      <td className={`px-4 py-2.5 text-right num font-semibold ${row.color}`}>{row.value}</td>
+                      <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] opacity-70">{row.hint}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+        })()}
 
-        <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-          💬 BTC percentile знижується 3-й тиждень (99→82→78) — структурно позитивне очищення. UST 10Y specs різко збільшили net short (19-й percentile, -48K) = ставка на голубиний FOMC. S&P specs нарощують лонги (68-й, +42K) = equity оптимізм. OI +5.6% WoW = накопичення ліквідності перед FOMC.
+        {/* 8 COT Signal badge */}
+        {(() => {
+          const r = report as any;
+          const sig = r.cot_8signal as string | undefined;
+          if (!sig) return null;
+          const isBull = sig === 'Strong Bullish' || sig === 'Accumulation' || sig === 'Floor Building';
+          const isBear = sig === 'Strong Bearish' || sig === 'Distribution';
+          return (
+            <div className={`mb-4 p-3 rounded-lg border flex items-center gap-3 ${
+              isBull ? 'bg-green-500/10 border-green-500/25' :
+              isBear ? 'bg-red-500/10 border-red-500/25' :
+              'bg-yellow-500/10 border-yellow-500/25'
+            }`}>
+              <span className="text-lg">{isBull ? '🟢' : isBear ? '🔴' : '🟡'}</span>
+              <div>
+                <div className={`text-sm font-bold ${
+                  isBull ? 'text-green-400' : isBear ? 'text-red-400' : 'text-yellow-400'
+                }`}>8 COT Signal: {sig}</div>
+                <div className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
+                  {sig === 'Strong Bullish'  && 'Ціна ↑, лонги ↑, шорти ↓ — класичний бичачий розгін'}
+                  {sig === 'Accumulation'    && 'Ціна ↓, лонги ↑, шорти ↓ — набір позицій на корекції'}
+                  {sig === 'Floor Building'  && 'Ціна ↓, лонги ↑ і шорти ↑ — двостороннє накопичення, можливий дно'}
+                  {sig === 'Strong Bearish'  && 'Ціна ↓, лонги ↓, шорти ↑ — класичний ведмежий тиск'}
+                  {sig === 'Distribution'    && 'Ціна ↑, лонги ↓, шорти ↑ — розподіл на вершині'}
+                  {sig === 'Topping Out'     && 'Ціна ↑, лонги ↑ і шорти ↑ — потенційна вершина'}
+                  {sig === 'Profit Taking'   && 'Ціна ↑, лонги ↓, шорти ↓ — фіксація прибутку'}
+                  {sig === 'Liquidation'     && 'Ціна ↓, лонги ↓, шорти ↓ — примусові ліквідації'}
+                </div>
+              </div>
+              {r.cot_velocity != null && (
+                <div className="ml-auto text-right">
+                  <div className="text-xs text-[hsl(var(--muted-foreground))]">Velocity</div>
+                  <div className={`num text-sm font-bold ${r.cot_velocity > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {r.cot_velocity > 0 ? '+' : ''}{r.cot_velocity.toLocaleString()}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
+        <div className="mt-1 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
+          💬 Leveraged Funds (хедж-фонди/CTAs) Net: <span className="num text-red-400">-7,949</span> контрактів, percentile 86.5% — ведмежа зона. WCI 62.8% (нейтральна). Asset Managers percentile всього 9.6% — великий buy-side майже не шортує. Sentiment Divergence 76.9%: specs агресивно шортять, інституціонали — ні. Acceleration +316 → уповільнення ведмежого імпульсу.
+          <div className="mt-1.5 text-[10px] opacity-60">Джерело: publicreporting.cftc.gov · TFF Futures Only · endpoint gpe5-46if · без API ключа</div>
         </div>
       </section>
 

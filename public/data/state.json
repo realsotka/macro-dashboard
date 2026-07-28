@@ -120,5 +120,8 @@
   "cot_accel": 316,
   "cot_conc_top4_long": 61.6,
   "cot_conc_top4_short": 25.9,
-  "cot_8signal": "Floor Building"
+  "cot_8signal": "Floor Building",
+  "eth_etf_weekly_flow": 40.0,
+  "eth_etf_cumulative": 11222.6,
+  "btc_eth_flow_ratio": -0.0
 }

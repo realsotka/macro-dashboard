@@ -1,22 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
+import { fetchState } from "@/lib/dataClient";
 
-// ─── Static MSTR fundamentals (updated weekly from SEC filings) ───
-// Source: Strategy 8-K July 12, 2026 + Yahoo Finance July 24, 2026
-const MSTR_FUNDAMENTALS = {
+// ─── Fallback MSTR fundamentals (hardcoded, used when state.json has no mstr_fundamentals) ───
+// Auto-updated weekly by cron c882d2e7 via SEC EDGAR 8-K parsing
+// Source: Strategy 8-K July 27, 2026
+const MSTR_FALLBACK = {
   btc_held: 843_775,
   avg_cost_per_btc: 75_476,
-  total_cost_basis: 63.69e9,
-  debt: 6.75e9,           // convertible notes
-  preferred: 15.46e9,     // STRK + STRF + STRD + STRC
-  cash: 3.225e9,          // USD reserve (July 24, 2026)
-  shares_basic: 560e6,    // ~560M basic shares
-  shares_fds: 700e6,      // fully diluted (incl. all converts & options)
-  as_of: "2026-07-24",
-  // mNAV historical percentiles (rough, from public data)
-  mnav_low: 0.9,
-  mnav_high: 3.5,
-  mnav_median: 1.6,
+  total_cost_basis_b: 63.69,
+  debt: 6.75e9,
+  preferred: 15.46e9,
+  cash: 3.75e9,           // USD reserve July 26, 2026
+  shares_basic: 560e6,
+  shares_fds: 700e6,
+  as_of: "2026-07-27",
 };
+
+// mNAV historical range constants
+const MNAV_LOW = 0.9;
+const MNAV_HIGH = 3.5;
+const MNAV_MEDIAN = 1.6;
 
 interface MstrLive {
   price: number;
@@ -35,9 +38,8 @@ function signalColor(val: number, low: number, mid: number, high: number, invert
 }
 
 function MNavGauge({ mnav }: { mnav: number }) {
-  const { mnav_low, mnav_high, mnav_median } = MSTR_FUNDAMENTALS;
   // position on gauge 0..100
-  const pct = Math.min(100, Math.max(0, ((mnav - mnav_low) / (mnav_high - mnav_low)) * 100));
+  const pct = Math.min(100, Math.max(0, ((mnav - MNAV_LOW) / (MNAV_HIGH - MNAV_LOW)) * 100));
   const label =
     mnav < 1.0 ? { text: "Дисконт до BTC", color: "text-green-400" } :
     mnav < 1.3 ? { text: "Близько до NAV", color: "text-yellow-400" } :
@@ -67,7 +69,7 @@ function MNavGauge({ mnav }: { mnav: number }) {
       </div>
       <div className="flex justify-between text-[10px] text-[hsl(var(--muted-foreground))] mt-0.5">
         <span></span>
-        <span>медіан {MSTR_FUNDAMENTALS.mnav_median}x</span>
+        <span>медіан {MNAV_MEDIAN}x</span>
         <span></span>
       </div>
     </div>
@@ -75,7 +77,24 @@ function MNavGauge({ mnav }: { mnav: number }) {
 }
 
 export default function MstrBlock() {
-  const { btc_held, debt, preferred, cash, shares_basic, shares_fds, avg_cost_per_btc } = MSTR_FUNDAMENTALS;
+  // Try to load mstr_fundamentals from state.json (updated weekly by cron)
+  const { data: stateData } = useQuery({
+    queryKey: ["/state"],
+    queryFn: fetchState,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const F = (stateData as any)?.mstr_fundamentals ?? MSTR_FALLBACK;
+  const { btc_held, debt, preferred, cash, shares_basic, shares_fds, avg_cost_per_btc } = {
+    btc_held:         F.btc_held         ?? MSTR_FALLBACK.btc_held,
+    avg_cost_per_btc: F.avg_cost_per_btc ?? MSTR_FALLBACK.avg_cost_per_btc,
+    debt:             F.debt             ?? MSTR_FALLBACK.debt,
+    preferred:        F.preferred        ?? MSTR_FALLBACK.preferred,
+    cash:             F.cash             ?? MSTR_FALLBACK.cash,
+    shares_basic:     F.shares_basic     ?? MSTR_FALLBACK.shares_basic,
+    shares_fds:       F.shares_fds       ?? MSTR_FALLBACK.shares_fds,
+  };
+  const as_of = F.as_of ?? MSTR_FALLBACK.as_of;
 
   // Fetch MSTR stock price via Yahoo Finance (public, no key needed)
   const { data: mstr, isLoading } = useQuery<MstrLive>({
@@ -110,7 +129,7 @@ export default function MstrBlock() {
       }
 
       const price = await yf("MSTR");
-      const mktcap = price * MSTR_FUNDAMENTALS.shares_basic;
+      const mktcap = price * MSTR_FALLBACK.shares_basic;
       return { price, mktcap };
     },
     staleTime: 5 * 60 * 1000,
@@ -141,7 +160,7 @@ export default function MstrBlock() {
   // ─── Calculations ───
   const btcP = btcPrice ?? 63_500;
   const mstrP = mstr?.price ?? null;
-  const mktcap = mstr ? mstr.price * MSTR_FUNDAMENTALS.shares_basic : null;
+  const mktcap = mstr ? mstr.price * shares_basic : null;
 
   // mNAV
   const btcNAV = btc_held * btcP;
@@ -337,7 +356,7 @@ export default function MstrBlock() {
       </div>
 
       <div className="mt-2 text-[10px] text-[hsl(var(--muted-foreground))] text-right">
-        📌 Фундаментальні дані: 8-K July 12, 2026 · Оновлюються з SEC filing при кожній купівлі BTC
+        📌 Фундаментальні дані: SEC 8-K {as_of} · Авто-оновлення кроном щопонеділка
       </div>
     </section>
   );

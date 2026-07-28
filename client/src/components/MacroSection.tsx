@@ -83,6 +83,7 @@ export default function MacroSection({ report }: { report: Report }) {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
               🧮 COMPOSITE SCORE
+              <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Formula C</span>
             </h2>
             <div className="flex items-center gap-3">
               {oversold && (
@@ -106,9 +107,9 @@ export default function MacroSection({ report }: { report: Report }) {
           {/* Score breakdown */}
           <div className="grid grid-cols-3 gap-3 mb-3">
             {([
-              { label: 'Macro', score: macroScore, scoreAdj: macroAdj, weight: '40%', icon: '📊' },
-              { label: 'COT',   score: cotScore,   scoreAdj: undefined, weight: '30%', icon: '📐' },
-              { label: 'Tech',  score: techScore,  scoreAdj: undefined, weight: '30%', icon: '⚙️' },
+              { label: 'Macro', score: macroScore, scoreAdj: macroAdj, weight: '25%', icon: '📊' },
+              { label: 'COT',   score: cotScore,   scoreAdj: undefined, weight: '35%', icon: '📐' },
+              { label: 'Tech',  score: techScore,  scoreAdj: undefined, weight: '40%', icon: '⚙️' },
             ] as const).map(({ label, score: s, scoreAdj, weight, icon }) => (
               <div key={label} className="rounded p-3 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
                 <div className="flex justify-between items-center mb-2">
@@ -199,23 +200,50 @@ export default function MacroSection({ report }: { report: Report }) {
               }`}>
                 {mvrvActive ? '🔴 ACTIVE (< 1.3) — SHORT блоковано' : '🟢 INACTIVE (≥ 1.3)'}
               </span>
-              {tradeSignal === 'FLAT_MVRV_FILTER' && composite !== undefined && composite < 42 && (
+              {tradeSignal === 'FLAT_MVRV_FILTER' && composite !== undefined && composite < 38 && (
                 <span className="text-xs text-yellow-300 ml-1">· risk-off → FLAT</span>
               )}
             </div>
           )}
 
           {/* Score scale */}
-          <div className="flex items-center gap-1 text-xs text-[hsl(var(--muted-foreground))]">
-            <span className="text-red-400">🔴 &lt;42</span>
+          <div className="flex items-center gap-1 text-xs text-[hsl(var(--muted-foreground))] mb-3">
+            <span className="text-red-400">🔴 &lt;38</span>
             <span className="mx-1">·</span>
-            <span className="text-orange-400">🟡↓ 42–51</span>
+            <span className="text-orange-400">🟡↓ 38–47</span>
             <span className="mx-1">·</span>
-            <span className="text-yellow-400">🟡↑ 52–64</span>
+            <span className="text-yellow-400">🟡↑ 48–59</span>
             <span className="mx-1">·</span>
-            <span className="text-green-400">🟢 ≥65</span>
+            <span className="text-green-400">🟢 ≥60</span>
             {bias && <span className="ml-auto italic">Bias: {bias}</span>}
           </div>
+
+          {/* Live composite formula calc row */}
+          {macroAdj !== undefined && cotScore !== undefined && techScore !== undefined && compScore !== undefined && (
+            <div className="p-3 rounded-lg bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))] text-xs">
+              <div className="text-[hsl(var(--muted-foreground))] mb-1.5 font-medium">Формула C (Macro×0.25 + COT×0.35 + Tech×0.40):</div>
+              <div className="num flex items-baseline gap-1 flex-wrap">
+                <span className="text-[hsl(var(--foreground))] font-medium">{macroAdj}</span>
+                <span className="text-[hsl(var(--muted-foreground))]">(макро)</span>
+                <span className="text-[hsl(var(--muted-foreground))]">×0.25</span>
+                <span className="text-[hsl(var(--muted-foreground))] mx-0.5">+</span>
+                <span className="text-[hsl(var(--foreground))] font-medium">{cotScore}</span>
+                <span className="text-[hsl(var(--muted-foreground))]">(COT)</span>
+                <span className="text-[hsl(var(--muted-foreground))]">×0.35</span>
+                <span className="text-[hsl(var(--muted-foreground))] mx-0.5">+</span>
+                <span className="text-cyan-400 font-medium">{techScore}</span>
+                <span className="text-[hsl(var(--muted-foreground))]">(tech)</span>
+                <span className="text-[hsl(var(--muted-foreground))]">×0.40</span>
+                <span className="text-[hsl(var(--muted-foreground))] mx-1">=</span>
+                <span className={`font-bold text-base ${
+                  compScore >= 60 ? 'text-green-400' : compScore >= 48 ? 'text-yellow-400' : compScore >= 38 ? 'text-orange-400' : 'text-red-400'
+                }`}>{compScore}</span>
+                <span className="text-[hsl(var(--muted-foreground))] text-[10px]">
+                  = {(macroAdj * 0.25).toFixed(1)} + {(cotScore * 0.35).toFixed(1)} + {(techScore * 0.40).toFixed(1)}
+                </span>
+              </div>
+            </div>
+          )}
         </section>
       )}
 

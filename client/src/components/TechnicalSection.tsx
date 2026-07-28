@@ -386,6 +386,119 @@ export default function TechnicalSection({ report }: { report: any }) {
           💬 BTC утримує висхідну weekly структуру (HH/HL, 4 тижні поспіль) вище обох EMAs. Funding rate нейтральний. OI -1.35% WoW при зростанні ціни = ринок росте на закритті позицій. Ключові рівні: <span className="text-green-400">$64,572</span> (EMA21, Support) та <span className="text-red-400">$66,928</span> (W-1 High, Resistance) визначатимуть напрямок після FOMC 30.07.
         </div>
       </section>
+
+      {/* ── TECH SCORE BREAKDOWN (Formula C) ── */}
+      <section>
+        <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
+          <span>⚙️</span> Tech Score — Formula C
+          <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">40% ваги</span>
+          {report?.tech_score !== undefined && (
+            <span className="ml-auto num text-lg font-bold text-[hsl(var(--foreground))]">{report.tech_score}/100</span>
+          )}
+        </h2>
+
+        {/* Live tech score calculator */}
+        {(() => {
+          const pr = d?.price ?? report?.btc_price ?? 0;
+          const e21 = d?.ema21 ?? report?.btc_ema21 ?? 0;
+          const e50 = d?.ema50 ?? report?.btc_ema50 ?? 0;
+          const frA = d?.frAvg ?? report?.btc_fr_avg_7d ?? 0;
+          const frC = d?.frCur ?? report?.btc_fr_cur ?? 0;
+          const oiC = report?.btc_oi_chg_wow ?? 0;
+
+          if (!pr || !e21 || !e50) return null;
+
+          const pct21 = (pr / e21 - 1) * 100;
+          const pct50 = (pr / e50 - 1) * 100;
+
+          const ema21Adj = pct21 > 3 ? +10 : pct21 > 1 ? +6 : pct21 > 0 ? +3 : pct21 > -1 ? -5 : pct21 > -3 ? -8 : -12;
+          const ema50Adj = pct50 > 2 ? +8 : pct50 > 0.5 ? +4 : pct50 > 0 ? +2 : pct50 > -1 ? -4 : pct50 > -2.5 ? -6 : -8;
+          const frAvgAdj = frA > 0.020 ? -6 : frA > 0.010 ? -2 : frA > 0.003 ? +3 : frA > -0.003 ? 0 : frA > -0.010 ? +5 : +6;
+          const frCurAdj = frC > 0.015 ? -5 : frC > 0.005 ? -2 : frC > 0 ? +1 : frC > -0.005 ? +3 : +5;
+          const oiAdj = oiC > 5 ? +6 : oiC > 2 ? +3 : oiC > -2 ? 0 : oiC > -5 ? -3 : oiC > -10 ? -5 : -6;
+          const techLive = Math.max(0, Math.min(100, Math.round(50 + ema21Adj + ema50Adj + frAvgAdj + frCurAdj + oiAdj)));
+
+          const rows = [
+            { label: 'EMA21', value: `${pct21 >= 0 ? '+' : ''}${pct21.toFixed(2)}%`, adj: ema21Adj, hint: `Ціна ${pct21 >= 0 ? 'вище' : 'нижче'} EMA21` },
+            { label: 'EMA50', value: `${pct50 >= 0 ? '+' : ''}${pct50.toFixed(2)}%`, adj: ema50Adj, hint: `Ціна ${pct50 >= 0 ? 'вище' : 'нижче'} EMA50` },
+            { label: 'FR avg 21d', value: `${frA >= 0 ? '+' : ''}${frA.toFixed(4)}%`, adj: frAvgAdj, hint: 'Середній фандинг 21d' },
+            { label: 'FR поточний', value: `${frC >= 0 ? '+' : ''}${frC.toFixed(4)}%`, adj: frCurAdj, hint: 'Поточний FR' },
+            { label: 'OI 7d', value: `${oiC >= 0 ? '+' : ''}${oiC.toFixed(2)}%`, adj: oiAdj, hint: 'Зміна Open Interest' },
+          ];
+
+          return (
+            <div>
+              <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden mb-3">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[hsl(var(--border))]">
+                      <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Компонент</th>
+                      <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Значення</th>
+                      <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Score adj</th>
+                      <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Інтерпретація</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-[hsl(var(--border))] bg-[hsl(var(--muted)/0.3)]">
+                      <td className="px-4 py-2 text-xs text-[hsl(var(--muted-foreground))]">База</td>
+                      <td className="px-4 py-2 text-right num text-xs">—</td>
+                      <td className="px-4 py-2 text-right num text-xs text-[hsl(var(--muted-foreground))]">50</td>
+                      <td className="px-4 py-2 text-xs text-[hsl(var(--muted-foreground))]">Нейтральна база</td>
+                    </tr>
+                    {rows.map((row, i) => (
+                      <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
+                        <td className="px-4 py-2.5 text-xs text-[hsl(var(--foreground))] font-medium">{row.label}</td>
+                        <td className="px-4 py-2.5 text-right num text-xs text-[hsl(var(--foreground))]">{row.value}</td>
+                        <td className={`px-4 py-2.5 text-right num text-xs font-bold ${
+                          row.adj > 0 ? 'text-green-400' : row.adj < 0 ? 'text-red-400' : 'text-[hsl(var(--muted-foreground))]'
+                        }`}>
+                          {row.adj > 0 ? '+' : ''}{row.adj}
+                        </td>
+                        <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">{row.hint}</td>
+                      </tr>
+                    ))}
+                    <tr className="border-t-2 border-[hsl(var(--border))] bg-[hsl(var(--muted)/0.5)]">
+                      <td colSpan={2} className="px-4 py-2.5 text-xs font-semibold text-[hsl(var(--foreground))]">Tech Score (live)</td>
+                      <td className={`px-4 py-2.5 text-right num text-lg font-bold ${
+                        techLive >= 60 ? 'text-green-400' : techLive >= 40 ? 'text-yellow-400' : 'text-red-400'
+                      }`}>{techLive}</td>
+                      <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">50 {rows.map(r => `${r.adj >= 0 ? '+' : ''}${r.adj}`).join(' ')} = {techLive}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Composite preview */}
+              {report?.macro_score_adj !== undefined && report?.cot_score !== undefined && (
+                <div className="p-3 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-xs">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-cyan-400 font-semibold">🧮 Composite preview (Formula C)</span>
+                    <span className="text-[hsl(var(--muted-foreground))]">Macro×0.25 + COT×0.35 + Tech×0.40</span>
+                  </div>
+                  <div className="num text-sm">
+                    <span className="text-[hsl(var(--muted-foreground))]">= </span>
+                    <span className="text-[hsl(var(--foreground))]">{report.macro_score_adj}</span>
+                    <span className="text-[hsl(var(--muted-foreground))]">×0.25</span>
+                    <span className="text-[hsl(var(--muted-foreground))] mx-1">+</span>
+                    <span className="text-[hsl(var(--foreground))]">{report.cot_score}</span>
+                    <span className="text-[hsl(var(--muted-foreground))]">×0.35</span>
+                    <span className="text-[hsl(var(--muted-foreground))] mx-1">+</span>
+                    <span className="text-cyan-400 font-bold">{techLive}</span>
+                    <span className="text-[hsl(var(--muted-foreground))]">×0.40</span>
+                    <span className="text-[hsl(var(--muted-foreground))] mx-2">=</span>
+                    <span className={`font-bold text-base ${
+                      (() => { const c = +(report.macro_score_adj * 0.25 + report.cot_score * 0.35 + techLive * 0.40).toFixed(1); return c >= 60 ? 'text-green-400' : c >= 48 ? 'text-yellow-400' : c >= 38 ? 'text-orange-400' : 'text-red-400'; })()
+                    }`}>
+                      {(report.macro_score_adj * 0.25 + report.cot_score * 0.35 + techLive * 0.40).toFixed(1)}
+                    </span>
+                    <span className="text-[hsl(var(--muted-foreground))] ml-1 text-[10px]">(saved: {report.composite_score})</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+      </section>
     </div>
   );
 }

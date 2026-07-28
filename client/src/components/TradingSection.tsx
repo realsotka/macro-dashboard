@@ -429,6 +429,42 @@ export default function TradingSection() {
         </section>
       )}
 
+      {/* ── FORMULA C SIGNAL LEGEND ── */}
+      <section>
+        <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-3 flex items-center gap-2">
+          ⚙️ Formula C — правила системи
+          <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Macro 25% ∙ COT 35% ∙ Tech 40%</span>
+        </h2>
+        <div className="grid grid-cols-2 gap-3 mb-3">
+          {[
+            { label: '🟢 LONG Strong', range: '≥ 60', size: '15%', lev: '2×', color: 'border-green-500/30 bg-green-500/5', badge: 'text-green-400' },
+            { label: '🟡 LONG Weak', range: '48 – 59', size: '12%', lev: '1.5×', color: 'border-yellow-500/30 bg-yellow-500/5', badge: 'text-yellow-400' },
+            { label: '⚪ FLAT', range: '38 – 47', size: '—', lev: '—', color: 'border-[hsl(var(--border))] bg-[hsl(var(--muted)/0.3)]', badge: 'text-[hsl(var(--muted-foreground))]' },
+            { label: '🔴 SHORT', range: '< 38', size: '12%', lev: '1.5×', color: 'border-red-500/30 bg-red-500/5', badge: 'text-red-400' },
+          ].map((s, i) => (
+            <div key={i} className={`rounded-lg border p-3 ${s.color}`}>
+              <div className={`text-sm font-bold mb-2 ${s.badge}`}>{s.label}</div>
+              <div className="grid grid-cols-2 gap-x-4 text-xs">
+                <div><span className="text-[hsl(var(--muted-foreground))]">Composite: </span><span className="num font-medium text-[hsl(var(--foreground))]">{s.range}</span></div>
+                <div><span className="text-[hsl(var(--muted-foreground))]">Плече: </span><span className="num font-medium text-[hsl(var(--foreground))]">{s.lev}</span></div>
+                <div className="col-span-2"><span className="text-[hsl(var(--muted-foreground))]">Розмір: </span><span className="num font-medium text-[hsl(var(--foreground))]">{s.size}</span></div>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* MVRV SHORT filter explanation */}
+        <div className="p-3 rounded-lg bg-orange-500/5 border border-orange-500/20 text-xs">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-orange-400 font-semibold">🔆 MVRV SHORT-фільтр</span>
+            <span className="text-[hsl(var(--muted-foreground))]">(активний)</span>
+          </div>
+          <div className="text-[hsl(var(--muted-foreground))] leading-relaxed">
+            Якщо composite &lt; 38 (ризик-офф) <strong className="text-[hsl(var(--foreground))]">ALE</strong> MVRV &lt; 1.3 — сигнал змінюється на <strong className="text-orange-400">FLAT_MVRV_FILTER</strong>.
+            {' '}Низький MVRV означає: ринок вже дешевовартісний — шорт непрацює без чіткого перепродажу. Поріг MVRV: <strong className="text-[hsl(var(--foreground))]">1.3</strong>.
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }

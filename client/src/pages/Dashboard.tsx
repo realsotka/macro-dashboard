@@ -126,7 +126,7 @@ export default function Dashboard() {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar */}
         <header className="h-14 flex items-center justify-between px-6 border-b border-[hsl(var(--border))] flex-shrink-0">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-sm font-semibold text-[hsl(var(--foreground))]">
               {NAV_ITEMS.find(n => n.id === active)?.label}
             </h1>
@@ -136,6 +136,23 @@ export default function Dashboard() {
                 score={report.composite_score ?? undefined}
                 confidence={report.confidence ?? undefined}
               />
+            )}
+            {/* Formula C badge */}
+            <span className="text-[10px] px-1.5 py-0.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded font-mono">
+              Formula C
+            </span>
+            {/* Composite formula row */}
+            {report && report.macro_score_adj !== undefined && (
+              <span className="num text-[10px] text-[hsl(var(--muted-foreground))]">
+                {report.macro_score_adj}&times;0.25 + {report.cot_score}&times;0.35 + {report.tech_score}&times;0.40 = 
+                <span className="font-bold text-[hsl(var(--foreground))]">{report.composite_score}</span>
+              </span>
+            )}
+            {/* MVRV filter badge */}
+            {report?.trade_signal === 'FLAT_MVRV_FILTER' && (
+              <span className="text-[10px] px-1.5 py-0.5 bg-orange-500/15 border border-orange-500/30 text-orange-400 rounded">
+                MVRV filter ({report.mvrv?.toFixed(3)})
+              </span>
             )}
           </div>
           <div className="flex items-center gap-4">

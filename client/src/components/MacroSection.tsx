@@ -62,6 +62,12 @@ export default function MacroSection({ report }: { report: Report }) {
   const confidence  = (report as any).confidence   as number | undefined;
   const bias        = (report as any).bias_text    as string | undefined;
   const oversold    = (report as any).oversold_bounce as boolean | undefined;
+  // MSTR signals
+  const macroAdj    = (report as any).macro_score_adj  as number | undefined;
+  const mstrAdj     = (report as any).mstr_macro_adj   as number | undefined;
+  const mstrMnav    = (report as any).mstr_mnav_cur    as number | undefined;
+  const mstrMnavWow = (report as any).mstr_mnav_wow    as number | undefined;
+  const mstrBought  = (report as any).mstr_btc_purchased_week as number | undefined;
 
   return (
     <div className="p-6 space-y-8 max-w-5xl">
@@ -93,31 +99,85 @@ export default function MacroSection({ report }: { report: Report }) {
           </div>
 
           {/* Score breakdown */}
-          <div className="grid grid-cols-3 gap-3 mb-4">
+          <div className="grid grid-cols-3 gap-3 mb-3">
             {([
-              { label: 'Macro', score: macroScore, weight: '40%', icon: '📊' },
-              { label: 'COT',   score: cotScore,   weight: '30%', icon: '📐' },
-              { label: 'Tech',  score: techScore,  weight: '30%', icon: '⚙️' },
-            ] as const).map(({ label, score: s, weight, icon }) => (
+              { label: 'Macro', score: macroScore, scoreAdj: macroAdj, weight: '40%', icon: '📊' },
+              { label: 'COT',   score: cotScore,   scoreAdj: undefined, weight: '30%', icon: '📐' },
+              { label: 'Tech',  score: techScore,  scoreAdj: undefined, weight: '30%', icon: '⚙️' },
+            ] as const).map(({ label, score: s, scoreAdj, weight, icon }) => (
               <div key={label} className="rounded p-3 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs text-[hsl(var(--muted-foreground))]">{icon} {label}</span>
                   <span className="text-xs text-[hsl(var(--muted-foreground))]">{weight}</span>
                 </div>
-                <div className="num text-lg font-bold text-[hsl(var(--foreground))]">{s ?? '—'}</div>
+                <div className="flex items-baseline gap-2">
+                  <div className="num text-lg font-bold text-[hsl(var(--foreground))]">{s ?? '—'}</div>
+                  {scoreAdj !== undefined && s !== undefined && scoreAdj !== s && (
+                    <div className={`num text-xs font-medium ${
+                      scoreAdj > s ? 'text-green-400' : 'text-red-400'
+                    }`}>
+                      → {scoreAdj}
+                      <span className="ml-0.5">
+                        ({scoreAdj > s ? '+' : ''}{scoreAdj - s})
+                      </span>
+                    </div>
+                  )}
+                </div>
                 {s !== undefined && (
-                  <div className="mt-2 h-1.5 rounded-full bg-[hsl(var(--border))]">
+                  <div className="mt-2 h-1.5 rounded-full bg-[hsl(var(--border))] relative">
                     <div
                       className={`h-1.5 rounded-full transition-all ${
-                        s >= 60 ? 'bg-green-500' : s >= 40 ? 'bg-yellow-500' : 'bg-red-500'
+                        (scoreAdj ?? s) >= 60 ? 'bg-green-500' : (scoreAdj ?? s) >= 40 ? 'bg-yellow-500' : 'bg-red-500'
                       }`}
-                      style={{ width: `${s}%` }}
+                      style={{ width: `${scoreAdj ?? s}%` }}
                     />
+                    {scoreAdj !== undefined && scoreAdj !== s && (
+                      <div
+                        className="absolute top-0 bottom-0 w-0.5 bg-white/40"
+                        style={{ left: `${s}%` }}
+                        title={`Raw macro: ${s}`}
+                      />
+                    )}
                   </div>
                 )}
               </div>
             ))}
           </div>
+
+          {/* MSTR adjustment row */}
+          {mstrAdj !== undefined && (
+            <div className="flex items-center gap-3 p-2.5 mb-3 rounded-lg bg-[hsl(var(--muted)/0.3)] border border-[hsl(var(--border))]">
+              <span className="text-xs text-[hsl(var(--muted-foreground))]">🟧 MSTR корекція macro:</span>
+              <span className={`num text-sm font-bold ${
+                mstrAdj > 0 ? 'text-green-400' : mstrAdj < 0 ? 'text-red-400' : 'text-[hsl(var(--muted-foreground))]'
+              }`}>
+                {mstrAdj > 0 ? '+' : ''}{mstrAdj}
+              </span>
+              <span className="text-xs text-[hsl(var(--muted-foreground))] mx-1">·</span>
+              {mstrMnav !== undefined && (
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">
+                  mNAV {mstrMnav.toFixed(2)}x
+                  {mstrMnavWow !== undefined && (
+                    <span className={`ml-1 ${
+                      mstrMnavWow > 0.1 ? 'text-red-400' : mstrMnavWow < -0.1 ? 'text-green-400' : 'text-[hsl(var(--muted-foreground))]'
+                    }`}>
+                      ({mstrMnavWow > 0 ? '+' : ''}{mstrMnavWow.toFixed(3)} WoW)
+                    </span>
+                  )}
+                </span>
+              )}
+              <span className="text-xs text-[hsl(var(--muted-foreground))] mx-1">·</span>
+              {mstrBought !== undefined && (
+                <span className={`text-xs font-medium ${
+                  mstrBought > 0 ? 'text-green-400' : 'text-[hsl(var(--muted-foreground))]'
+                }`}>
+                  {mstrBought > 0
+                    ? `✅ Купили ${mstrBought.toLocaleString()} BTC`
+                    : '⏸️ Пауза в купівлях'}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Score scale */}
           <div className="flex items-center gap-1 text-xs text-[hsl(var(--muted-foreground))]">

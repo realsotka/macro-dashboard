@@ -1,5 +1,5 @@
 {
-  "bias_text": "Технічна сила (EMA+структура) компенсує hawkish макро — BTC тримається вище ключових EMA",
+  "bias_text": "🟡↑ Neutral-Up",
   "breakeven_10y": 2.21,
   "btc_ema21": 64122.22,
   "btc_ema50": 63675.82,
@@ -11,8 +11,8 @@
   "btc_oi_current": 3062156,
   "btc_price": 63690.4,
   "btc_weekly_structure": "HH/HL",
-  "composite_score": 53.5,
-  "confidence": 7,
+  "composite_score": 52.3,
+  "confidence": 5,
   "cot_btc_net_pos": -7949,
   "cot_btc_oi": 20527,
   "cot_btc_oi_trend_pct": 5.6,
@@ -98,5 +98,11 @@
   "tips_10y": 2.43,
   "tips_5y": 2.19,
   "ust_10y": 4.56,
-  "vix": 18.58
+  "vix": 18.58,
+  "mstr_mnav_cur": 1.028,
+  "mstr_mnav_prev": 1.031,
+  "mstr_mnav_wow": -0.003,
+  "mstr_btc_purchased_week": 0,
+  "mstr_macro_adj": -3,
+  "macro_score_adj": 22
 }

@@ -1,47 +1,63 @@
 {
   "deposit_initial": 10000,
-  "deposit_current": 10000,
+  "deposit_current": 9973.0,
   "equity_curve": [
     {
       "date": "2026-07-27",
       "equity": 10000,
       "pnl": 0,
       "event": "Старт"
+    },
+    {
+      "date": "2026-07-28",
+      "equity": 9973.0,
+      "pnl": -27.0,
+      "event": "T001 SL LONG -2.25%"
     }
   ],
-  "open_position": {
-    "id": "T001",
-    "opened_at": "2026-07-28",
-    "direction": "LONG",
-    "regime": "neutral-up",
-    "composite_score": 53.5,
-    "entry_price": 65023.4,
-    "size_pct": 8,
-    "leverage": 1.5,
-    "notional": 1200,
-    "sl_price": 64048.05,
-    "tp_price": 66974.1,
-    "sl_pct": -1.5,
-    "tp_pct": 3.0,
-    "max_risk_usd": -18.0,
-    "max_reward_usd": 36.0,
-    "status": "open",
-    "note": "Neutral-Up: технічна сила вище EMA+структура, hawkish макро стримує розмір"
-  },
-  "closed_trades": [],
+  "open_position": null,
+  "closed_trades": [
+    {
+      "id": "T001",
+      "opened_at": "2026-07-28",
+      "direction": "LONG",
+      "regime": "neutral-up",
+      "composite_score": 53.5,
+      "entry_price": 65023.4,
+      "size_pct": 8,
+      "leverage": 1.5,
+      "notional": 1200,
+      "sl_price": 64048.05,
+      "tp_price": 66974.1,
+      "sl_pct": -1.5,
+      "tp_pct": 3.0,
+      "max_risk_usd": -18.0,
+      "max_reward_usd": 36.0,
+      "status": "closed",
+      "note": "Neutral-Up: технічна сила вище EMA+структура, hawkish макро стримує розмір",
+      "closed_at": "2026-07-28",
+      "exit_price": 64048.05,
+      "pnl_usd": -27.0,
+      "pnl_pct": -2.25,
+      "result": "SL",
+      "analysis": "SL спрацював на 64048 — BTC скорегувався після hawkish макро (FOMC тиждень). Позиція закрита щоденним кроном."
+    }
+  ],
   "stats": {
-    "total_trades": 0,
+    "total_trades": 1,
     "wins": 0,
-    "losses": 0,
+    "losses": 1,
     "flat": 0,
-    "win_rate": 0,
-    "total_pnl_usd": 0,
-    "total_pnl_pct": 0,
+    "win_rate": 0.0,
+    "total_pnl_usd": -27.0,
+    "total_pnl_pct": -0.27,
     "avg_win_usd": 0,
     "avg_loss_usd": 0,
     "best_trade_usd": 0,
-    "worst_trade_usd": 0,
-    "monthly_pnl": {},
+    "worst_trade_usd": -27.0,
+    "monthly_pnl": {
+      "2026-07": -27.0
+    },
     "score_accuracy": {
       "risk_on": {
         "trades": 0,

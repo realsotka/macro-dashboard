@@ -372,8 +372,73 @@ export default function MacroSection({ report }: { report: Report }) {
           </table>
         </div>
 
+        {/* BTC vs ETH ETF comparison */}
+        {(() => {
+          const r = report as any;
+          const btcFlow = report.etf_weekly_flow ?? 0; // вже в $B
+          const ethFlow = r.eth_etf_weekly_flow as number | undefined; // в $M
+          const ethCum  = r.eth_etf_cumulative  as number | undefined;
+          const ratio   = r.btc_eth_flow_ratio  as number | undefined;
+
+          const btcM = btcFlow * 1000; // конвертуємо в $M для порівняння
+          const totalCryptoFlow = ethFlow != null ? btcM + ethFlow : null;
+
+          // Сигнал: якщо ETH > BTC flow → ротація в ETH (слабший сигнал для BTC)
+          const rotationSignal = ethFlow != null
+            ? ethFlow > btcM ? '⚠️ Ротація ETH>BTC' : btcM > 0 && ethFlow > 0 ? '✅ Обидва позитивні' : btcM < 0 && ethFlow > 0 ? '⚡ ETH strong / BTC weak' : '🔴 Обидва негативні'
+            : null;
+
+          return (
+            <div className="mt-3 bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden">
+              <div className="px-4 py-2.5 border-b border-[hsl(var(--border))] text-xs font-medium text-[hsl(var(--muted-foreground))]">BTC vs ETH ETF — тижневий порівняння</div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[hsl(var(--border))]">
+                    <th className="text-left px-4 py-2 text-xs text-[hsl(var(--muted-foreground))] font-medium">ETF</th>
+                    <th className="text-right px-4 py-2 text-xs text-[hsl(var(--muted-foreground))] font-medium">Тижневий потік</th>
+                    <th className="text-right px-4 py-2 text-xs text-[hsl(var(--muted-foreground))] font-medium">Кумулятив</th>
+                    <th className="text-left px-4 py-2 text-xs text-[hsl(var(--muted-foreground))] font-medium">Контекст</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-[hsl(var(--border))]">
+                    <td className="px-4 py-2.5 text-xs font-semibold text-[hsl(var(--foreground))]">BTC ETF</td>
+                    <td className={`px-4 py-2.5 text-right num font-bold ${btcM >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {btcM >= 0 ? '+' : ''}{btcM.toFixed(1)}M
+                    </td>
+                    <td className="px-4 py-2.5 text-right num text-xs text-[hsl(var(--muted-foreground))]">
+                      ${((report.etf_cumulative ?? 0)).toFixed(1)}B
+                    </td>
+                    <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">Bitcoin spot ETFs</td>
+                  </tr>
+                  <tr className="border-b border-[hsl(var(--border))]">
+                    <td className="px-4 py-2.5 text-xs font-semibold text-[hsl(var(--foreground))]">ETH ETF</td>
+                    <td className={`px-4 py-2.5 text-right num font-bold ${ethFlow == null ? '' : ethFlow >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {ethFlow == null ? '—' : `${ethFlow >= 0 ? '+' : ''}${ethFlow.toFixed(1)}M`}
+                    </td>
+                    <td className="px-4 py-2.5 text-right num text-xs text-[hsl(var(--muted-foreground))]">
+                      {ethCum != null ? `$${(ethCum / 1000).toFixed(2)}B` : '—'}
+                    </td>
+                    <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">Ethereum spot ETFs</td>
+                  </tr>
+                  {totalCryptoFlow != null && (
+                    <tr className="bg-[hsl(var(--muted)/0.5)]">
+                      <td className="px-4 py-2.5 text-xs font-semibold text-[hsl(var(--foreground))]">Разом крипто</td>
+                      <td className={`px-4 py-2.5 text-right num font-bold ${totalCryptoFlow >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {totalCryptoFlow >= 0 ? '+' : ''}{totalCryptoFlow.toFixed(1)}M
+                      </td>
+                      <td className="px-4 py-2.5" />
+                      <td className="px-4 py-2.5 text-xs font-medium text-yellow-400">{rotationSignal}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          );
+        })()}
+
         <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-          💬 V-патерн тижня: приплив Пн+Вт (+$272M), різкий розворот Ср+Чт (-$465M). Інституціонали відкрили позиції на початку тижня, потім ліквідували після PMI-цінового шоку (24.07). Підтверджує вразливість ETF попиту до hawkish сигналів.
+          💬 V-патерн тижня: приплив Пн+Вт (+$272M), різкий розворот Ср+Чт (-$465M). Інституціонали відкрили позиції на початку тижня, потім ліквідували після PMI-цінового шоку (24.07). ETH ETF +$40M за тиждень при BTC -$0.2M → ⚡ ротаційний сигнал: великий капітал шукає крипто-експозицію через ETH поки BTC під тиском.
         </div>
       </section>
 

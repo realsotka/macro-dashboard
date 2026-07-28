@@ -1,4 +1,5 @@
 import type { Report } from "@shared/schema";
+import MstrBlock from "./MstrBlock";
 
 function Sparkline({ values, colors }: { values: (number | null)[]; colors?: string[] }) {
   const valid = values.filter(v => v !== null) as number[];
@@ -498,6 +499,9 @@ export default function MacroSection({ report }: { report: Report }) {
           💬 BTC percentile знижується 3-й тиждень (99→82→78) — структурно позитивне очищення. UST 10Y specs різко збільшили net short (19-й percentile, -48K) = ставка на голубиний FOMC. S&P specs нарощують лонги (68-й, +42K) = equity оптимізм. OI +5.6% WoW = накопичення ліквідності перед FOMC.
         </div>
       </section>
+
+      {/* ── BLOCK 6: MSTR / STRATEGY ── */}
+      <MstrBlock />
     </div>
   );
 }

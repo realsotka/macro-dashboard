@@ -84,7 +84,7 @@ export default function MacroSection({ report }: { report: Report }) {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
               🧮 COMPOSITE SCORE
-              <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Formula v2</span>
+              <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Formula v3</span>
             </h2>
             <div className="flex items-center gap-3">
               {oversold && (
@@ -222,7 +222,7 @@ export default function MacroSection({ report }: { report: Report }) {
           {/* Live composite formula calc row */}
           {macroAdj !== undefined && (cryptoScore ?? cotScore) !== undefined && techScore !== undefined && compScore !== undefined && (
             <div className="p-3 rounded-lg bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))] text-xs">
-              <div className="text-[hsl(var(--muted-foreground))] mb-1.5 font-medium">Formula v2 (Macro×0.25 + CRYPTO×0.35 + Tech×0.40):</div>
+              <div className="text-[hsl(var(--muted-foreground))] mb-1.5 font-medium">Formula v3 (Macro×0.25 + CRYPTO×0.35 + Tech×0.40):</div>
               <div className="num flex items-baseline gap-1 flex-wrap">
                 <span className="text-[hsl(var(--foreground))] font-medium">{macroAdj}</span>
                 <span className="text-[hsl(var(--muted-foreground))]">(макро)</span>
@@ -612,7 +612,7 @@ export default function MacroSection({ report }: { report: Report }) {
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
           <span className="text-yellow-400">🪙</span> БЛОК 5 — CRYPTO SCORE (ETF + COT + MVRV)
           <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">
-            Formula v2 · ваги 50/30/20
+            Formula v3 · ваги 50/30/20
           </span>
         </h2>
 

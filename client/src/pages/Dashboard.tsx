@@ -137,9 +137,9 @@ export default function Dashboard() {
                 confidence={report.confidence ?? undefined}
               />
             )}
-            {/* Formula C badge */}
+            {/* Formula v3 badge */}
             <span className="text-[10px] px-1.5 py-0.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded font-mono">
-              Formula C
+              Formula v3
             </span>
             {/* Composite formula row */}
             {report && report.macro_score_adj !== undefined && (

@@ -5,8 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 interface OkxData {
   price: number; ema21: number; ema50: number;
   frAvg: number; frCur: number; frPos: number; frTotal: number;
+  rsi14: number; // weekly RSI14 for Formula v3
   oiList: { date: string; oi: number }[];
-  oiChg: number;
+  oiChg: number; oiChgWeekly: number; // oiChgWeekly = WoW% for v3
   weekly: { t: string; dateRange: string; o: number; h: number; l: number; c: number }[];
 }
 interface BinanceFR {
@@ -75,22 +76,37 @@ export default function TechnicalSection({ report }: { report: any }) {
         const r2 = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(BASE + path)}`);
         return r2.json();
       }
-      const [dailyRaw, weeklyRaw, frRaw, oiRaw] = await Promise.all([
-        okxFetch("/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1D&limit=55"),
-        okxFetch("/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=9"),
+      // ⚠️ Formula v3: weekly candles for EMA21 + RSI14, weekly OI for WoW change
+      const [weeklyCandles, weeklyOiRaw, frRaw, dailyOiRaw] = await Promise.all([
+        okxFetch("/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=55"),
+        okxFetch("/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1W&limit=3&instId=BTC-USDT-SWAP"),
         okxFetch("/api/v5/public/funding-rate-history?instId=BTC-USDT-SWAP&limit=21"),
         okxFetch("/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1D&limit=7&instId=BTC-USDT-SWAP"),
       ]);
-      const closes = dailyRaw.data.map((c: any) => parseFloat(c[4])).reverse();
+      const wCloses = weeklyCandles.data.map((c: any) => parseFloat(c[4])).reverse();
       const emaFn = (prices: number[], p: number) => {
         const k = 2 / (p + 1); let e = prices[0];
         for (const v of prices.slice(1)) e = v * k + e * (1 - k);
         return e;
       };
-      const price = closes[closes.length - 1];
-      const ema21 = emaFn(closes.slice(-21), 21);
-      const ema50 = emaFn(closes, 50);
-      const weekly = weeklyRaw.data.map((c: any) => {
+      // RSI14 on weekly closes
+      const rsi14Fn = (prices: number[]) => {
+        const last15 = prices.slice(-15);
+        let avgGain = 0, avgLoss = 0;
+        for (let i = 1; i < 15; i++) {
+          const diff = last15[i] - last15[i-1];
+          if (diff > 0) avgGain += diff; else avgLoss -= diff;
+        }
+        avgGain /= 14; avgLoss /= 14;
+        const rs = avgLoss > 0 ? avgGain / avgLoss : 999;
+        return Math.round((100 - 100 / (1 + rs)) * 100) / 100;
+      };
+      const price = wCloses[wCloses.length - 1];
+      const ema21 = emaFn(wCloses.slice(-21), 21);
+      const ema50 = emaFn(wCloses.slice(-50), 50); // kept for price table display only
+      const rsi14 = rsi14Fn(wCloses);
+      // Weekly structure table — use last 9 weekly candles
+      const weekly = weeklyCandles.data.slice(0, 9).map((c: any) => {
         const openTs = parseInt(c[0]);
         const openDate = new Date(openTs);
         const closeDate = new Date(openTs + 6 * 24 * 60 * 60 * 1000);
@@ -105,14 +121,20 @@ export default function TechnicalSection({ report }: { report: any }) {
       const frAvg = rates.reduce((a: number, b: number) => a + b, 0) / rates.length;
       const frCur = rates[0];
       const frPos = rates.filter((r: number) => r > 0).length;
-      const oiList = oiRaw.data.map((o: any) => ({
+      // Daily OI list for sparkline display
+      const oiList = dailyOiRaw.data.map((o: any) => ({
         date: new Date(parseInt(o[0])).toLocaleDateString("uk-UA", { day: "2-digit", month: "2-digit" }),
         oi: parseFloat(o[1]),
       })).reverse();
       const oiCur = oiList[oiList.length - 1]?.oi || 0;
-      const oiPrev = oiList[0]?.oi || 0;
-      const oiChg = oiPrev > 0 ? ((oiCur / oiPrev - 1) * 100) : 0;
-      return { price, ema21, ema50, frAvg, frCur, frPos, frTotal: rates.length, oiList, oiChg, weekly };
+      const oiPrev7d = oiList[0]?.oi || 0;
+      const oiChg = oiPrev7d > 0 ? ((oiCur / oiPrev7d - 1) * 100) : 0;
+      // Weekly OI change for Formula v3 Tech Score
+      const wOiList = weeklyOiRaw.data.map((o: any) => parseFloat(o[1])).reverse();
+      const oiChgWeekly = wOiList.length >= 2 && wOiList[0] > 0
+        ? ((wOiList[wOiList.length-1] / wOiList[0] - 1) * 100)
+        : oiChg; // fallback to daily if weekly not available
+      return { price, ema21, ema50, frAvg, frCur, frPos, frTotal: rates.length, rsi14, oiList, oiChg, oiChgWeekly, weekly };
     },
     staleTime: 5 * 60 * 1000,
     retry: 1,
@@ -146,6 +168,7 @@ export default function TechnicalSection({ report }: { report: any }) {
   const price = d?.price ?? report?.btc_price ?? 0;
   const ema21 = d?.ema21 ?? report?.btc_ema21 ?? 0;
   const ema50 = d?.ema50 ?? report?.btc_ema50 ?? 0;
+  const rsi14Live = d?.rsi14 ?? report?.btc_rsi14 ?? 0;
 
   return (
     <div className="p-6 space-y-8 max-w-5xl">
@@ -387,10 +410,10 @@ export default function TechnicalSection({ report }: { report: any }) {
         </div>
       </section>
 
-      {/* ── TECH SCORE BREAKDOWN (Formula C) ── */}
+      {/* ── TECH SCORE BREAKDOWN (Formula v3) ── */}
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
-          <span>⚙️</span> Tech Score — Formula C
+          <span>⚙️</span> Tech Score — Formula v3
           <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">40% ваги</span>
           {report?.tech_score !== undefined && (
             <span className="ml-auto num text-lg font-bold text-[hsl(var(--foreground))]">{report.tech_score}/100</span>
@@ -399,31 +422,33 @@ export default function TechnicalSection({ report }: { report: any }) {
 
         {/* Live tech score calculator */}
         {(() => {
+          // ── Formula v3 live Tech Score ──
           const pr = d?.price ?? report?.btc_price ?? 0;
           const e21 = d?.ema21 ?? report?.btc_ema21 ?? 0;
-          const e50 = d?.ema50 ?? report?.btc_ema50 ?? 0;
-          const frA = d?.frAvg ?? report?.btc_fr_avg_7d ?? 0;
+          const rsi = d?.rsi14 ?? report?.btc_rsi14 ?? 0;
           const frC = d?.frCur ?? report?.btc_fr_cur ?? 0;
-          const oiC = report?.btc_oi_chg_wow ?? 0;
+          // Use weekly OI change for v3 (from live fetch or saved)
+          const oiC = d?.oiChgWeekly ?? report?.btc_oi_chg_wow ?? 0;
 
-          if (!pr || !e21 || !e50) return null;
+          if (!pr || !e21) return null;
 
           const pct21 = (pr / e21 - 1) * 100;
-          const pct50 = (pr / e50 - 1) * 100;
 
+          // EMA21 adj (weekly price vs weekly EMA21)
           const ema21Adj = pct21 > 3 ? +10 : pct21 > 1 ? +6 : pct21 > 0 ? +3 : pct21 > -1 ? -5 : pct21 > -3 ? -8 : -12;
-          const ema50Adj = pct50 > 2 ? +8 : pct50 > 0.5 ? +4 : pct50 > 0 ? +2 : pct50 > -1 ? -4 : pct50 > -2.5 ? -6 : -8;
-          const frAvgAdj = frA > 0.020 ? -6 : frA > 0.010 ? -2 : frA > 0.003 ? +3 : frA > -0.003 ? 0 : frA > -0.010 ? +5 : +6;
+          // RSI14 weekly
+          const rsiAdj = rsi >= 60 ? +7 : rsi >= 50 ? +3 : rsi >= 40 ? -3 : -7;
+          // FR current (contrarian to longs)
           const frCurAdj = frC > 0.015 ? -5 : frC > 0.005 ? -2 : frC > 0 ? +1 : frC > -0.005 ? +3 : +5;
-          const oiAdj = oiC > 5 ? +6 : oiC > 2 ? +3 : oiC > -2 ? 0 : oiC > -5 ? -3 : oiC > -10 ? -5 : -6;
-          const techLive = Math.max(0, Math.min(100, Math.round(50 + ema21Adj + ema50Adj + frAvgAdj + frCurAdj + oiAdj)));
+          // OI WoW change — CONTRARIAN (high OI = bearish)
+          const oiAdj = oiC > 5 ? -6 : oiC > 2 ? -3 : oiC > -2 ? 0 : oiC > -5 ? +3 : oiC > -10 ? +5 : +6;
+          const techLive = Math.max(0, Math.min(100, Math.round(50 + ema21Adj + rsiAdj + frCurAdj + oiAdj)));
 
           const rows = [
-            { label: 'EMA21', value: `${pct21 >= 0 ? '+' : ''}${pct21.toFixed(2)}%`, adj: ema21Adj, hint: `Ціна ${pct21 >= 0 ? 'вище' : 'нижче'} EMA21` },
-            { label: 'EMA50', value: `${pct50 >= 0 ? '+' : ''}${pct50.toFixed(2)}%`, adj: ema50Adj, hint: `Ціна ${pct50 >= 0 ? 'вище' : 'нижче'} EMA50` },
-            { label: 'FR avg 21d', value: `${frA >= 0 ? '+' : ''}${frA.toFixed(4)}%`, adj: frAvgAdj, hint: 'Середній фандинг 21d' },
-            { label: 'FR поточний', value: `${frC >= 0 ? '+' : ''}${frC.toFixed(4)}%`, adj: frCurAdj, hint: 'Поточний FR' },
-            { label: 'OI 7d', value: `${oiC >= 0 ? '+' : ''}${oiC.toFixed(2)}%`, adj: oiAdj, hint: 'Зміна Open Interest' },
+            { label: 'EMA21 (weekly)', value: `${pct21 >= 0 ? '+' : ''}${pct21.toFixed(2)}%`, adj: ema21Adj, hint: `Ціна ${pct21 >= 0 ? 'вище' : 'нижче'} weekly EMA21` },
+            { label: 'RSI14 (weekly)', value: `${rsi.toFixed(2)}`, adj: rsiAdj, hint: `RSI14 тижневий: ${rsi >= 60 ? 'Перекупленість' : rsi >= 50 ? 'Бичачий' : rsi >= 40 ? 'Нейтральний' : 'Перепроданість'}` },
+            { label: 'FR поточний', value: `${frC >= 0 ? '+' : ''}${frC.toFixed(4)}%`, adj: frCurAdj, hint: 'Поточний funding rate' },
+            { label: 'OI WoW (контрар)', value: `${oiC >= 0 ? '+' : ''}${oiC.toFixed(2)}%`, adj: oiAdj, hint: `OI ${oiC >= 0 ? 'зріс' : 'скоротився'} WoW — контрарний сигнал` },
           ];
 
           return (
@@ -462,34 +487,34 @@ export default function TechnicalSection({ report }: { report: any }) {
                       <td className={`px-4 py-2.5 text-right num text-lg font-bold ${
                         techLive >= 60 ? 'text-green-400' : techLive >= 40 ? 'text-yellow-400' : 'text-red-400'
                       }`}>{techLive}</td>
-                      <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">50 {rows.map(r => `${r.adj >= 0 ? '+' : ''}${r.adj}`).join(' ')} = {techLive}</td>
+                      <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">50 {rows.map(r => `${r.adj >= 0 ? '+' : ''}${r.adj}`).join(' ')} = {techLive} · saved: {report?.tech_score ?? '—'}</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
               {/* Composite preview */}
-              {report?.macro_score_adj !== undefined && report?.cot_score !== undefined && (
+              {report?.macro_score_adj !== undefined && (report?.crypto_score !== undefined || report?.cot_score !== undefined) && (
                 <div className="p-3 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-xs">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-cyan-400 font-semibold">🧮 Composite preview (Formula C)</span>
-                    <span className="text-[hsl(var(--muted-foreground))]">Macro×0.25 + COT×0.35 + Tech×0.40</span>
+                    <span className="text-cyan-400 font-semibold">🧮 Composite preview (Formula v3)</span>
+                    <span className="text-[hsl(var(--muted-foreground))]">Macro×0.25 + Crypto×0.35 + Tech×0.40</span>
                   </div>
                   <div className="num text-sm">
                     <span className="text-[hsl(var(--muted-foreground))]">= </span>
                     <span className="text-[hsl(var(--foreground))]">{report.macro_score_adj}</span>
                     <span className="text-[hsl(var(--muted-foreground))]">×0.25</span>
                     <span className="text-[hsl(var(--muted-foreground))] mx-1">+</span>
-                    <span className="text-[hsl(var(--foreground))]">{report.cot_score}</span>
+                    <span className="text-[hsl(var(--foreground))]">{report.crypto_score}</span>
                     <span className="text-[hsl(var(--muted-foreground))]">×0.35</span>
                     <span className="text-[hsl(var(--muted-foreground))] mx-1">+</span>
                     <span className="text-cyan-400 font-bold">{techLive}</span>
                     <span className="text-[hsl(var(--muted-foreground))]">×0.40</span>
                     <span className="text-[hsl(var(--muted-foreground))] mx-2">=</span>
                     <span className={`font-bold text-base ${
-                      (() => { const c = +(report.macro_score_adj * 0.25 + report.cot_score * 0.35 + techLive * 0.40).toFixed(1); return c >= 60 ? 'text-green-400' : c >= 48 ? 'text-yellow-400' : c >= 38 ? 'text-orange-400' : 'text-red-400'; })()
+                      (() => { const c = +(report.macro_score_adj * 0.25 + (report.crypto_score ?? report.cot_score) * 0.35 + techLive * 0.40).toFixed(1); return c >= 65 ? 'text-green-400' : c >= 53 ? 'text-yellow-400' : c >= 38 ? 'text-orange-400' : 'text-red-400'; })()
                     }`}>
-                      {(report.macro_score_adj * 0.25 + report.cot_score * 0.35 + techLive * 0.40).toFixed(1)}
+                      {(report.macro_score_adj * 0.25 + (report.crypto_score ?? report.cot_score) * 0.35 + techLive * 0.40).toFixed(1)}
                     </span>
                     <span className="text-[hsl(var(--muted-foreground))] ml-1 text-[10px]">(saved: {report.composite_score})</span>
                   </div>

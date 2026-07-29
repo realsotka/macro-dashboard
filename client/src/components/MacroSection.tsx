@@ -57,6 +57,7 @@ export default function MacroSection({ report }: { report: Report }) {
   // Composite score data
   const compScore   = (report as any).composite_score as number | undefined;
   const macroScore  = (report as any).macro_score  as number | undefined;
+  const cryptoScore = (report as any).crypto_score as number | undefined;
   const cotScore    = (report as any).cot_score    as number | undefined;
   const techScore   = (report as any).tech_score   as number | undefined;
   const confidence  = (report as any).confidence   as number | undefined;
@@ -83,7 +84,7 @@ export default function MacroSection({ report }: { report: Report }) {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
               🧮 COMPOSITE SCORE
-              <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Formula C</span>
+              <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Formula v2</span>
             </h2>
             <div className="flex items-center gap-3">
               {oversold && (
@@ -107,9 +108,9 @@ export default function MacroSection({ report }: { report: Report }) {
           {/* Score breakdown */}
           <div className="grid grid-cols-3 gap-3 mb-3">
             {([
-              { label: 'Macro', score: macroScore, scoreAdj: macroAdj, weight: '25%', icon: '📊' },
-              { label: 'COT',   score: cotScore,   scoreAdj: undefined, weight: '35%', icon: '📐' },
-              { label: 'Tech',  score: techScore,  scoreAdj: undefined, weight: '40%', icon: '⚙️' },
+              { label: 'Macro',  score: macroScore,  scoreAdj: macroAdj, weight: '25%', icon: '📊' },
+              { label: 'CRYPTO', score: cryptoScore ?? cotScore, scoreAdj: undefined, weight: '35%', icon: '🪙' },
+              { label: 'Tech',   score: techScore,  scoreAdj: undefined, weight: '40%', icon: '⚙️' },
             ] as const).map(({ label, score: s, scoreAdj, weight, icon }) => (
               <div key={label} className="rounded p-3 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
                 <div className="flex justify-between items-center mb-2">
@@ -210,25 +211,25 @@ export default function MacroSection({ report }: { report: Report }) {
           <div className="flex items-center gap-1 text-xs text-[hsl(var(--muted-foreground))] mb-3">
             <span className="text-red-400">🔴 &lt;38</span>
             <span className="mx-1">·</span>
-            <span className="text-orange-400">🟡↓ 38–47</span>
+            <span className="text-orange-400">🟡↓ 38–49</span>
             <span className="mx-1">·</span>
-            <span className="text-yellow-400">🟡↑ 48–59</span>
+            <span className="text-yellow-400">🟡↑ 50–64</span>
             <span className="mx-1">·</span>
-            <span className="text-green-400">🟢 ≥60</span>
+            <span className="text-green-400">🟢 ≥65</span>
             {bias && <span className="ml-auto italic">Bias: {bias}</span>}
           </div>
 
           {/* Live composite formula calc row */}
-          {macroAdj !== undefined && cotScore !== undefined && techScore !== undefined && compScore !== undefined && (
+          {macroAdj !== undefined && (cryptoScore ?? cotScore) !== undefined && techScore !== undefined && compScore !== undefined && (
             <div className="p-3 rounded-lg bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))] text-xs">
-              <div className="text-[hsl(var(--muted-foreground))] mb-1.5 font-medium">Формула C (Macro×0.25 + COT×0.35 + Tech×0.40):</div>
+              <div className="text-[hsl(var(--muted-foreground))] mb-1.5 font-medium">Formula v2 (Macro×0.25 + CRYPTO×0.35 + Tech×0.40):</div>
               <div className="num flex items-baseline gap-1 flex-wrap">
                 <span className="text-[hsl(var(--foreground))] font-medium">{macroAdj}</span>
                 <span className="text-[hsl(var(--muted-foreground))]">(макро)</span>
                 <span className="text-[hsl(var(--muted-foreground))]">×0.25</span>
                 <span className="text-[hsl(var(--muted-foreground))] mx-0.5">+</span>
-                <span className="text-[hsl(var(--foreground))] font-medium">{cotScore}</span>
-                <span className="text-[hsl(var(--muted-foreground))]">(COT)</span>
+                <span className="text-yellow-400 font-medium">{cryptoScore ?? cotScore}</span>
+                <span className="text-[hsl(var(--muted-foreground))]">(crypto)</span>
                 <span className="text-[hsl(var(--muted-foreground))]">×0.35</span>
                 <span className="text-[hsl(var(--muted-foreground))] mx-0.5">+</span>
                 <span className="text-cyan-400 font-medium">{techScore}</span>
@@ -236,10 +237,10 @@ export default function MacroSection({ report }: { report: Report }) {
                 <span className="text-[hsl(var(--muted-foreground))]">×0.40</span>
                 <span className="text-[hsl(var(--muted-foreground))] mx-1">=</span>
                 <span className={`font-bold text-base ${
-                  compScore >= 60 ? 'text-green-400' : compScore >= 48 ? 'text-yellow-400' : compScore >= 38 ? 'text-orange-400' : 'text-red-400'
+                  compScore >= 65 ? 'text-green-400' : compScore >= 50 ? 'text-yellow-400' : compScore >= 38 ? 'text-orange-400' : 'text-red-400'
                 }`}>{compScore}</span>
                 <span className="text-[hsl(var(--muted-foreground))] text-[10px]">
-                  = {(macroAdj * 0.25).toFixed(1)} + {(cotScore * 0.35).toFixed(1)} + {(techScore * 0.40).toFixed(1)}
+                  = {(macroAdj * 0.25).toFixed(1)} + {((cryptoScore ?? cotScore ?? 50) * 0.35).toFixed(1)} + {(techScore * 0.40).toFixed(1)}
                 </span>
               </div>
             </div>
@@ -606,14 +607,68 @@ export default function MacroSection({ report }: { report: Report }) {
         </div>
       </section>
 
-      {/* ── BLOCK 5: COT ── */}
+      {/* ── BLOCK 5: CRYPTO SCORE ── */}
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
-          <span className="text-red-400">🔻</span> БЛОК 5 — COT / ІНСТИТУЦІЙНЕ ПОЗИЦІОНУВАННЯ
+          <span className="text-yellow-400">🪙</span> БЛОК 5 — CRYPTO SCORE (ETF + COT + MVRV)
           <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">
-            CFTC Direct · TFF Futures Only · {(report as any).cot_date ?? 'н/д'}
+            Formula v2 · ваги 50/30/20
           </span>
         </h2>
+
+        {/* CRYPTO Score summary */}
+        {(() => {
+          const r = report as any;
+          const cs = r.crypto_score as number | undefined;
+          const etfM = (r.etf_weekly_flow ?? 0) * 1000;
+          const etf4wM = r.etf_4w_avg_m as number | undefined;
+          const pct = r.cot_btc_percentile as number | undefined;
+          const mv = r.mvrv as number | undefined;
+
+          const csColor = cs == null ? '' : cs >= 60 ? 'text-green-400' : cs >= 45 ? 'text-yellow-400' : 'text-red-400';
+
+          return (
+            <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-4 mb-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">🤗 Composite CRYPTO блок (замість COT у формулі)</span>
+                {cs != null && <span className={`num text-xl font-bold ${csColor}`}>{cs}<span className="text-sm font-normal text-[hsl(var(--muted-foreground))] ml-1">/100</span></span>}
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="rounded p-2.5 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
+                  <div className="text-xs text-[hsl(var(--muted-foreground))] mb-1">ETF BTC 4w MA <span className="opacity-60">(50%)</span></div>
+                  <div className={`num font-bold text-sm ${etfM > 30 ? 'text-green-400' : etfM < -30 ? 'text-red-400' : 'text-yellow-400'}`}>
+                    {etf4wM != null ? `${etf4wM.toFixed(0)}M` : `${etfM.toFixed(0)}M`}
+                  </div>
+                  <div className="text-[10px] text-[hsl(var(--muted-foreground))] opacity-70 mt-0.5">
+                    {etf4wM != null ? '4-тижневий MA' : 'weekly (MA недост.)'}
+                  </div>
+                </div>
+                <div className="rounded p-2.5 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
+                  <div className="text-xs text-[hsl(var(--muted-foreground))] mb-1">COT contrarian <span className="opacity-60">(30%)</span></div>
+                  <div className={`num font-bold text-sm ${pct != null && pct > 75 ? 'text-green-400' : pct != null && pct < 30 ? 'text-red-400' : 'text-yellow-400'}`}>
+                    pct {pct != null ? `${pct}%` : '—'}
+                  </div>
+                  <div className="text-[10px] text-[hsl(var(--muted-foreground))] opacity-70 mt-0.5">Lev Funds &middot; &gt;75%=ведмежий short=bullish</div>
+                </div>
+                <div className="rounded p-2.5 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
+                  <div className="text-xs text-[hsl(var(--muted-foreground))] mb-1">MVRV filter <span className="opacity-60">(20%)</span></div>
+                  <div className={`num font-bold text-sm ${mv != null && mv > 2.5 ? 'text-red-400' : mv != null && mv < 1.5 ? 'text-green-400' : 'text-yellow-400'}`}>
+                    {mv != null ? mv.toFixed(3) : '—'}
+                  </div>
+                  <div className="text-[10px] text-[hsl(var(--muted-foreground))] opacity-70 mt-0.5">&lt;1.0=OB filter · &gt;3.5=top filter</div>
+                </div>
+              </div>
+              <div className="mt-2 text-[10px] text-[hsl(var(--muted-foreground))] opacity-60">
+                CRYPTO score = ETF×0.50 + COT_contrarian×0.30 + MVRV×0.20
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* COT detail subheader */}
+        <div className="text-xs font-semibold text-[hsl(var(--muted-foreground))] mb-3 mt-1 uppercase tracking-wide">
+          COT деталі · CFTC Direct · TFF Futures Only · {(report as any).cot_date ?? 'н/д'}
+        </div>
 
         {/* Top KPI row */}
         {(() => {

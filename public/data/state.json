@@ -1,7 +1,7 @@
 {
   "bias_text": "FLAT (MVRV Filter)",
   "breakeven_10y": 2.28,
-  "btc_ema21": 67766.32,
+  "btc_ema21": 67768.01,
   "btc_ema50": 63375.86,
   "btc_fr_avg_7d": 0.0027,
   "btc_fr_cur": 0.0004,
@@ -9,7 +9,7 @@
   "btc_oi_chg_wow": 1.15,
   "btc_oi_cur": 3129055.0,
   "btc_oi_current": 3062156,
-  "btc_price": 62843.2,
+  "btc_price": 62861.8,
   "btc_weekly_structure": "Break нижче EMA21+EMA50",
   "composite_score": 34.5,
   "confidence": 31,
@@ -129,9 +129,9 @@
     "rsi_adj": -7,
     "fr_cur_adj": 1,
     "oi_adj": 0,
-    "pct_vs_ema21": -7.26,
-    "rsi14": 28.88
+    "pct_vs_ema21": -7.24,
+    "rsi14": 28.9
   },
   "crypto_score": 29,
-  "btc_rsi14": 28.88
+  "btc_rsi14": 28.9
 }

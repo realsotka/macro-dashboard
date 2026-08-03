@@ -10,7 +10,7 @@
   "btc_oi_cur": 3177446.9600000144,
   "btc_oi_current": 3177446.9600000144,
   "btc_price": 62571.4,
-  "btc_weekly_structure": "Break нижче EMA21+EMA50",
+  "btc_weekly_structure": "Neutral — структура не визначена",
   "composite_score": 37.3,
   "confidence": 25,
   "cot_btc_net_pos": -6873,
@@ -193,5 +193,11 @@
     }
   ],
   "macro_comment": "FOMC W32: Warsh зберіг ставку 4.25–4.50% (очікувано), риторика hawkish hold — немає підстав для зниження ставки поки інфляція не повністю приборкана. Jobless Claims 217K нижче прогнозу 220K = сильний ринок праці → ФРС без поспіху. Composite: 37.3 (FLAT_MVRV_FILTER) — BTC під структурним тиском реальних дохідностей.",
-  "macro_events_week": "28.07–01.08.2026"
+  "macro_events_week": "28.07–01.08.2026",
+  "btc_w0_high": 63989.9,
+  "btc_w0_low": 62268.0,
+  "btc_w1_high": 65740.0,
+  "btc_w1_low": 62227.0,
+  "btc_w2_high": 66928.0,
+  "btc_w2_low": 63700.0
 }

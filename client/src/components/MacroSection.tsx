@@ -757,10 +757,36 @@ export default function MacroSection({ report }: { report: Report }) {
           );
         })()}
 
-        <div className="mt-1 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-          💬 Leveraged Funds (хедж-фонди/CTAs) Net: <span className="num text-red-400">-7,949</span> контрактів, percentile 86.5% — ведмежа зона. WCI 62.8% (нейтральна). Asset Managers percentile всього 9.6% — великий buy-side майже не шортує. Sentiment Divergence 76.9%: specs агресивно шортять, інституціонали — ні. Acceleration +316 → уповільнення ведмежого імпульсу.
-          <div className="mt-1.5 text-[10px] opacity-60">Джерело: publicreporting.cftc.gov · TFF Futures Only · endpoint gpe5-46if · без API ключа</div>
-        </div>
+        {(() => {
+          const netLev = report.cot_net_lev ?? -7949;
+          const pct = report.cot_btc_percentile ?? 86.5;
+          const wci = report.cot_wci_26w ?? 62.8;
+          const assetPct = report.cot_net_asset !== undefined
+            ? Math.round((report.cot_net_asset > 0 ? 75 : 25))
+            : null;
+          const sentDiv = report.cot_btc_percentile !== undefined && report.cot_net_asset !== undefined
+            ? Math.abs(report.cot_btc_percentile - (100 - Math.round(Math.abs(report.cot_net_asset) / 1000)))
+            : null;
+          const accel = report.cot_accel ?? 0;
+          const vel = report.cot_velocity ?? 0;
+          const zone = pct >= 80 ? 'ведмежа зона' : pct >= 60 ? 'нейтральна зона' : pct <= 20 ? 'бичача зона' : 'нейтральна зона';
+          const wciLabel = wci >= 60 ? 'нейтральна' : wci >= 80 ? 'ведмежа' : 'бичача';
+          const netColor = netLev < 0 ? 'text-red-400' : 'text-green-400';
+          const cotDate = (report as any).cot_date ?? '';
+          return (
+            <div className="mt-1 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
+              💬 Leveraged Funds (хедж-фонди/CTAs) Net:{' '}
+              <span className={`num ${netColor}`}>{netLev.toLocaleString()}</span>{' '}
+              контрактів, percentile {pct.toFixed(1)}% — {zone}. WCI 26w: {wci.toFixed(1)}%.{' '}
+              {accel !== 0 && <>Acceleration {accel > 0 ? '+' : ''}{accel} → {accel > 0 ? 'уповільнення ведмежого' : 'прискорення бичачого'} імпульсу.</>}{' '}
+              {vel !== 0 && <>Velocity: {vel > 0 ? '+' : ''}{vel} контрактів/тиждень.</>}
+              <div className="mt-1.5 text-[10px] opacity-60">
+                Джерело: publicreporting.cftc.gov · TFF Futures Only · endpoint gpe5-46if · без API ключа
+                {cotDate && <> · Дата COT: {cotDate}</>}
+              </div>
+            </div>
+          );
+        })()}
       </section>
 
       {/* ── BLOCK 6: MSTR / STRATEGY ── */}

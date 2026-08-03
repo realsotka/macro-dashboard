@@ -144,5 +144,54 @@
   ],
   "rotation_signal": "ETH>BTC",
   "mstr_total_btc": 843775,
-  "mstr_avg_purchase_price": 63685
+  "mstr_avg_purchase_price": 63685,
+  "macro_events": [
+    {
+      "date": "30.07",
+      "name": "FOMC Rate Decision",
+      "actual": "4.25–4.50%",
+      "forecast": "4.25–4.50%",
+      "prev": "4.25–4.50%",
+      "impact": 0,
+      "note": "Пауза — відповідно до прогнозу"
+    },
+    {
+      "date": "30.07",
+      "name": "FOMC Statement (Warsh)",
+      "actual": "Hawkish hold",
+      "forecast": "—",
+      "prev": "—",
+      "impact": -1,
+      "note": "⚠ Warsh: немає підстав для зниження до повної дезінфляції"
+    },
+    {
+      "date": "31.07",
+      "name": "Jobless Claims",
+      "actual": "217K",
+      "forecast": "220K",
+      "prev": "235K",
+      "impact": -1,
+      "note": "⚠ Нижче прогнозу — ринок праці сильний, hawkish"
+    },
+    {
+      "date": "01.08",
+      "name": "NFP (Non-Farm Payrolls)",
+      "actual": "177K",
+      "forecast": "185K",
+      "prev": "148K",
+      "impact": 0,
+      "note": "Нижче прогнозу — нейтрально"
+    },
+    {
+      "date": "29.07",
+      "name": "CB Consumer Confidence",
+      "actual": "98.7",
+      "forecast": "100.0",
+      "prev": "97.8",
+      "impact": 0,
+      "note": "Трохи нижче прогнозу — нейтрально"
+    }
+  ],
+  "macro_comment": "FOMC W32: Warsh зберіг ставку 4.25–4.50% (очікувано), риторика hawkish hold — немає підстав для зниження ставки поки інфляція не повністю приборкана. Jobless Claims 217K нижче прогнозу 220K = сильний ринок праці → ФРС без поспіху. Composite: 37.3 (FLAT_MVRV_FILTER) — BTC під структурним тиском реальних дохідностей.",
+  "macro_events_week": "28.07–01.08.2026"
 }

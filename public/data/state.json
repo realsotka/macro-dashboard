@@ -1,15 +1,15 @@
 {
   "bias_text": "FLAT (MVRV Filter)",
   "breakeven_10y": 2.28,
-  "btc_ema21": 67768.01,
+  "btc_ema21": 67046.24,
   "btc_ema50": 63375.86,
   "btc_fr_avg_7d": 0.0027,
-  "btc_fr_cur": 0.0004,
+  "btc_fr_cur": 0.0047,
   "btc_fr_current": 0.0053,
-  "btc_oi_chg_wow": 1.15,
-  "btc_oi_cur": 3129055.0,
+  "btc_oi_chg_wow": 0.15,
+  "btc_oi_cur": 3177447.0,
   "btc_oi_current": 3062156,
-  "btc_price": 62861.8,
+  "btc_price": 63553.9,
   "btc_weekly_structure": "Break нижче EMA21+EMA50",
   "composite_score": 34.5,
   "confidence": 31,
@@ -42,7 +42,7 @@
   "etf_cumulative": 51.35,
   "etf_weekly_flow": -0.1929,
   "last_run": "2026-07-28",
-  "last_updated_daily": "2026-08-02",
+  "last_updated_daily": "2026-08-03",
   "macro_score": 46,
   "market_regime": "risk-off",
   "oversold_bounce": false,
@@ -107,7 +107,7 @@
   "macro_score_adj": 46,
   "fomc_hike_prob": 34,
   "fomc_date": "2026-07-29",
-  "mvrv": 1.19,
+  "mvrv": 1.1887,
   "trade_signal": "FLAT_MVRV_FILTER",
   "formula_version": "v3",
   "cot_net_lev": -7949,
@@ -129,9 +129,9 @@
     "rsi_adj": -7,
     "fr_cur_adj": 1,
     "oi_adj": 0,
-    "pct_vs_ema21": -7.24,
-    "rsi14": 28.9
+    "pct_vs_ema21": -5.21,
+    "rsi14": 28.77
   },
   "crypto_score": 29,
-  "btc_rsi14": 28.9
+  "btc_rsi14": 28.77
 }

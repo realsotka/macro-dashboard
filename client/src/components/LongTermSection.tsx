@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchAnalyses } from "@/lib/dataClient";
+import { fetchAnalyses, fetchState } from "@/lib/dataClient";
 
 function BiasBadge({ bias }: { bias: string }) {
   const map: Record<string, string> = {
@@ -15,6 +15,12 @@ function BiasBadge({ bias }: { bias: string }) {
 }
 
 export default function LongTermSection() {
+  const { data: state } = useQuery<any>({
+    queryKey: ["state"],
+    queryFn: fetchState,
+    staleTime: 5 * 60 * 1000,
+  });
+
   const { data: analyses = [], isLoading } = useQuery<any[]>({
     queryKey: ["analyses", "long"],
     queryFn: () => fetchAnalyses("long"),
@@ -44,14 +50,21 @@ export default function LongTermSection() {
       <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-5 space-y-4">
         <h3 className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider">BTC Macro Framework</h3>
         <div className="grid grid-cols-2 gap-3">
-          {[
-            { label: "Реальні ставки",    status: "risk",    val: "10Y TIPS 2.43%",   note: "⚠ Headwind > 2%" },
-            { label: "ETF AUM",           status: "ok",      val: "$77.74B",           note: "Інституційна база міцна" },
-            { label: "Halvening ефект",   status: "ok",      val: "Квітень 2025+",    note: "Supply shock продовжується" },
-            { label: "Weekly структура",  status: "ok",      val: "HH/HL × 4",        note: "Bullish momentum" },
-            { label: "BTC/USD кореляція", status: "neutral", val: "Негативна",        note: "DXY ↑ = BTC тиск" },
-            { label: "Cyclic position",   status: "neutral", val: "Post-halving Y+1", note: "Hist. peak Q3–Q4" },
-          ].map((f, i) => (
+          {((): { label: string; status: string; val: string; note: string }[] => {
+            const tips10 = state?.tips_10y;
+            const etfAum = state?.etf_aum;
+            const weeklyStruct = state?.btc_weekly_structure;
+            const tipsStatus = tips10 != null ? (tips10 > 2.0 ? 'risk' : tips10 > 1.5 ? 'neutral' : 'ok') : 'risk';
+            const structStatus = weeklyStruct?.includes('HH') ? 'ok' : weeklyStruct?.includes('LH') ? 'risk' : 'neutral';
+            return [
+              { label: "Реальні ставки",    status: tipsStatus, val: tips10 != null ? `10Y TIPS ${tips10.toFixed(2)}%` : '10Y TIPS —', note: tips10 != null && tips10 > 2.0 ? '⚠ Headwind > 2%' : tips10 != null && tips10 > 1.5 ? 'Помірний тиск' : '✅ Нейтральна зона' },
+              { label: "ETF AUM",           status: "ok",      val: etfAum != null ? `$${etfAum.toFixed(2)}B` : '$77.74B', note: "Інституційна база" },
+              { label: "Halvening ефект",   status: "ok",      val: "Квітень 2025+",    note: "Supply shock продовжується" },
+              { label: "Weekly структура",  status: structStatus, val: weeklyStruct ?? 'HH/HL × 4', note: structStatus === 'ok' ? 'Bullish momentum' : structStatus === 'risk' ? 'Bearish pressure' : 'Нейтральна' },
+              { label: "BTC/USD кореляція", status: "neutral", val: "Негативна",        note: "DXY ↑ = BTC тиск" },
+              { label: "Cyclic position",   status: "neutral", val: "Post-halving Y+1", note: "Hist. peak Q3–Q4" },
+            ];
+          })().map((f, i) => (
             <div key={i} className={`rounded p-3 border ${
               f.status === "ok"      ? "bg-green-500/5 border-green-500/20" :
               f.status === "risk"    ? "bg-red-500/5 border-red-500/20" :

@@ -144,7 +144,7 @@ export default function Dashboard() {
             {/* Composite formula row */}
             {report && report.macro_score_adj !== undefined && (
               <span className="num text-[10px] text-[hsl(var(--muted-foreground))]">
-                {report.macro_score_adj}&times;0.25 + {report.cot_score}&times;0.35 + {report.tech_score}&times;0.40 = 
+                {report.macro_score_adj}&times;0.25 + {(report as any).crypto_score ?? report.cot_score}&times;0.35 + {report.tech_score}&times;0.40 = 
                 <span className="font-bold text-[hsl(var(--foreground))]">{report.composite_score}</span>
               </span>
             )}

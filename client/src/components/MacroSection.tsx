@@ -280,28 +280,36 @@ export default function MacroSection({ report }: { report: Report }) {
               </tr>
             </thead>
             <tbody>
-              {[
-                { label: "5Y TIPS", now: report.tips_5y, prev: 2.04 },
-                { label: "10Y TIPS", now: report.tips_10y, prev: 2.35 },
-                { label: "10Y Breakeven", now: report.breakeven_10y, prev: 2.24 },
-                { label: "UST 10Y", now: report.ust_10y, prev: 4.55 },
-              ].map((row, i) => (
+{(() => {
+                const pw = (report as any).prior_week ?? {};
+                const rows = [
+                  { label: "5Y TIPS",       now: report.tips_5y,      prev: pw.tips_5y      ?? null },
+                  { label: "10Y TIPS",      now: report.tips_10y,     prev: pw.tips_10y     ?? null },
+                  { label: "10Y Breakeven", now: report.breakeven_10y,prev: pw.breakeven_10y?? null },
+                  { label: "UST 10Y",       now: report.ust_10y,      prev: pw.ust_10y      ?? null },
+                ];
+                return rows.map((row, i) => (
                 <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
                   <td className="px-4 py-2.5 text-[hsl(var(--muted-foreground))] text-xs">{row.label}</td>
-                  <td className="px-4 py-2.5 text-right num font-medium text-[hsl(var(--foreground))]">{row.now?.toFixed(2)}%</td>
-                  <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">{row.prev?.toFixed(2)}%</td>
-                  <td className="px-4 py-2.5 text-right"><Delta now={row.now != null ? row.now * 100 : null} prev={row.prev * 100} /></td>
+                  <td className="px-4 py-2.5 text-right num font-medium text-[hsl(var(--foreground))]">{row.now?.toFixed(2) ?? '—'}%</td>
+                  <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">{row.prev != null ? `${row.prev.toFixed(2)}%` : '—'}</td>
                   <td className="px-4 py-2.5 text-right">
-                    <Sparkline values={[row.prev, row.prev, row.prev * 0.98, row.now]} />
+                    <Delta now={row.now != null ? row.now * 100 : null} prev={row.prev != null ? row.prev * 100 : null} />
+                  </td>
+                  <td className="px-4 py-2.5 text-right">
+                    {row.prev != null && row.now != null
+                      ? <Sparkline values={[row.prev, (row.prev + row.now) / 2, row.now]} />
+                      : <span className="text-[hsl(var(--muted-foreground))] text-xs">н/д</span>}
                   </td>
                 </tr>
-              ))}
+              ));
+              })()}
             </tbody>
           </table>
         </div>
 
         <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-          💬 Реальні дохідності продовжують зростати — 10Y TIPS {report.tips_10y?.toFixed(2)}% є максимумом за рік. Breakeven {report.breakeven_10y?.toFixed(2)}% стабільний. Структурний тиск на BTC максимальний з початку 2024.
+          💬 10Y TIPS: {report.tips_10y?.toFixed(2) ?? '—'}%{report.tips_10y != null && report.tips_10y > 2.0 ? ' — структурний headwind для BTC' : report.tips_10y != null && report.tips_10y > 1.5 ? ' — помірний тиск' : ' — нейтральна зона'}. Breakeven {report.breakeven_10y?.toFixed(2) ?? '—'}%. UST 10Y: {report.ust_10y?.toFixed(2) ?? '—'}%.
         </div>
       </section>
 

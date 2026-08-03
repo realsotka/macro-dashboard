@@ -368,42 +368,68 @@ export default function TechnicalSection({ report }: { report: any }) {
 
       {/* ── KEY LEVELS ── */}
       <section>
-        <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
-          <span>🎯</span> Ключові рівні тижня
-          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">28.07–01.08</span>
-        </h2>
-        <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden">
-          {[
-            { label: "Resistance 2", price: 66928, type: "resistance", note: "Weekly High W-1" },
-            { label: "Resistance 1", price: 65740, type: "resistance", note: "Weekly High W-0 (поточний)" },
+        {(() => {
+          const w0High = (report as any).btc_w0_high ?? 0;
+          const w0Low  = (report as any).btc_w0_low  ?? 0;
+          const w1High = (report as any).btc_w1_high ?? 0;
+          const w1Low  = (report as any).btc_w1_low  ?? 0;
+          const w2High = (report as any).btc_w2_high ?? 0;
+          const w2Low  = (report as any).btc_w2_low  ?? 0;
+          const structure: string = (report as any).btc_weekly_structure ?? '';
+          const weekLabel: string = (report as any).week_label ?? '';
+
+          // Determine structure label and color
+          const isUptrend = structure.includes('HH/HL');
+          const isDowntrend = structure.includes('LH/LL');
+          const structureColor = isUptrend ? 'text-green-400' : isDowntrend ? 'text-red-400' : 'text-yellow-400';
+
+          // Price range for bar display
+          const minP = Math.min(price, w0Low, w1Low, w2Low, ema21 ?? price) * 0.99;
+          const maxP = Math.max(price, w0High, w1High, w2High, ema21 ?? price) * 1.01;
+          const barPct = (p: number) => maxP > minP ? Math.min(100, Math.max(2, ((p - minP) / (maxP - minP)) * 100)) : 50;
+
+          const levels = [
+            ...(w2High > 0 ? [{ label: "Resistance 2", price: w2High, type: "resistance", note: "Weekly High W-2" }] : []),
+            ...(w1High > 0 ? [{ label: "Resistance 1", price: w1High, type: "resistance", note: "Weekly High W-1" }] : []),
             { label: "→ Ціна", price: price, type: "current", note: "BTC зараз" },
-            { label: "Support 1", price: ema21, type: "support", note: "EMA21 daily" },
-            { label: "Support 2", price: ema50, type: "support", note: "EMA50 daily" },
-            { label: "Support 3", price: 63700, type: "support", note: "Weekly Low W-1" },
-            { label: "Major Support", price: 61800, type: "major", note: "Weekly Low W-2 / структурна" },
-          ].map((row, i) => {
-            const typeStyle = row.type === "resistance" ? "text-red-400 bg-red-500/10 border-red-500/20"
-              : row.type === "current" ? "text-cyan-400 bg-cyan-500/10 border-cyan-500/20"
-              : row.type === "major" ? "text-orange-400 bg-orange-500/10 border-orange-500/20"
-              : "text-green-400 bg-green-500/10 border-green-500/20";
-            const barPct = price > 0 ? Math.min(100, Math.max(0, ((row.price - 55000) / (75000 - 55000)) * 100)) : 50;
-            return (
-              <div key={i} className={`flex items-center gap-4 px-4 py-2.5 border-b border-[hsl(var(--border))] last:border-0 ${row.type === "current" ? "bg-[hsl(var(--muted)/0.3)]" : ""}`}>
-                <div className="w-32 text-xs text-[hsl(var(--muted-foreground))]">{row.label}</div>
-                <div className={`num font-semibold text-sm ${row.type === "current" ? "text-cyan-400" : row.type === "resistance" ? "text-red-400" : "text-green-400"}`}>
-                  ${row.price.toLocaleString("en-US", { maximumFractionDigits: 0 })}
-                </div>
-                <div className="flex-1 mx-3">
-                  <div className="h-1 bg-[hsl(var(--muted))] rounded-full">
-                    <div className={`h-1 rounded-full ${row.type === "resistance" ? "bg-red-400" : row.type === "current" ? "bg-cyan-400" : "bg-green-400"}`}
-                      style={{ width: `${barPct}%` }} />
-                  </div>
-                </div>
-                <div className="text-xs text-[hsl(var(--muted-foreground))] w-48 text-right">{row.note}</div>
+            ...(ema21 ? [{ label: "Support 1", price: ema21, type: "support", note: "EMA21 weekly" }] : []),
+            ...(w1Low > 0 ? [{ label: "Support 2", price: w1Low, type: "support", note: "Weekly Low W-1" }] : []),
+            ...(w2Low > 0 ? [{ label: "Major Support", price: w2Low, type: "major", note: "Weekly Low W-2 / структурна" }] : []),
+          ].sort((a, b) => b.price - a.price);
+
+          return (
+            <>
+              <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
+                <span>🎯</span> Ключові рівні тижня
+                {weekLabel && <span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">{weekLabel}</span>}
+                {structure && <span className={`text-[10px] font-normal ml-auto ${structureColor}`}>{structure}</span>}
+              </h2>
+              <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden">
+                {levels.map((row, i) => {
+                  const typeStyle = row.type === "resistance" ? "text-red-400 bg-red-500/10 border-red-500/20"
+                    : row.type === "current" ? "text-cyan-400 bg-cyan-500/10 border-cyan-500/20"
+                    : row.type === "major" ? "text-orange-400 bg-orange-500/10 border-orange-500/20"
+                    : "text-green-400 bg-green-500/10 border-green-500/20";
+                  return (
+                    <div key={i} className={`flex items-center gap-4 px-4 py-2.5 border-b border-[hsl(var(--border))] last:border-0 ${row.type === "current" ? "bg-[hsl(var(--muted)/0.3)]" : ""}`}>
+                      <div className="w-32 text-xs text-[hsl(var(--muted-foreground))]">{row.label}</div>
+                      <div className={`num font-semibold text-sm ${row.type === "current" ? "text-cyan-400" : row.type === "resistance" ? "text-red-400" : "text-green-400"}`}>
+                        ${row.price.toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                      </div>
+                      <div className="flex-1 mx-3">
+                        <div className="h-1 bg-[hsl(var(--muted))] rounded-full">
+                          <div className={`h-1 rounded-full ${row.type === "resistance" ? "bg-red-400" : row.type === "current" ? "bg-cyan-400" : "bg-green-400"}`}
+                            style={{ width: `${barPct(row.price)}%` }} />
+                        </div>
+                      </div>
+                      <div className="text-xs text-[hsl(var(--muted-foreground))] w-48 text-right">{row.note}</div>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
+            </>
+          );
+        })()}
 
         {(() => {
           const p = report?.btc_price;

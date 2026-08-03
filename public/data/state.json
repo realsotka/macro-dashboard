@@ -1,5 +1,5 @@
 {
-  "bias_text": "Risk-Off",
+  "bias_text": "🟡↓ Neutral-Down",
   "breakeven_10y": 2.28,
   "btc_ema21": 64065.83509524968,
   "btc_ema50": 63375.86,
@@ -11,8 +11,8 @@
   "btc_oi_current": 3177446.9600000144,
   "btc_price": 62571.4,
   "btc_weekly_structure": "Neutral — структура не визначена",
-  "composite_score": 37.3,
-  "confidence": 25,
+  "composite_score": 40.8,
+  "confidence": 18,
   "cot_btc_net_pos": -6873,
   "cot_btc_oi": 20019.0,
   "cot_btc_oi_trend_pct": 5.6,
@@ -44,7 +44,7 @@
   "last_run": "2026-08-03",
   "last_updated_daily": "2026-08-03",
   "macro_score": 46,
-  "market_regime": "risk-off",
+  "market_regime": "neutral-down",
   "oversold_bounce": false,
   "prior_month": {
     "breakeven_10y": 2.2,
@@ -108,7 +108,7 @@
   "fomc_hike_prob": 34,
   "fomc_date": "2026-07-29",
   "mvrv": 1.2018952766591153,
-  "trade_signal": "FLAT_MVRV_FILTER",
+  "trade_signal": "neutral-down",
   "formula_version": "v3",
   "cot_net_lev": -6873,
   "cot_net_asset": 2299,
@@ -129,9 +129,10 @@
     "rsi_adj": -7,
     "fr_cur_adj": 1,
     "oi_adj": -3,
-    "pct_vs_ema21": -2.33
+    "pct_vs_ema21": -2.33,
+    "rsi14": 33.18
   },
-  "crypto_score": 36,
+  "crypto_score": 46,
   "btc_rsi14": 33.18,
   "week_label": "W32 2026",
   "nominal_10y": 4.68,

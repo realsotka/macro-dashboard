@@ -565,9 +565,22 @@ export default function MacroSection({ report }: { report: Report }) {
           ))}
         </div>
 
-        <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-          💬 Equity ринок зростає попри hawkish макро: SPY +0.35%, QQQ +0.67% WoW. Лідери — Financials (+1.45%) та Tech (+1.11%). Аутсайдер — Energy (-2.40%) на фоні падіння нафти. VIX 18.58 = низька волатильність, ринок не закладає стресу перед FOMC. Висока кореляція QQQ/BTC (+0.81) — якщо tech розпродається після FOMC, BTC під тиском.
-        </div>
+        {(() => {
+          const spy = report.spy_close;
+          const qqq = report.qqq_close;
+          const vix = report.vix;
+          if (!spy && !qqq && !vix) return null;
+          const vixLabel = vix < 16 ? 'низька волатильність — risk-on' : vix < 25 ? 'помірна волатильність' : 'підвищена волатильність — стрес';
+          const btcAboveEma = report.btc_price && report.btc_ema21 ? report.btc_price > report.btc_ema21 : null;
+          return (
+            <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
+              💬{spy && <> SPY: <span className="num text-[hsl(var(--foreground))]">${spy.toFixed(2)}</span></>}
+              {qqq && <> · QQQ: <span className="num text-[hsl(var(--foreground))]">${qqq.toFixed(2)}</span></>}
+              {vix && <> · VIX: <span className={`num ${vix < 16 ? 'text-green-400' : vix > 25 ? 'text-red-400' : 'text-yellow-400'}`}>{vix.toFixed(2)}</span> = {vixLabel}.</>}
+              {btcAboveEma !== null && <> BTC {btcAboveEma ? 'вище' : 'нижче'} EMA21 (${report.btc_ema21?.toFixed(0)}) — {btcAboveEma ? 'бичача структура' : 'ведмежий тиск'}.</>}
+            </div>
+          );
+        })()}
       </section>
 
       {/* ── BLOCK 5: CRYPTO SCORE ── */}

@@ -328,51 +328,6 @@ export default function MacroSection({ report }: { report: Report }) {
           />
         </div>
 
-        {/* ETF daily table */}
-        <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden mb-3">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[hsl(var(--border))]">
-                <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Дата</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">IBIT</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">FBTC</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">GBTC</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Нетто</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { date: "Пн 21.07", ibit: 163.9, fbtc: 23.1, gbtc: 0, net: 203.2 },
-                { date: "Вт 22.07", ibit: 38.8, fbtc: 21.5, gbtc: -38.3, net: 69.1 },
-                { date: "Ср 23.07", ibit: -202.5, fbtc: -5.6, gbtc: 0, net: -225.1 },
-                { date: "Чт 24.07", ibit: -212.2, fbtc: -27.9, gbtc: 0, net: -240.1 },
-                { date: "Пт 25.07", ibit: null, fbtc: null, gbtc: null, net: null },
-              ].map((row, i) => {
-                const netColor = row.net == null ? "" : row.net > 0 ? "text-green-400" : "text-red-400";
-                const fmt = (v: number | null) => v == null ? <span className="text-[hsl(var(--muted-foreground))]">н/д</span>
-                  : <span className={`num ${v >= 0 ? "text-green-400" : "text-red-400"}`}>{v >= 0 ? "+" : ""}{v.toFixed(1)}M</span>;
-                return (
-                  <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
-                    <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">{row.date}</td>
-                    <td className="px-4 py-2.5 text-right">{fmt(row.ibit)}</td>
-                    <td className="px-4 py-2.5 text-right">{fmt(row.fbtc)}</td>
-                    <td className="px-4 py-2.5 text-right">{fmt(row.gbtc)}</td>
-                    <td className={`px-4 py-2.5 text-right num font-semibold ${netColor}`}>
-                      {row.net == null ? <span className="text-[hsl(var(--muted-foreground))]">н/д</span>
-                        : `${row.net >= 0 ? "+" : ""}${row.net.toFixed(1)}M`}
-                    </td>
-                  </tr>
-                );
-              })}
-              <tr className="bg-[hsl(var(--muted)/0.5)]">
-                <td className="px-4 py-2.5 text-xs font-semibold text-[hsl(var(--foreground))]">Разом Пн–Чт</td>
-                <td colSpan={3} />
-                <td className="px-4 py-2.5 text-right num font-bold text-red-400">-192.9M</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
         {/* BTC vs ETH ETF comparison */}
         {(() => {
           const r = report as any;
@@ -438,9 +393,6 @@ export default function MacroSection({ report }: { report: Report }) {
           );
         })()}
 
-        <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-          💬 V-патерн тижня: приплив Пн+Вт (+$272M), різкий розворот Ср+Чт (-$465M). Інституціонали відкрили позиції на початку тижня, потім ліквідували після PMI-цінового шоку (24.07). ETH ETF +$40M за тиждень при BTC -$0.2M → ⚡ ротаційний сигнал: великий капітал шукає крипто-експозицію через ETH поки BTC під тиском.
-        </div>
       </section>
 
       {/* ── BLOCK 3: MACRO EVENTS (dynamic from state.json) ── */}

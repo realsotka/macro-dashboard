@@ -443,57 +443,68 @@ export default function MacroSection({ report }: { report: Report }) {
         </div>
       </section>
 
-      {/* ── BLOCK 3: MACRO ── */}
+      {/* ── BLOCK 3: MACRO EVENTS (dynamic from state.json) ── */}
       <section>
-        <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
-          <span className="text-amber-400">🔸</span> БЛОК 3 — МАКРО-ДАНІ ТИЖНЯ
-          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">21–25.07.2026</span>
-        </h2>
+        {(() => {
+          const events: any[] = (report as any).macro_events ?? [];
+          const comment: string = (report as any).macro_comment ?? '';
+          const eventsWeek: string = (report as any).macro_events_week ?? report.week_label ?? '';
 
-        <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[hsl(var(--border))]">
-                <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Дата</th>
-                <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Індикатор</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Факт</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Прогноз</th>
-                <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Попер.</th>
-                <th className="text-center px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Вплив</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { date: "24.07", name: "Jobless Claims", actual: "187K", forecast: "215K", prev: "209K", impact: -1, note: "⚠ Сильний ринок праці — hawkish для ФРС" },
-                { date: "24.07", name: "Flash Composite PMI", actual: "53.6", forecast: "52.2", prev: "51.9", impact: -1, note: "⚠ Сильніше прогнозу — hawkish" },
-                { date: "24.07", name: "Flash Services PMI", actual: "53.6", forecast: "51.5", prev: "51.2", impact: -1, note: "⚠ 8-місячний максимум" },
-                { date: "24.07", name: "Flash Mfg PMI", actual: "53.8", forecast: "54.3", prev: "53.9", impact: 0, note: "Нижче прогнозу — нейтрально" },
-                { date: "24.07", name: "PMI Input Prices", actual: "14M-max", forecast: "—", prev: "—", impact: -1, note: "⚠ Inflation re-acceleration" },
-                { date: "24.07", name: "PMI Selling Prices", actual: "Aug'22-max", forecast: "—", prev: "—", impact: -1 },
-              ].map((row, i) => (
-                <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
-                  <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] whitespace-nowrap">{row.date}</td>
-                  <td className="px-4 py-2.5 text-xs">
-                    <span className="text-[hsl(var(--foreground))]">{row.name}</span>
-                    {row.note && <span className="block text-[10px] text-yellow-400 mt-0.5">{row.note}</span>}
-                  </td>
-                  <td className={`px-4 py-2.5 text-right num font-semibold ${row.impact > 0 ? "text-green-400" : row.impact < 0 ? "text-red-400" : "text-[hsl(var(--foreground))]"}`}>
-                    {row.actual}
-                  </td>
-                  <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">{row.forecast}</td>
-                  <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">{row.prev}</td>
-                  <td className="px-4 py-2.5 text-center">
-                    {row.impact > 0 ? "🟢" : row.impact < 0 ? "🔴" : "🟡"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          if (events.length === 0) return (
+            <div className="p-4 rounded-lg bg-[hsl(var(--muted))] text-xs text-[hsl(var(--muted-foreground))]">
+              ⏳ Макро-події тижня будуть доступні після наступного понеділкового оновлення.
+            </div>
+          );
 
-        <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-          💬 Hawkish картина для крипти: Jobless Claims 187K (57-річний мінімум, нижче прогнозу 215K) + PMI Composite 53.6 (8-місячний максимум) = ФРС не має підстав різати ставки. PMI ціни прискорились до 14-місячного максимуму → stagflation ризик. Сильна економіка = менше ймовірність rate cuts = структурний тиск на BTC/ризик-активи. FOMC 30.07 — Market очікує паузу (UST10Y specs 19-й percentile підтверджує ставку на dovish риторику Пауелла, але не rate cut).
-        </div>
+          return (
+            <>
+              <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
+                <span className="text-amber-400">🔸</span> БЛОК 3 — МАКРО-ДАНІ ТИЖНЯ
+                <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">{eventsWeek}</span>
+              </h2>
+
+              <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[hsl(var(--border))]">
+                      <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Дата</th>
+                      <th className="text-left px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Індикатор</th>
+                      <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Факт</th>
+                      <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Прогноз</th>
+                      <th className="text-right px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Попер.</th>
+                      <th className="text-center px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] font-medium">Вплив</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {events.map((row: any, i: number) => (
+                      <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
+                        <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))] whitespace-nowrap">{row.date}</td>
+                        <td className="px-4 py-2.5 text-xs">
+                          <span className="text-[hsl(var(--foreground))]">{row.name}</span>
+                          {row.note && <span className="block text-[10px] text-yellow-400 mt-0.5">{row.note}</span>}
+                        </td>
+                        <td className={`px-4 py-2.5 text-right num font-semibold ${
+                          row.impact > 0 ? 'text-green-400' : row.impact < 0 ? 'text-red-400' : 'text-[hsl(var(--foreground))]'
+                        }`}>{row.actual}</td>
+                        <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">{row.forecast ?? '—'}</td>
+                        <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">{row.prev ?? '—'}</td>
+                        <td className="px-4 py-2.5 text-center">
+                          {row.impact > 0 ? '🟢' : row.impact < 0 ? '🔴' : '🟡'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {comment && (
+                <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
+                  💬 {comment}
+                </div>
+              )}
+            </>
+          );
+        })()}
       </section>
 
       {/* ── BLOCK 4: EQUITY / SECTOR ETF ── */}

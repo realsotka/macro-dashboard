@@ -199,5 +199,45 @@
   "btc_w1_high": 65740.0,
   "btc_w1_low": 62227.0,
   "btc_w2_high": 66928.0,
-  "btc_w2_low": 63700.0
+  "btc_w2_low": 63700.0,
+  "sector_etfs": {
+    "XLK": {
+      "price": 178.17,
+      "prev_week": 171.09,
+      "name": "Tech Sector"
+    },
+    "XLE": {
+      "price": 58.96,
+      "prev_week": 57.57,
+      "name": "Energy Sector"
+    },
+    "XLF": {
+      "price": 57.12,
+      "prev_week": 57.6,
+      "name": "Financials"
+    },
+    "XLV": {
+      "price": 161.85,
+      "prev_week": 167.26,
+      "name": "Health Care"
+    },
+    "XLI": {
+      "price": 182.08,
+      "prev_week": 182.49,
+      "name": "Industrials"
+    },
+    "XLP": {
+      "price": 84.68,
+      "prev_week": 87.06,
+      "name": "Staples"
+    },
+    "GLD": {
+      "price": 370.08,
+      "prev_week": 369.37,
+      "name": "Gold ETF"
+    }
+  },
+  "fear_greed_score": 28,
+  "fear_greed_label": "Fear",
+  "equity_week_label": "28.07–01.08.2026"
 }

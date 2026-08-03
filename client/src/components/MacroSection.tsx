@@ -463,7 +463,7 @@ export default function MacroSection({ report }: { report: Report }) {
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
           <span className="text-blue-400">🔹</span> БЛОК 4 — EQUITY / SECTOR ETF
-          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">тиждень 21–25.07.2026</span>
+          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">{(report as any).equity_week_label ?? (report as any).week_label ?? ''}</span>
         </h2>
 
         {/* KPI row */}
@@ -471,14 +471,24 @@ export default function MacroSection({ report }: { report: Report }) {
           <KpiCard
             label="SPY"
             value={`$${report.spy_close?.toFixed(2) ?? '746.00'}`}
-            sub="S&P 500 ETF · тижн. +0.35%"
-            color="text-green-400"
+            sub={(() => {
+              const se = (report as any).sector_etfs as Record<string, {price: number, prev_week: number}> | undefined;
+              const spy = report.spy_close; const spyPrev = se?.['SPY']?.prev_week;
+              if (spy && spyPrev) { const c = ((spy/spyPrev)-1)*100; return `S&P 500 ETF · тижн. ${c >= 0 ? '+' : ''}${c.toFixed(2)}%`; }
+              return 'S&P 500 ETF';
+            })()}
+            color={report.spy_close ? 'text-green-400' : 'text-[hsl(var(--muted-foreground))]'}
           />
           <KpiCard
             label="QQQ"
             value={`$${report.qqq_close?.toFixed(2) ?? '700.00'}`}
-            sub="Nasdaq-100 ETF · тижн. +0.67%"
-            color="text-green-400"
+            sub={(() => {
+              const se = (report as any).sector_etfs as Record<string, {price: number, prev_week: number}> | undefined;
+              const qqq = report.qqq_close; const qqqPrev = se?.['QQQ']?.prev_week;
+              if (qqq && qqqPrev) { const c = ((qqq/qqqPrev)-1)*100; return `Nasdaq-100 ETF · тижн. ${c >= 0 ? '+' : ''}${c.toFixed(2)}%`; }
+              return 'Nasdaq-100 ETF';
+            })()}
+            color={report.qqq_close ? 'text-green-400' : 'text-[hsl(var(--muted-foreground))]'}
           />
           <KpiCard
             label="VIX"
@@ -488,9 +498,18 @@ export default function MacroSection({ report }: { report: Report }) {
           />
           <KpiCard
             label="Fear & Greed"
-            value="54 / 100"
-            sub="Neutral → Greed"
-            color="text-yellow-400"
+            value={`${(report as any).fear_greed_score ?? '—'} / 100`}
+            sub={(() => {
+              const sc = (report as any).fear_greed_score as number | undefined;
+              const lb = (report as any).fear_greed_label as string | undefined;
+              if (!sc) return 'Crypto F&G Index';
+              return lb ?? (sc <= 25 ? 'Extreme Fear' : sc <= 45 ? 'Fear' : sc <= 55 ? 'Neutral' : sc <= 75 ? 'Greed' : 'Extreme Greed');
+            })()}
+            color={(() => {
+              const sc = (report as any).fear_greed_score as number | undefined;
+              if (!sc) return 'text-[hsl(var(--muted-foreground))]';
+              return sc <= 25 ? 'text-red-400' : sc <= 45 ? 'text-orange-400' : sc <= 55 ? 'text-yellow-400' : sc <= 75 ? 'text-green-400' : 'text-green-300';
+            })()}
           />
         </div>
 
@@ -509,16 +528,27 @@ export default function MacroSection({ report }: { report: Report }) {
               </tr>
             </thead>
             <tbody>
-              {[
-                { ticker: 'SPY',  name: 'S&P 500',       price: report.spy_close ?? 746.00, prevWeek: 743.29, prevMonth: 728.99, corr: '+0.72', corrColor: 'text-green-400' },
-                { ticker: 'QQQ',  name: 'Nasdaq-100',    price: report.qqq_close ?? 700.00, prevWeek: 695.33, prevMonth: 706.52, corr: '+0.81', corrColor: 'text-green-400' },
-                { ticker: 'XLK',  name: 'Tech Sector',   price: 245.80, prevWeek: 243.10, prevMonth: 238.50, corr: '+0.77', corrColor: 'text-green-400' },
-                { ticker: 'XLE',  name: 'Energy Sector', price: 89.20,  prevWeek: 91.40,  prevMonth: 87.30,  corr: '-0.18', corrColor: 'text-red-400' },
-                { ticker: 'XLF',  name: 'Financials',    price: 48.90,  prevWeek: 48.20,  prevMonth: 46.80,  corr: '+0.45', corrColor: 'text-yellow-400' },
-                { ticker: 'GLD',  name: 'Gold ETF',      price: 243.50, prevWeek: 241.80, prevMonth: 235.20, corr: '+0.38', corrColor: 'text-yellow-400' },
-              ].map((row, i) => {
-                const wChg = ((row.price / row.prevWeek - 1) * 100);
-                const mChg = ((row.price / row.prevMonth - 1) * 100);
+              {(() => {
+                const se = (report as any).sector_etfs as Record<string, {price: number, prev_week: number, name?: string}> | undefined;
+                const corrMap: Record<string, {corr: string, corrColor: string}> = {
+                  SPY: {corr: '+0.72', corrColor: 'text-green-400'},
+                  QQQ: {corr: '+0.81', corrColor: 'text-green-400'},
+                  XLK: {corr: '+0.77', corrColor: 'text-green-400'},
+                  XLE: {corr: '-0.18', corrColor: 'text-red-400'},
+                  XLF: {corr: '+0.45', corrColor: 'text-yellow-400'},
+                  GLD: {corr: '+0.38', corrColor: 'text-yellow-400'},
+                };
+                const rows = [
+                  { ticker: 'SPY', name: 'S&P 500',      price: report.spy_close ?? se?.['SPY']?.price ?? 0, prevWeek: se?.['SPY']?.prev_week ?? 0 },
+                  { ticker: 'QQQ', name: 'Nasdaq-100',   price: report.qqq_close ?? se?.['QQQ']?.price ?? 0, prevWeek: se?.['QQQ']?.prev_week ?? 0 },
+                  { ticker: 'XLK', name: se?.['XLK']?.name ?? 'Tech Sector',   price: se?.['XLK']?.price ?? 0, prevWeek: se?.['XLK']?.prev_week ?? 0 },
+                  { ticker: 'XLE', name: se?.['XLE']?.name ?? 'Energy Sector', price: se?.['XLE']?.price ?? 0, prevWeek: se?.['XLE']?.prev_week ?? 0 },
+                  { ticker: 'XLF', name: se?.['XLF']?.name ?? 'Financials',    price: se?.['XLF']?.price ?? 0, prevWeek: se?.['XLF']?.prev_week ?? 0 },
+                  { ticker: 'GLD', name: se?.['GLD']?.name ?? 'Gold ETF',      price: se?.['GLD']?.price ?? 0, prevWeek: se?.['GLD']?.prev_week ?? 0 },
+                ];
+                return rows.map((row, i) => {
+                const wChg = row.prevWeek ? ((row.price / row.prevWeek - 1) * 100) : 0;
+                const mChg = 0;
                 return (
                   <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
                     <td className="px-4 py-2.5 num font-semibold text-xs text-[hsl(var(--foreground))]">{row.ticker}</td>
@@ -527,28 +557,32 @@ export default function MacroSection({ report }: { report: Report }) {
                     <td className={`px-4 py-2.5 text-right num font-semibold ${wChg >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                       {wChg >= 0 ? '+' : ''}{wChg.toFixed(2)}%
                     </td>
-                    <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">${row.prevMonth.toFixed(2)}</td>
-                    <td className={`px-4 py-2.5 text-right num ${mChg >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                      {mChg >= 0 ? '+' : ''}{mChg.toFixed(2)}%
-                    </td>
-                    <td className={`px-4 py-2.5 text-right num text-xs ${row.corrColor}`}>{row.corr}</td>
+                    <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">—</td>
+                    <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">—</td>
+                    <td className={`px-4 py-2.5 text-right num text-xs ${corrMap[row.ticker]?.corrColor ?? 'text-[hsl(var(--muted-foreground))]'}`}>{corrMap[row.ticker]?.corr ?? '—'}</td>
                   </tr>
                 );
-              })}
+                });
+              })()}
             </tbody>
           </table>
         </div>
 
         {/* Sector heatmap row */}
         <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-3">
-          {[
-            { label: 'XLK Tech',      chg: +1.11, top: true },
-            { label: 'XLF Finance',   chg: +1.45, top: true },
-            { label: 'XLV Health',    chg: +0.82, top: false },
-            { label: 'XLI Industrl',  chg: +0.55, top: false },
-            { label: 'XLE Energy',    chg: -2.40, top: false },
-            { label: 'XLP Staples',   chg: -0.31, top: false },
-          ].map((s, i) => (
+          {(() => {
+            const se = (report as any).sector_etfs as Record<string, {price: number, prev_week: number}> | undefined;
+            const heatmap = [
+              { label: 'XLK Tech',     ticker: 'XLK' },
+              { label: 'XLF Finance',  ticker: 'XLF' },
+              { label: 'XLV Health',   ticker: 'XLV' },
+              { label: 'XLI Industrl', ticker: 'XLI' },
+              { label: 'XLE Energy',   ticker: 'XLE' },
+              { label: 'XLP Staples',  ticker: 'XLP' },
+            ].map(s => { const d = se?.[s.ticker]; const chg = d ? (d.price / d.prev_week - 1) * 100 : 0; return { ...s, chg }; });
+            const sorted = [...heatmap].sort((a,b) => b.chg - a.chg);
+            const topTicker = sorted[0]?.ticker; const botTicker = sorted[sorted.length-1]?.ticker;
+            return heatmap.map((s, i) => (
             <div key={i} className={`rounded p-2.5 text-center border ${
               s.chg > 1.2 ? 'bg-green-500/15 border-green-500/25' :
               s.chg > 0   ? 'bg-green-500/8 border-green-500/15' :
@@ -559,10 +593,11 @@ export default function MacroSection({ report }: { report: Report }) {
               <div className={`num text-sm font-semibold ${
                 s.chg >= 0 ? 'text-green-400' : 'text-red-400'
               }`}>{s.chg >= 0 ? '+' : ''}{s.chg.toFixed(2)}%</div>
-              {s.top && <div className="text-[9px] text-green-400 mt-0.5">🏅 топ</div>}
-              {s.label.includes('Energy') && <div className="text-[9px] text-red-400 mt-0.5">💀 аутсайдер</div>}
+              {s.ticker === topTicker && <div className="text-[9px] text-green-400 mt-0.5">🏅 топ</div>}
+              {s.ticker === botTicker && <div className="text-[9px] text-red-400 mt-0.5">💀 аутсайдер</div>}
             </div>
-          ))}
+          ));
+          })()}
         </div>
 
         {(() => {

@@ -405,9 +405,30 @@ export default function TechnicalSection({ report }: { report: any }) {
           })}
         </div>
 
-        <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-          💬 BTC утримує висхідну weekly структуру (HH/HL, 4 тижні поспіль) вище обох EMAs. Funding rate нейтральний. OI -1.35% WoW при зростанні ціни = ринок росте на закритті позицій. Ключові рівні: <span className="text-green-400">$64,572</span> (EMA21, Support) та <span className="text-red-400">$66,928</span> (W-1 High, Resistance) визначатимуть напрямок після FOMC 30.07.
-        </div>
+        {(() => {
+          const p = report?.btc_price;
+          const e21 = report?.btc_ema21;
+          const rsi = report?.btc_rsi14;
+          const fr = report?.btc_fr_cur;
+          const oiChg = report?.btc_oi_chg_wow;
+          if (!p || !e21) return null;
+          const pctVsEma = ((p / e21 - 1) * 100);
+          const aboveEma = p > e21;
+          const frLabel = fr === undefined ? '' : fr > 0.01 ? 'перегрів лонгів' : fr < -0.005 ? 'тиск шортів' : 'нейтральний';
+          const oiLabel = oiChg === undefined ? '' : oiChg > 5 ? 'OI ↑ зростає — нові позиції' : oiChg < -5 ? 'OI ↓ скорочується — делеверидж' : 'OI нейтральний';
+          return (
+            <div className="mt-3 p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
+              💬 BTC{' '}
+              <span className={aboveEma ? 'text-green-400' : 'text-red-400'}>
+                {aboveEma ? 'вище' : 'нижче'} EMA21
+              </span>{' '}
+              (${e21.toFixed(0)}, {pctVsEma > 0 ? '+' : ''}{pctVsEma.toFixed(2)}%).{' '}
+              {rsi !== undefined && <>RSI14: <span className={`num ${rsi >= 60 ? 'text-green-400' : rsi <= 40 ? 'text-red-400' : 'text-yellow-400'}`}>{rsi.toFixed(1)}</span>{rsi >= 70 ? ' — перекупленість' : rsi <= 30 ? ' — перепроданість' : ''}. </>}
+              {fr !== undefined && <>FR: <span className={`num ${fr > 0.01 ? 'text-red-400' : fr < -0.005 ? 'text-green-400' : 'text-[hsl(var(--foreground))]'}`}>{fr > 0 ? '+' : ''}{fr.toFixed(4)}%</span> — {frLabel}. </>}
+              {oiChg !== undefined && <>{oiLabel} ({oiChg > 0 ? '+' : ''}{oiChg.toFixed(2)}% WoW).</>}
+            </div>
+          );
+        })()}
       </section>
 
       {/* ── TECH SCORE BREAKDOWN (Formula v3) ── */}

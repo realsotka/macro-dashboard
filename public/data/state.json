@@ -150,53 +150,71 @@
   "mstr_avg_purchase_price": 63957,
   "macro_events": [
     {
-      "date": "10.08",
-      "name": "TIPS 10Y Real Yield (FRED)",
-      "actual": "2.43%",
-      "forecast": "—",
-      "prev": "2.43%",
+      "date": "03.08",
+      "name": "ISM Manufacturing PMI (Jul)",
+      "actual": "55.6",
+      "forecast": "54.0",
+      "prev": "53.3",
+      "impact": 1,
+      "note": "🟢 Сильний beat — найвищий рівень з травня 2022. 7-й місяць розширення поспіль"
+    },
+    {
+      "date": "04.08",
+      "name": "JOLTS Job Openings (Jun)",
+      "actual": "7.36M",
+      "forecast": "7.4M",
+      "prev": "7.54M",
       "impact": -1,
-      "note": "High real yield pressures BTC"
+      "note": "🔴 Miss — відкриті вакансії скорочуються, ринок праці охолоджується"
     },
     {
-      "date": "10.08",
-      "name": "VIX (Fear Index)",
-      "actual": "14.90",
-      "forecast": "—",
-      "prev": "15.99",
-      "impact": 1,
-      "note": "Low volatility supports risk appetite"
-    },
-    {
-      "date": "10.08",
-      "name": "BTC ETF Weekly Flow",
-      "actual": "+865M",
-      "forecast": "—",
-      "prev": "-62M",
-      "impact": 1,
-      "note": "Institutional inflow"
-    },
-    {
-      "date": "08.04",
-      "name": "COT Leveraged Funds Percentile",
-      "actual": "86.5%",
-      "forecast": "—",
-      "prev": "88.5",
+      "date": "05.08",
+      "name": "ADP Employment Change (Jul)",
+      "actual": "+44K",
+      "forecast": "+70K",
+      "prev": "+95K",
       "impact": -1,
-      "note": "Crowded bearish positioning; contrarian bullish"
+      "note": "🔴 Miss — приватний сектор наймає значно повільніше"
     },
     {
-      "date": "10.08",
-      "name": "MVRV Ratio (CoinMetrics)",
-      "actual": "1.230",
+      "date": "05.08",
+      "name": "ISM Services PMI (Jul)",
+      "actual": "54.1",
+      "forecast": "54.5",
+      "prev": "54.0",
+      "impact": 0,
+      "note": "🟡 Незначний miss — сектор послуг у зоні розширення (>50), 25-й місяць поспіль"
+    },
+    {
+      "date": "07.08",
+      "name": "Initial Jobless Claims",
+      "actual": "199K",
       "forecast": "—",
-      "prev": "1.231",
+      "prev": "198K",
+      "impact": 0,
+      "note": "🟡 Стабільно низький рівень — ринок праці ще тримається"
+    },
+    {
+      "date": "07.08",
+      "name": "NFP Non-Farm Payrolls (Jul)",
+      "actual": "-23K",
+      "forecast": "+80K",
+      "prev": "+20K",
+      "impact": -1,
+      "note": "🔴 Сильний miss — перше скорочення робочих місць з 2020. Голубиний сигнал для ФРС (Warsh)"
+    },
+    {
+      "date": "07.08",
+      "name": "Unemployment Rate (Jul)",
+      "actual": "4.1%",
+      "forecast": "4.2%",
+      "prev": "4.2%",
       "impact": 1,
-      "note": "MVRV below 1.3 blocks SHORT under v3"
+      "note": "🟢 Краще прогнозу — рівень безробіття знизився"
     }
   ],
-  "macro_comment": "Composite 42.1 (neutral-down). TIPS 10Y=2.43% | VIX=14.9 | ETF +865M | COT 86% | MVRV 1.230. Real yields are a headwind for BTC. COT is in a crowded bearish zone, a contrarian bullish signal. The MVRV filter is active and blocks SHORT under v3. A hawkish Fed under Chair Warsh remains a constraint on risk appetite.",
-  "macro_events_week": "10.08–10.08.2026",
+  "macro_comment": "Composite 42.1 (neutral-down). Тиждень W33 — домінували слабкі дані ринку праці. NFP -23K (прогн. +80K) — перше скорочення робочих місць за 5+ років, сильний голубиний сигнал. ADP +44K (прогн. +70K) підтвердило тренд. ISM Manufacturing 55.6 — єдиний позитивний сюрприз тижня. TIPS 10Y=2.43% залишається headwind для BTC. COT 86.5% — contrarian bullish (хедж-фонди максимально в шорті). MVRV 1.230 — SHORT заблокований фільтром v3. Fed Chair Warsh — слабкий NFP відкриває простір для rate cuts.",
+  "macro_events_week": "04.08–08.08.2026",
   "btc_w0_high": 65500.0,
   "btc_w0_low": 64794.4,
   "btc_w1_high": 65357.8,

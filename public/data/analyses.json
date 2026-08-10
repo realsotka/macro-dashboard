@@ -1,25 +1,20 @@
 [
   {
-    "id": "mid-2026-08-03",
+    "id": "mid-2026-08-10",
     "type": "mid",
-    "date": "2026-08-03",
-    "timeframe": "2–4 тижні",
+    "date": "2026-08-10",
+    "timeframe": "4–8 weeks",
     "bias": "bearish",
-    "title": "BTC Мід-терм W32: Risk-Off, очікування сигналу",
-    "content": "Composite 37.3/100 — система в режимі Risk-Off, але MVRV-фільтр (1.202 < 1.3) блокує відкриття SHORT. Позиція: поза ринком.\n\nКлючові рівні:\n• Підтримка: $61,500–62,000 (зона накопичення)\n• EMA21 weekly: $64,066 — основний опір\n• Опір: $66,500 (W-1 high)\n\nСценарій 1 — ПРОДОВЖЕННЯ СЛАБКОСТІ (базовий, 60%):\nBTC залишається під EMA21, RSI14=33 без ознак відновлення. ETF-відтік $61.5M за тиждень, COT percentile 88.5% — позиціонування переповнене. Цільова зона: $59,000–61,000. Для відкриття SHORT потрібно MVRV ≥ 1.3 + composite < 40.\n\nСценарій 2 — ВІДСКОК ДО EMA21 (30%):\nЗакриття шортів + позитивні ETF-дані можуть підняти BTC до $64,000–66,000. Для LONG потрібен composite ≥ 53 (зараз 37.3 — далеко).\n\nСценарій 3 — ПРОБІЙ ВНИЗ (10%):\nMVRV < 1.0 активує SHORT bottom exit. При поточній динаміці малоймовірно в межах 2–4 тижнів.\n\nДія: FLAT. Чекаємо або composite ≥ 53 (LONG) або composite < 40 + MVRV ≥ 1.3 (SHORT).",
-    "levels": {
-      "support": "$61,500–62,000",
-      "resistance": "$64,066 (EMA21)",
-      "key_level": "$66,500"
-    }
+    "title": "Mid-term W33: neutral-down | Composite 42.1",
+    "content": "Composite 42.1/100 (neutral-down). Tech 33, Crypto 49, Macro 47. MVRV 1.230. EMA21 66699 (BTC below). Base case: BTC remains range-bound; composite 42.1 is in the FLAT zone. | Bullish: reclaiming EMA21 (66699) plus composite at least 53 opens LONG. | Bearish: break below support plus composite below 38 opens SHORT only if MVRV is at least 1.3."
   },
   {
-    "id": "long-2026-08-03",
+    "id": "long-2026-08-10",
     "type": "long",
-    "date": "2026-08-03",
-    "timeframe": "1–3 місяці",
-    "bias": "neutral",
-    "title": "BTC Лонг-терм W32: макро-цикл, MVRV і сигнал розвороту",
-    "content": "Система Formula v3 в режимі Risk-Off з composite 37.3. Всі три блоки сигналізують слабкість.\n\nМакро (46/100):\nTIPS 10Y = 2.41% — реальні ставки залишаються обмежувальними. Breakeven 2.28% — інфляційні очікування стабільні. ФРС під керівництвом Kevin Warsh не демонструє готовності до зниження ставок при сильному ринку праці. VIX = 16 — ринок акцій не відображає ризиків.\n\nCrypto (36/100):\n• ETF 4w avg: +$61.3M, але останній тиждень -$61.5M — погіршення\n• COT lev-money: net -6,873, percentile 88.5% — «розумні гроші» в шортах\n• MVRV 1.202 — нижче 1.3 (FLAT zone): ринок ще не на дні, але й не перегрітий\n\nTech (33/100):\nЦіна на -2.33% нижче weekly EMA21, RSI14 = 33.18 (слабкість, але не екстремум). FR нейтральний (+0.0047%). OI WoW +4.85% при падінні ціни = примусові лонги.\n\nСценарій розвороту до LONG:\nПотрібне відновлення composite ≥ 53. Умови: ETF-потоки 4w avg > $150M, COT percentile < 70%, BTC вище EMA21. Орієнтовний горизонт: жовтень–листопад 2026 (сезонність + цикл)\n\nРизик просідання:\nЯкщо MVRV опуститься < 1.0 — система відкриє SHORT + MVRV bottom exit (розворот). Зараз буфер 1.202 → 1.0 = ~17% падіння BTC від поточних рівнів (~$52,000).\n\nПозиція: FLAT. Попередня SHORT (31 трав. $74,300 → 5 черв. ~$65,000) закрита з прибутком. Наступний вхід лише при підтвердженні системи."
+    "date": "2026-08-10",
+    "timeframe": "2–6 months",
+    "bias": "bullish",
+    "title": "Long-term: Accumulation | MVRV 1.230",
+    "content": "Cycle analysis: MVRV 1.230 indicates Accumulation. TIPS10 real yield 2.43% remains a structural pressure. Hawkish Fed policy under Chair Warsh limits risk appetite. BTC ETF cumulative flow is 53.27B. COT percentile 86.5% indicates crowded bearish positioning with contrarian bullish potential. LONG conditions: composite at least 53, MVRV at most 3.5, VIX at most 30. Current status: neutral-down."
   }
 ]

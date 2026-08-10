@@ -150,71 +150,80 @@
   "mstr_avg_purchase_price": 63957,
   "macro_events": [
     {
-      "date": "03.08",
-      "name": "ISM Manufacturing PMI (Jul)",
-      "actual": "55.6",
-      "forecast": "54.0",
-      "prev": "53.3",
-      "impact": 1,
-      "note": "🟢 Сильний beat — найвищий рівень з травня 2022. 7-й місяць розширення поспіль"
-    },
-    {
-      "date": "04.08",
-      "name": "JOLTS Job Openings (Jun)",
-      "actual": "7.36M",
-      "forecast": "7.4M",
-      "prev": "7.54M",
-      "impact": -1,
-      "note": "🔴 Miss — відкриті вакансії скорочуються, ринок праці охолоджується"
-    },
-    {
-      "date": "05.08",
-      "name": "ADP Employment Change (Jul)",
-      "actual": "+44K",
-      "forecast": "+70K",
-      "prev": "+95K",
-      "impact": -1,
-      "note": "🔴 Miss — приватний сектор наймає значно повільніше"
-    },
-    {
-      "date": "05.08",
-      "name": "ISM Services PMI (Jul)",
-      "actual": "54.1",
-      "forecast": "54.5",
-      "prev": "54.0",
+      "date": "11.08",
+      "name": "NFIB Small Business Optimism (Jul)",
+      "actual": "—",
+      "forecast": "96.8",
+      "prev": "97.4",
       "impact": 0,
-      "note": "🟡 Незначний miss — сектор послуг у зоні розширення (>50), 25-й місяць поспіль"
+      "note": "Настрої малого бізнесу"
     },
     {
-      "date": "07.08",
+      "date": "11.08",
+      "name": "Existing Home Sales (Jul)",
+      "actual": "—",
+      "forecast": "4.07M",
+      "prev": "4.09M",
+      "impact": 0,
+      "note": "Ринок нерухомості — вторинні продажі"
+    },
+    {
+      "date": "12.08",
+      "name": "CPI YoY (Jul) ⚡",
+      "actual": "—",
+      "forecast": "3.4%",
+      "prev": "3.5%",
+      "impact": 0,
+      "note": "⚡ ГОЛОВНА ПОДІЯ — 1-й з 2 CPI звітів до FOMC вересень (15-16.09)"
+    },
+    {
+      "date": "12.08",
+      "name": "Core CPI YoY (Jul)",
+      "actual": "—",
+      "forecast": "2.5%",
+      "prev": "2.6%",
+      "impact": 0,
+      "note": "Core CPI MoM прогн. +0.2% (попер. 0.0%)"
+    },
+    {
+      "date": "13.08",
+      "name": "PPI MoM (Jul)",
+      "actual": "—",
+      "forecast": "+0.2%",
+      "prev": "—",
+      "impact": 0,
+      "note": "Оптові ціни — індикатор майбутньої інфляції"
+    },
+    {
+      "date": "13.08",
       "name": "Initial Jobless Claims",
-      "actual": "199K",
+      "actual": "—",
       "forecast": "—",
-      "prev": "198K",
+      "prev": "199K",
       "impact": 0,
-      "note": "🟡 Стабільно низький рівень — ринок праці ще тримається"
+      "note": "Щотижнева — контекст після NFP -23K"
     },
     {
-      "date": "07.08",
-      "name": "NFP Non-Farm Payrolls (Jul)",
-      "actual": "-23K",
-      "forecast": "+80K",
-      "prev": "+20K",
-      "impact": -1,
-      "note": "🔴 Сильний miss — перше скорочення робочих місць з 2020. Голубиний сигнал для ФРС (Warsh)"
+      "date": "14.08",
+      "name": "Retail Sales MoM (Jul)",
+      "actual": "—",
+      "forecast": "+0.1%",
+      "prev": "+0.2%",
+      "impact": 0,
+      "note": "Споживчі витрати — ключовий індикатор GDP"
     },
     {
-      "date": "07.08",
-      "name": "Unemployment Rate (Jul)",
-      "actual": "4.1%",
-      "forecast": "4.2%",
-      "prev": "4.2%",
-      "impact": 1,
-      "note": "🟢 Краще прогнозу — рівень безробіття знизився"
+      "date": "14.08",
+      "name": "UMich Consumer Sentiment (Aug)",
+      "actual": "—",
+      "forecast": "54.5",
+      "prev": "54.4",
+      "impact": 0,
+      "note": "Попередній — настрої споживачів після слабкого NFP"
     }
   ],
-  "macro_comment": "Composite 42.1 (neutral-down). Тиждень W33 — домінували слабкі дані ринку праці. NFP -23K (прогн. +80K) — перше скорочення робочих місць за 5+ років, сильний голубиний сигнал. ADP +44K (прогн. +70K) підтвердило тренд. ISM Manufacturing 55.6 — єдиний позитивний сюрприз тижня. TIPS 10Y=2.43% залишається headwind для BTC. COT 86.5% — contrarian bullish (хедж-фонди максимально в шорті). MVRV 1.230 — SHORT заблокований фільтром v3. Fed Chair Warsh — слабкий NFP відкриває простір для rate cuts.",
-  "macro_events_week": "04.08–08.08.2026",
+  "macro_comment": "W34: тиждень інфляції. CPI (12.08) — ключова подія: прогноз 3.4% YoY vs 3.5% попер. Це 1-й з 2 звітів до FOMC вересень (15-16.09). Після NFP -23K ринок закладає rate cut. Якщо CPI охолоне — тиск на BTC зменшиться. Core CPI прогн. 2.5% YoY. Також: PPI (13.08) + Retail Sales + UMich Sentiment (14.08). TIPS 10Y=2.43% | VIX=14.9 | COT 86.5% contrarian bullish | MVRV 1.230 — SHORT filter активний (v3).",
+  "macro_events_week": "10.08–14.08.2026",
   "btc_w0_high": 65500.0,
   "btc_w0_low": 64794.4,
   "btc_w1_high": 65357.8,

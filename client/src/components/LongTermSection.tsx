@@ -9,7 +9,7 @@ function BiasBadge({ bias }: { bias: string }) {
   };
   return (
     <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-xs font-medium ${map[bias] || map["neutral"]}`}>
-      {bias === "bullish" ? "🟢 Bullish" : bias === "bearish" ? "🔴 Bearish" : "🟡 Neutral"}
+      {bias === "bullish" ? "🟢 Бичачий" : bias === "bearish" ? "🔴 Ведмежий" : "🟡 Нейтральний"}
     </span>
   );
 }
@@ -57,12 +57,12 @@ export default function LongTermSection() {
             const tipsStatus = tips10 != null ? (tips10 > 2.0 ? 'risk' : tips10 > 1.5 ? 'neutral' : 'ok') : 'risk';
             const structStatus = weeklyStruct?.includes('HH') ? 'ok' : weeklyStruct?.includes('LH') ? 'risk' : 'neutral';
             return [
-              { label: "Реальні ставки",    status: tipsStatus, val: tips10 != null ? `10Y TIPS ${tips10.toFixed(2)}%` : '10Y TIPS —', note: tips10 != null && tips10 > 2.0 ? '⚠ Headwind > 2%' : tips10 != null && tips10 > 1.5 ? 'Помірний тиск' : '✅ Нейтральна зона' },
+              { label: "Реальні ставки",    status: tipsStatus, val: tips10 != null ? `10Y TIPS ${tips10.toFixed(2)}%` : '10Y TIPS —', note: tips10 != null && tips10 > 2.0 ? '⚠ Структурний headwind' : tips10 != null && tips10 > 1.5 ? 'Помірний тиск' : '✅ Нейтральна зона' },
               { label: "ETF AUM",           status: "ok",      val: etfAum != null ? `$${etfAum.toFixed(2)}B` : '$77.74B', note: "Інституційна база" },
               { label: "Halvening ефект",   status: "ok",      val: "Квітень 2025+",    note: "Supply shock продовжується" },
-              { label: "Weekly структура",  status: structStatus, val: weeklyStruct ?? 'HH/HL × 4', note: structStatus === 'ok' ? 'Bullish momentum' : structStatus === 'risk' ? 'Bearish pressure' : 'Нейтральна' },
-              { label: "BTC/USD кореляція", status: "neutral", val: "Негативна",        note: "DXY ↑ = BTC тиск" },
-              { label: "Cyclic position",   status: "neutral", val: "Post-halving Y+1", note: "Hist. peak Q3–Q4" },
+              { label: "Тижнева структура",  status: structStatus, val: weeklyStruct ?? 'HH/HL × 4', note: structStatus === 'ok' ? 'Бичачий імпульс' : structStatus === 'risk' ? 'Ведмежий тиск' : 'Нейтральна' },
+              { label: "BTC/USD кореляція", status: "neutral", val: "Негативна",        note: "DXY ↑ = тиск на BTC" },
+              { label: "Циклічна позиція",   status: "neutral", val: "Після-халвінг Y+1", note: "Іст. пік Q3–Q4" },
             ];
           })().map((f, i) => (
             <div key={i} className={`rounded p-3 border ${

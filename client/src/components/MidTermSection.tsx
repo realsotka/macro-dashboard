@@ -14,7 +14,7 @@ function BiasBadge({ bias }: { bias: string }) {
   };
   return (
     <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-xs font-medium ${map[bias] || map["neutral"]}`}>
-      {bias === "bullish" ? "🟢 Bullish" : bias === "bearish" ? "🔴 Bearish" : "🟡 Neutral"}
+      {bias === "bullish" ? "🟢 Бичачий" : bias === "bearish" ? "🔴 Ведмежий" : "🟡 Нейтральний"}
     </span>
   );
 }

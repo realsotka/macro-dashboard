@@ -1,40 +1,72 @@
-// GitHub raw data URLs
-const REPO = "https://raw.githubusercontent.com/realsotka/macro-dashboard/main";
+// Data client — reads from inline window.__DASHBOARD_DATA__ first (static deploy),
+// then falls back to /data/*.json (local dev with Express), then raw GitHub.
 
-export const DATA_URLS = {
-  state:    `${REPO}/public/data/state.json`,
-  analyses: `${REPO}/public/data/analyses.json`,
-  report:   `${REPO}/public/data/latest_report.md`,
-  trades:   `${REPO}/public/data/trades.json`,
-};
+declare global {
+  interface Window {
+    __DASHBOARD_DATA__?: {
+      state: any;
+      analyses: any[];
+      trades: any;
+      report: string;
+    };
+  }
+}
 
-// Cache busting — append timestamp rounded to 5 min so data refreshes every 5 min
+const GITHUB_RAW = "https://raw.githubusercontent.com/realsotka/macro-dashboard/main";
+
 function bustUrl(url: string) {
   const t = Math.floor(Date.now() / (5 * 60 * 1000));
   return `${url}?t=${t}`;
 }
 
-export async function fetchState() {
-  const res = await fetch(bustUrl(DATA_URLS.state));
-  if (!res.ok) throw new Error("state.json fetch failed");
+async function fetchJson(path: string): Promise<any> {
+  // 1. Try inline data (fastest, no network)
+  const inline = window.__DASHBOARD_DATA__;
+  if (inline) {
+    if (path.includes("state"))    return inline.state;
+    if (path.includes("analyses")) return inline.analyses;
+    if (path.includes("trades"))   return inline.trades;
+  }
+
+  // 2. Try local /data/ (Express dev server)
+  try {
+    const res = await fetch(bustUrl(`/data/${path}`));
+    if (res.ok) return res.json();
+  } catch {}
+
+  // 3. Fallback: GitHub raw
+  const res = await fetch(bustUrl(`${GITHUB_RAW}/public/data/${path}`));
+  if (!res.ok) throw new Error(`Failed to fetch ${path}`);
   return res.json();
 }
 
-export async function fetchAnalyses(type?: "mid" | "long") {
-  const res = await fetch(bustUrl(DATA_URLS.analyses));
-  if (!res.ok) throw new Error("analyses.json fetch failed");
-  const all = await res.json() as any[];
-  return type ? all.filter(a => a.type === type) : all;
-}
+async function fetchText(path: string): Promise<string> {
+  const inline = window.__DASHBOARD_DATA__;
+  if (inline && path.includes("report")) return inline.report;
 
-export async function fetchReport() {
-  const res = await fetch(bustUrl(DATA_URLS.report));
+  try {
+    const res = await fetch(bustUrl(`/data/${path}`));
+    if (res.ok) return res.text();
+  } catch {}
+
+  const res = await fetch(bustUrl(`${GITHUB_RAW}/public/data/${path}`));
   if (!res.ok) return "";
   return res.text();
 }
 
+export async function fetchState() {
+  return fetchJson("state.json");
+}
+
+export async function fetchAnalyses(type?: "mid" | "long") {
+  const all = await fetchJson("analyses.json") as any[];
+  return type ? all.filter(a => a.type === type) : all;
+}
+
+export async function fetchReport() {
+  return fetchText("latest_report.md");
+}
+
 export async function fetchTrades() {
-  const res = await fetch(bustUrl(DATA_URLS.trades));
-  if (!res.ok) throw new Error("trades.json fetch failed");
-  return res.json();
+  return fetchJson("trades.json");
 }

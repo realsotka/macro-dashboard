@@ -1,59 +1,59 @@
-## Macro Dashboard — Weekly Report W33 2026
+## Macro Dashboard — Weekly Report W34 2026
 
-### Composite Score: 42.1/100 — neutral-down
-- Tech: 33 | Crypto: 49 | Macro: 47
+### Composite Score: 38.2/100 — neutral-down
+- Tech: 26 | Crypto: 46 | Macro: 47
 - Formula: v3 (Macro 25%, Crypto 35%, Tech 40%)
-- Confidence: 16/100
+- Confidence: 24/100
 
 ### BTC Technical Analysis
-- Price: $65159.00 | Weekly EMA21: $66698.58 (-2.31%)
-- Weekly RSI14: 26.47 | Funding rate: +0.0092% | Open interest WoW: +1.57%
-- Weekly structure: HH/HL — висхідна
-- Score adjustments: EMA -8, RSI -7, funding -2, OI +0
-- Key weekly levels: W0 high/low $65,500/$64,794; W1 $65,358/$62,268; W2 $65,740/$62,227
+- Price: $63553.90 | Weekly EMA21: $66348.61 (-4.21%)
+- Weekly RSI14: 28.48 | Funding rate: +0.0100% | Open interest WoW: +3.66%
+- Weekly structure: Neutral — структура не визначена
+- Score adjustments: EMA -12, RSI -7, funding -2, OI -3
+- Key weekly levels: W0 high/low $63,695/$62,685; W1 $65,500/$62,508; W2 $65,358/$62,268
 
 ### Macro (FRED and Market)
-- TIPS 5Y: 2.17% | TIPS 10Y: 2.43% | 10Y breakeven: 2.25%
-- Nominal 10Y: 4.69% | SOFR: 3.65% | VIX: 14.90
-- SPY: $773.26 | QQQ: $723.03
-- Fear and Greed: 30 (Fear)
+- TIPS 5Y: 2.11% | TIPS 10Y: 2.39% | 10Y breakeven: 2.27%
+- Nominal 10Y: 4.63% | SOFR: 3.62% | VIX: 14.25
+- SPY: $776.34 | QQQ: $731.07
+- Fear and Greed: 31 (Fear)
 - Fed context: Chair Warsh; real yields above 2% remain a macro headwind.
 
 ### BTC and ETH ETF Flows
-- BTC weekly: +865.3M | 4-week average: +228.3M | cumulative: 53.27B
-- ETH weekly: +243.7M | cumulative: 11464.6M
-- BTC/ETH weekly flow ratio: 3.55 | Rotation: BOTH_POSITIVE
+- BTC weekly: -385.2M | 4-week average: +113.1M | cumulative: 52.89B
+- ETH weekly: -3.0M | cumulative: 11461.6M
+- BTC/ETH weekly flow ratio: 128.4 | Rotation: ETH>BTC
 
 ### Sector ETFs
-- Tech Sector (XLK): $187.97 (+5.58% WoW)
-- Energy Sector (XLE): $57.50 (-2.19% WoW)
-- Financials (XLF): $57.60 (+0.38% WoW)
-- Health Care (XLV): $165.68 (+2.12% WoW)
-- Industrials (XLI): $185.18 (+1.10% WoW)
-- Staples (XLP): $85.12 (+0.31% WoW)
-- Gold ETF (GLD): $398.47 (+7.20% WoW)
+- Tech Sector (XLK): $190.01 (+1.98% WoW)
+- Energy Sector (XLE): $61.91 (+2.87% WoW)
+- Financials (XLF): $58.16 (+0.61% WoW)
+- Health Care (XLV): $167.37 (-0.64% WoW)
+- Industrials (XLI): $186.51 (+1.03% WoW)
+- Staples (XLP): $86.09 (+1.34% WoW)
+- Gold ETF (GLD): $401.48 (-0.26% WoW)
 
 ### COT and MVRV
-- COT report date: 2026-08-04 | Leveraged funds net: -7240 | Percentile: 86.5% | Velocity: -367
-- Asset managers net: +2542 | 26-week WCI: 70.0
-- BTC MVRV: 1.230 | Cycle phase: Accumulation
+- COT report date: 2026-08-11 | Leveraged funds net: -7052 | Percentile: 86.5% | Velocity: +188
+- Asset managers net: +2234 | 26-week WCI: 72.9
+- BTC MVRV: 1.193 | Cycle phase: Accumulation
 
 ### Strategy / MSTR Fundamentals
-- Latest ledger row: 2026-08-03 | BTC held: 842,138 | Average purchase price: $63,957
-- MSTR price: $100.01 | Assumed shares outstanding: 280M
-- Current mNAV: 0.5103x | Prior mNAV: 1.4134x | WoW change: -0.9031x | Macro adjustment: -5
+- Latest ledger row: 2026-08-03 | BTC held: 842,138 | Average purchase price: $63,513.0
+- MSTR price: $93.04 | Assumed shares outstanding: 280M
+- Current mNAV: 0.4867x | Prior mNAV: 0.5103x | WoW change: -0.0236x | Macro adjustment: -5
 
 ### Paper Trading Position
-- Signal: neutral-down | Composite: 42.1
+- Signal: neutral-down | Composite: 38.2
 - Trade action: HOLD
 - Rules: LONG entry at composite at least 53 with MVRV at most 3.5 and VIX at most 30; SHORT entry below 40 requires MVRV at least 1.3 and VIX at most 30.
 
 ### Weekly Macro Events
-- TIPS 10Y Real Yield (FRED): 2.43% | High real yield pressures BTC
-- VIX (Fear Index): 14.90 | Low volatility supports risk appetite
-- BTC ETF Weekly Flow: +865M | Institutional inflow
+- TIPS 10Y Real Yield (FRED): 2.39% | High real yield pressures BTC
+- VIX (Fear Index): 14.25 | Low volatility supports risk appetite
+- BTC ETF Weekly Flow: -385M | ETF outflow
 - COT Leveraged Funds Percentile: 86.5% | Crowded bearish positioning; contrarian bullish
-- MVRV Ratio (CoinMetrics): 1.230 | MVRV below 1.3 blocks SHORT under v3
+- MVRV Ratio (CoinMetrics): 1.193 | MVRV below 1.3 blocks SHORT under v3
 
 ### Sources
 - FRED DFII5: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII5

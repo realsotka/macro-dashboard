@@ -50,9 +50,9 @@
 - 18.08 COT Leveraged Funds percentile: 82.7% | prev 86.5% | impact -1 | Переповнене ведмеже позиціонування; contrarian bullish.
 - 20.08 Initial Jobless Claims: — | prev 199K | impact +0 | Щотижневий індикатор ринку праці; значення потребує ручного оновлення.
 - 24.08 BTC ETF тижневий потік: +1918M | prev -385M | impact +1 | Сильний інституційний приток.
-- 24.08 TIPS 10Y реальна дохідність: 2.35% | prev 2.35% | impact -1 | Структурний тиск на BTC (>2%).
+- 24.08 TIPS 10Y реальна дохідність: 2.35% | prev 2.39% | impact -1 | Структурний тиск на BTC (>2%).
 - 24.08 VIX (індекс волатильності): 15.13 | prev 14.25 | impact +1 | Низька волатильність — risk-on.
-- 24.08 MVRV Ratio: 1.468 | prev 1.458 | impact +0 | Рання бичача фаза.
+- 24.08 MVRV Ratio: 1.468 | prev 1.193 | impact +0 | Рання бичача фаза.
 
 ### Коментар
 Composite 54.4 (neutral-up). TIPS 10Y=2.35% | VIX=15.1 | COT 83% | MVRV 1.468. ETF потік: +1918M — приток. Структурний headwind від реальних ставок (TIPS >2%). COT 83% — contrarian bullish, хедж-фонди зберігають значний шорт. Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит.

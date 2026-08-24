@@ -13,9 +13,33 @@
       "equity": 9973.0,
       "pnl": -27.0,
       "event": "T001 SL LONG -2.25%"
+    },
+    {
+      "date": "2026-08-25",
+      "equity": 9973.0,
+      "pnl": 0,
+      "event": "T002 LONG відкрито @$77,563"
     }
   ],
-  "open_position": null,
+  "open_position": {
+    "id": "T002",
+    "opened_at": "2026-08-25",
+    "direction": "LONG",
+    "regime": "neutral-up",
+    "composite_score": 54.4,
+    "entry_price": 77563.3,
+    "size_pct": 8,
+    "leverage": 1.5,
+    "notional": 1196.76,
+    "sl_price": 76399.85,
+    "tp_price": 79890.2,
+    "sl_pct": -1.5,
+    "tp_pct": 3.0,
+    "max_risk_usd": -17.95,
+    "max_reward_usd": 35.9,
+    "status": "open",
+    "note": "Neutral-Up: composite 54.4 ≥53, MVRV 1.468 ≤3.5, VIX 15.1 ≤30 — всі умови v3 виконані"
+  },
   "closed_trades": [
     {
       "id": "T001",

@@ -76,5 +76,18 @@
         "wins": 0
       }
     }
-  }
+  },
+  "trades": [
+    {
+      "id": "trade_2026-08-24",
+      "side": "long",
+      "entry_price": 77563.3,
+      "entry_date": "2026-08-24",
+      "entry_composite": 54.4,
+      "status": "open",
+      "exit_price": null,
+      "exit_date": null,
+      "pnl_pct": null
+    }
+  ]
 }

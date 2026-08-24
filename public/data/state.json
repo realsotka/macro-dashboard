@@ -75,10 +75,9 @@
     "ust_10y": 4.29
   },
   "prior_week": {
-    "last_updated_daily": "2026-08-24",
-    "tips_5y": 2.05,
-    "tips_10y": 2.35,
-    "breakeven_10y": 2.34,
+    "tips_5y": 2.11,
+    "tips_10y": 2.39,
+    "breakeven_10y": 2.27,
     "nominal_10y": 4.63,
     "sofr": 3.62,
     "etf_weekly_flow": -0.3852,
@@ -86,13 +85,14 @@
     "spy_close": 776.34,
     "qqq_close": 731.07,
     "vix": 14.25,
-    "market_regime": "neutral-up",
-    "composite_score": 54.6,
-    "trade_signal": "neutral-up",
+    "market_regime": "neutral-down",
+    "composite_score": 38.2,
+    "trade_signal": "neutral-down",
     "cot_btc_percentile": 86.5,
-    "cot_date": "2026-08-04",
-    "mvrv": 1.4578,
-    "mstr_mnav_cur": 0.4867
+    "cot_date": "2026-08-11",
+    "mvrv": 1.1930314938000863,
+    "mstr_mnav_cur": 0.4867,
+    "last_updated_daily": "2026-08-17"
   },
   "qqq_close": 713.44,
   "spy_close": 765.72,
@@ -181,7 +181,7 @@
       "name": "TIPS 10Y реальна дохідність",
       "actual": "2.35%",
       "forecast": "—",
-      "prev": "2.35%",
+      "prev": "2.39%",
       "impact": -1,
       "note": "Структурний тиск на BTC (>2%)."
     },
@@ -199,7 +199,7 @@
       "name": "MVRV Ratio",
       "actual": "1.468",
       "forecast": "—",
-      "prev": "1.458",
+      "prev": "1.193",
       "impact": 0,
       "note": "Рання бичача фаза."
     }

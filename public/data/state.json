@@ -150,62 +150,62 @@
   "mstr_avg_purchase_price": 63513.0,
   "macro_events": [
     {
-      "date": "18.08",
-      "name": "COT Leveraged Funds percentile",
-      "actual": "82.7%",
-      "forecast": "—",
-      "prev": "86.5%",
+      "date": "21.08",
+      "name": "Initial Jobless Claims",
+      "actual": "232K",
+      "forecast": "225K",
+      "prev": "228K",
       "impact": -1,
-      "note": "Переповнене ведмеже позиціонування; contrarian bullish."
+      "note": "🔴 Вище прогнозу — ринок праці продовжує слабшати третій тиждень поспіль"
     },
     {
-      "date": "20.08",
-      "name": "Initial Jobless Claims",
+      "date": "21.08",
+      "name": "Philadelphia Fed Manufacturing",
+      "actual": "1.6",
+      "forecast": "-3.0",
+      "prev": "-3.1",
+      "impact": 1,
+      "note": "🟢 Beat — вихід у позитивну зону, перший раз за 3 місяці"
+    },
+    {
+      "date": "22.08",
+      "name": "S&P Global PMI Flash (Aug)",
+      "actual": "53.9",
+      "forecast": "52.0",
+      "prev": "52.4",
+      "impact": 1,
+      "note": "🟢 Beat — ділова активність прискорилась, composite PMI найвищий з лютого"
+    },
+    {
+      "date": "22.08",
+      "name": "Jackson Hole Symposium — старт ⚡",
       "actual": "—",
       "forecast": "—",
-      "prev": "199K",
+      "prev": "—",
       "impact": 0,
-      "note": "Щотижневий індикатор ринку праці; значення потребує ручного оновлення."
+      "note": "📍 Щорічний симпозіум ФРС. Голова Warsh виступає 23.08 — ринок чекає сигнал про rate cut"
+    },
+    {
+      "date": "23.08",
+      "name": "Warsh (ФРС) — промова Jackson Hole ⚡",
+      "actual": "Hawkish-нейтральна",
+      "forecast": "—",
+      "prev": "—",
+      "impact": -1,
+      "note": "🔴 Warsh не дав чіткого сигналу на вересневий cut — «дані диктуватимуть рішення». Risk-off реакція"
     },
     {
       "date": "24.08",
-      "name": "BTC ETF тижневий потік",
+      "name": "BTC ETF тижневий потік (W35)",
       "actual": "+1918M",
       "forecast": "—",
       "prev": "-385M",
       "impact": 1,
-      "note": "Сильний інституційний приток."
-    },
-    {
-      "date": "24.08",
-      "name": "TIPS 10Y реальна дохідність",
-      "actual": "2.35%",
-      "forecast": "—",
-      "prev": "2.39%",
-      "impact": -1,
-      "note": "Структурний тиск на BTC (>2%)."
-    },
-    {
-      "date": "24.08",
-      "name": "VIX (індекс волатильності)",
-      "actual": "15.13",
-      "forecast": "—",
-      "prev": "14.25",
-      "impact": 1,
-      "note": "Низька волатильність — risk-on."
-    },
-    {
-      "date": "24.08",
-      "name": "MVRV Ratio",
-      "actual": "1.468",
-      "forecast": "—",
-      "prev": "1.193",
-      "impact": 0,
-      "note": "Рання бичача фаза."
+      "note": "🟢 Різкий розворот — найбільший тижневий приток з квітня. Інституційний попит повернувся"
     }
   ],
-  "macro_comment": "Composite 54.4 (neutral-up). TIPS 10Y=2.35% | VIX=15.1 | COT 83% | MVRV 1.468. ETF потік: +1918M — приток. Структурний headwind від реальних ставок (TIPS >2%). COT 83% — contrarian bullish, хедж-фонди зберігають значний шорт. Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит.",
-  "macro_events_week": "17.08–23.08.2026",
+  "macro_comment": "Composite 54.4 (neutral-up). W35 — тиждень Jackson Hole. Warsh (23.08) не дав чіткого сигналу на вересневий cut — hawkish-нейтральна позиція. PMI Flash 53.9 — ділова активність прискорилась. Але Claims 232K (+3тиж підряд) — ринок праці слабшає. Головне: ETF приток +$1918M (найбільший з квітня) — інституційний попит повернувся. TIPS 10Y=2.35% | VIX=15.1 | MVRV 1.468 (рання бичача фаза). Composite ≥53 — LONG відкрито за v3.",
+  "macro_events_week": "18.08–24.08.2026",
   "btc_w0_high": 78054.2,
   "btc_w0_low": 76663.6,
   "btc_w1_high": 79603.1,

@@ -124,7 +124,54 @@ function ResultBadge({ result }: { result: string }) {
   if (result === "TP")   return <span className="px-2 py-0.5 rounded text-xs font-bold bg-green-500/15 text-green-400 border border-green-500/30">✅ TP</span>;
   if (result === "SL")   return <span className="px-2 py-0.5 rounded text-xs font-bold bg-red-500/15 text-red-400 border border-red-500/30">🛑 SL</span>;
   if (result === "MANUAL") return <span className="px-2 py-0.5 rounded text-xs font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30">🔵 Manual</span>;
-  return <span className="px-2 py-0.5 rounded text-xs font-bold bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]">{result}</span>;
+  if (result === "MOMENTUM") return <span className="px-2 py-0.5 rounded text-xs font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">📉 Momentum</span>;
+  return <span className="px-2 py-0.5 rounded text-xs font-bold bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]">{result ?? "—"}</span>;
+}
+
+// Normalize a closed trade to a single display schema.
+// Daily cron writes: composite_open/composite_close, exit_reason (TP_HIT/SL_HIT/MOMENTUM_EXIT), note.
+// Older records use: composite_score, result (TP/SL/MANUAL), analysis.
+function normalizeTrade(t: any) {
+  const exitMap: Record<string, string> = { TP_HIT: "TP", SL_HIT: "SL", MOMENTUM_EXIT: "MOMENTUM", MANUAL: "MANUAL" };
+  return {
+    ...t,
+    composite_score: t.composite_score ?? t.composite_open ?? null,
+    result: t.result ?? (t.exit_reason ? (exitMap[t.exit_reason] ?? t.exit_reason) : null),
+    analysis: t.analysis ?? t.note ?? null,
+    regime_key: (t.regime ?? "").replace(/-/g, "_"),
+  };
+}
+
+// Compute all stats dynamically from closed_trades — no dependency on a
+// pre-computed stats block that crons may not maintain.
+function computeStats(closedRaw: any[], depositInitial: number) {
+  const closed = closedRaw.map(normalizeTrade);
+  const wins   = closed.filter((t) => (t.pnl_usd ?? 0) > 0);
+  const losses = closed.filter((t) => (t.pnl_usd ?? 0) < 0);
+  const flat   = closed.filter((t) => (t.pnl_usd ?? 0) === 0);
+  const totalPnlUsd = closed.reduce((s, t) => s + (t.pnl_usd ?? 0), 0);
+  const scoreAcc: Record<string, { wins: number; trades: number }> = {
+    risk_on: { wins: 0, trades: 0 }, neutral_up: { wins: 0, trades: 0 },
+    neutral_down: { wins: 0, trades: 0 }, risk_off: { wins: 0, trades: 0 },
+  };
+  for (const t of closed) {
+    const key = t.regime_key;
+    if (!scoreAcc[key]) continue;
+    scoreAcc[key].trades += 1;
+    if ((t.pnl_usd ?? 0) > 0) scoreAcc[key].wins += 1;
+  }
+  return {
+    total_trades: closed.length,
+    wins: wins.length,
+    losses: losses.length,
+    flat: flat.length,
+    win_rate: closed.length > 0 ? wins.length / closed.length : 0,
+    total_pnl_usd: totalPnlUsd,
+    total_pnl_pct: depositInitial > 0 ? (totalPnlUsd / depositInitial) * 100 : 0,
+    avg_win_usd: wins.length > 0 ? wins.reduce((s, t) => s + t.pnl_usd, 0) / wins.length : 0,
+    avg_loss_usd: losses.length > 0 ? losses.reduce((s, t) => s + t.pnl_usd, 0) / losses.length : 0,
+    score_accuracy: scoreAcc,
+  };
 }
 
 // ── main component ──────────────────────────────────────────────
@@ -165,9 +212,9 @@ export default function TradingSection() {
   );
 
   const pos = trades.open_position;
-  const stats = trades.stats;
   const curve: any[] = trades.equity_curve ?? [];
-  const closed: any[] = trades.closed_trades ?? [];
+  const closed: any[] = (trades.closed_trades ?? []).map(normalizeTrade);
+  const stats = computeStats(trades.closed_trades ?? [], trades.deposit_initial ?? 10000);
 
   // Live PnL calculation
   const curPrice = livePrice ?? pos?.entry_price;

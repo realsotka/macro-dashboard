@@ -72,23 +72,27 @@
       "pnl_usd": 53.85,
       "deposit_before": 9973.0,
       "deposit_after": 10026.85,
-      "note": "TP спрацював: ціна пробила 79890.2 (реальний пік 81,200+)"
+      "note": "TP спрацював: ціна пробила 79890.2 (реальний пік 81,200+)",
+      "composite_score": 54.4,
+      "result": "TP",
+      "analysis": "TP спрацював: ціна пробила 79,890.2 (реальний пік 81,266). LONG за v3 momentum-hold, composite 54.4→57.5. Закрито денним кроном за ціновою логікою TP_HIT."
     }
   ],
   "stats": {
-    "total_trades": 1,
-    "wins": 0,
+    "total_trades": 2,
+    "wins": 1,
     "losses": 1,
     "flat": 0,
-    "win_rate": 0.0,
-    "total_pnl_usd": -27.0,
-    "total_pnl_pct": -0.27,
-    "avg_win_usd": 0,
-    "avg_loss_usd": 0,
-    "best_trade_usd": 0,
+    "win_rate": 0.5,
+    "total_pnl_usd": 26.85,
+    "total_pnl_pct": 0.2685,
+    "avg_win_usd": 53.85,
+    "avg_loss_usd": -27.0,
+    "best_trade_usd": 53.85,
     "worst_trade_usd": -27.0,
     "monthly_pnl": {
-      "2026-07": -27.0
+      "2026-07": -27.0,
+      "2026-08": 53.85
     },
     "score_accuracy": {
       "risk_on": {
@@ -96,8 +100,8 @@
         "wins": 0
       },
       "neutral_up": {
-        "trades": 0,
-        "wins": 0
+        "trades": 2,
+        "wins": 1
       },
       "neutral_down": {
         "trades": 0,
@@ -109,19 +113,6 @@
       }
     }
   },
-  "trades": [
-    {
-      "id": "trade_2026-08-24",
-      "side": "long",
-      "entry_price": 77563.3,
-      "entry_date": "2026-08-24",
-      "entry_composite": 54.4,
-      "status": "open",
-      "exit_price": null,
-      "exit_date": null,
-      "pnl_pct": null
-    }
-  ],
   "total_pnl": 26.85,
   "win_count": 1,
   "loss_count": 1,

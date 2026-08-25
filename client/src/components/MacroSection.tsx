@@ -340,7 +340,8 @@ export default function MacroSection({ report }: { report: Report }) {
         {(() => {
           const r = report as any;
           const btcFlow = report.etf_weekly_flow ?? 0; // вже в $B
-          const ethFlow = r.eth_etf_weekly_flow as number | undefined; // в $M
+          // weekly cron зберігає eth_etf_weekly_flow в $B (eth_weekly_M / 1000) — конвертуємо в $M
+          const ethFlow = r.eth_etf_weekly_flow != null ? (r.eth_etf_weekly_flow as number) * 1000 : undefined;
           const ethCum  = r.eth_etf_cumulative  as number | undefined;
           const ratio   = r.btc_eth_flow_ratio  as number | undefined;
 
@@ -481,22 +482,32 @@ export default function MacroSection({ report }: { report: Report }) {
             value={`$${report.spy_close?.toFixed(2) ?? '746.00'}`}
             sub={(() => {
               const se = (report as any).sector_etfs as Record<string, {price: number, prev_week: number}> | undefined;
-              const spy = report.spy_close; const spyPrev = se?.['SPY']?.prev_week;
+              const spy = report.spy_close; const spyPrev = se?.['SPY']?.prev_week ?? (report as any).prior_week?.spy_close;
               if (spy && spyPrev) { const c = ((spy/spyPrev)-1)*100; return `S&P 500 ETF · тижн. ${c >= 0 ? '+' : ''}${c.toFixed(2)}%`; }
               return 'S&P 500 ETF';
             })()}
-            color={report.spy_close ? 'text-green-400' : 'text-[hsl(var(--muted-foreground))]'}
+            color={(() => {
+              const spy = report.spy_close; const spyPrev = ((report as any).sector_etfs?.['SPY']?.prev_week) ?? (report as any).prior_week?.spy_close;
+              if (!spy) return 'text-[hsl(var(--muted-foreground))]';
+              if (!spyPrev) return 'text-[hsl(var(--foreground))]';
+              return spy >= spyPrev ? 'text-green-400' : 'text-red-400';
+            })()}
           />
           <KpiCard
             label="QQQ"
             value={`$${report.qqq_close?.toFixed(2) ?? '700.00'}`}
             sub={(() => {
               const se = (report as any).sector_etfs as Record<string, {price: number, prev_week: number}> | undefined;
-              const qqq = report.qqq_close; const qqqPrev = se?.['QQQ']?.prev_week;
+              const qqq = report.qqq_close; const qqqPrev = se?.['QQQ']?.prev_week ?? (report as any).prior_week?.qqq_close;
               if (qqq && qqqPrev) { const c = ((qqq/qqqPrev)-1)*100; return `Nasdaq-100 ETF · тижн. ${c >= 0 ? '+' : ''}${c.toFixed(2)}%`; }
               return 'Nasdaq-100 ETF';
             })()}
-            color={report.qqq_close ? 'text-green-400' : 'text-[hsl(var(--muted-foreground))]'}
+            color={(() => {
+              const qqq = report.qqq_close; const qqqPrev = ((report as any).sector_etfs?.['QQQ']?.prev_week) ?? (report as any).prior_week?.qqq_close;
+              if (!qqq) return 'text-[hsl(var(--muted-foreground))]';
+              if (!qqqPrev) return 'text-[hsl(var(--foreground))]';
+              return qqq >= qqqPrev ? 'text-green-400' : 'text-red-400';
+            })()}
           />
           <KpiCard
             label="VIX"
@@ -546,27 +557,31 @@ export default function MacroSection({ report }: { report: Report }) {
                   XLF: {corr: '+0.45', corrColor: 'text-yellow-400'},
                   GLD: {corr: '+0.38', corrColor: 'text-yellow-400'},
                 };
+                const pw = (report as any).prior_week as any | undefined;
+                const pm = (report as any).prior_month as any | undefined;
                 const rows = [
-                  { ticker: 'SPY', name: 'S&P 500',      price: report.spy_close ?? se?.['SPY']?.price ?? 0, prevWeek: se?.['SPY']?.prev_week ?? 0 },
-                  { ticker: 'QQQ', name: 'Nasdaq-100',   price: report.qqq_close ?? se?.['QQQ']?.price ?? 0, prevWeek: se?.['QQQ']?.prev_week ?? 0 },
-                  { ticker: 'XLK', name: se?.['XLK']?.name ?? 'Tech Sector',   price: se?.['XLK']?.price ?? 0, prevWeek: se?.['XLK']?.prev_week ?? 0 },
-                  { ticker: 'XLE', name: se?.['XLE']?.name ?? 'Energy Sector', price: se?.['XLE']?.price ?? 0, prevWeek: se?.['XLE']?.prev_week ?? 0 },
-                  { ticker: 'XLF', name: se?.['XLF']?.name ?? 'Financials',    price: se?.['XLF']?.price ?? 0, prevWeek: se?.['XLF']?.prev_week ?? 0 },
-                  { ticker: 'GLD', name: se?.['GLD']?.name ?? 'Gold ETF',      price: se?.['GLD']?.price ?? 0, prevWeek: se?.['GLD']?.prev_week ?? 0 },
+                  { ticker: 'SPY', name: 'S&P 500',      price: report.spy_close ?? se?.['SPY']?.price ?? 0, prevWeek: se?.['SPY']?.prev_week ?? pw?.spy_close ?? 0, prevMonth: pm?.spy_close ?? 0 },
+                  { ticker: 'QQQ', name: 'Nasdaq-100',   price: report.qqq_close ?? se?.['QQQ']?.price ?? 0, prevWeek: se?.['QQQ']?.prev_week ?? pw?.qqq_close ?? 0, prevMonth: pm?.qqq_close ?? 0 },
+                  { ticker: 'XLK', name: se?.['XLK']?.name ?? 'Tech Sector',   price: se?.['XLK']?.price ?? 0, prevWeek: se?.['XLK']?.prev_week ?? 0, prevMonth: 0 },
+                  { ticker: 'XLE', name: se?.['XLE']?.name ?? 'Energy Sector', price: se?.['XLE']?.price ?? 0, prevWeek: se?.['XLE']?.prev_week ?? 0, prevMonth: 0 },
+                  { ticker: 'XLF', name: se?.['XLF']?.name ?? 'Financials',    price: se?.['XLF']?.price ?? 0, prevWeek: se?.['XLF']?.prev_week ?? 0, prevMonth: 0 },
+                  { ticker: 'GLD', name: se?.['GLD']?.name ?? 'Gold ETF',      price: se?.['GLD']?.price ?? 0, prevWeek: se?.['GLD']?.prev_week ?? 0, prevMonth: 0 },
                 ];
                 return rows.map((row, i) => {
-                const wChg = row.prevWeek ? ((row.price / row.prevWeek - 1) * 100) : 0;
-                const mChg = 0;
+                const wChg = row.prevWeek ? ((row.price / row.prevWeek - 1) * 100) : null;
+                const mChg = row.prevMonth ? ((row.price / row.prevMonth - 1) * 100) : null;
                 return (
                   <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
                     <td className="px-4 py-2.5 num font-semibold text-xs text-[hsl(var(--foreground))]">{row.ticker}</td>
                     <td className="px-4 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">{row.name}</td>
                     <td className="px-4 py-2.5 text-right num font-medium text-[hsl(var(--foreground))]">{'$'}{row.price.toFixed(2)}</td>
-                    <td className={`px-4 py-2.5 text-right num font-semibold ${wChg >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                      {wChg >= 0 ? '+' : ''}{wChg.toFixed(2)}%
+                    <td className={`px-4 py-2.5 text-right num font-semibold ${wChg == null ? 'text-[hsl(var(--muted-foreground))]' : wChg >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {wChg == null ? '—' : `${wChg >= 0 ? '+' : ''}${wChg.toFixed(2)}%`}
                     </td>
-                    <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">—</td>
-                    <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">—</td>
+                    <td className="px-4 py-2.5 text-right num text-[hsl(var(--muted-foreground))]">{row.prevMonth ? `$${row.prevMonth.toFixed(2)}` : '—'}</td>
+                    <td className={`px-4 py-2.5 text-right num ${mChg == null ? 'text-[hsl(var(--muted-foreground))]' : mChg >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {mChg == null ? '—' : `${mChg >= 0 ? '+' : ''}${mChg.toFixed(2)}%`}
+                    </td>
                     <td className={`px-4 py-2.5 text-right num text-xs ${corrMap[row.ticker]?.corrColor ?? 'text-[hsl(var(--muted-foreground))]'}`}>{corrMap[row.ticker]?.corr ?? '—'}</td>
                   </tr>
                 );
@@ -640,7 +655,10 @@ export default function MacroSection({ report }: { report: Report }) {
           const r = report as any;
           const cs = r.crypto_score as number | undefined;
           const etfM = (r.etf_weekly_flow ?? 0) * 1000;
-          const etf4wM = r.etf_4w_avg_m as number | undefined;
+          // 4w MA: беремо готове значення або рахуємо з etf_history_4w (ведеться weekly-кроном, в $M)
+          const etfHist = (r.etf_history_4w as number[] | undefined) ?? [];
+          const etf4wM = (r.etf_4w_avg_m as number | undefined)
+            ?? (etfHist.length > 0 ? etfHist.reduce((a, b) => a + b, 0) / etfHist.length : undefined);
           const pct = r.cot_btc_percentile as number | undefined;
           const mv = r.mvrv as number | undefined;
 
@@ -655,11 +673,11 @@ export default function MacroSection({ report }: { report: Report }) {
               <div className="grid grid-cols-3 gap-3">
                 <div className="rounded p-2.5 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
                   <div className="text-xs text-[hsl(var(--muted-foreground))] mb-1">ETF BTC 4w MA <span className="opacity-60">(50%)</span></div>
-                  <div className={`num font-bold text-sm ${etfM > 30 ? 'text-green-400' : etfM < -30 ? 'text-red-400' : 'text-yellow-400'}`}>
-                    {etf4wM != null ? `${etf4wM.toFixed(0)}M` : `${etfM.toFixed(0)}M`}
+                  <div className={`num font-bold text-sm ${(etf4wM ?? etfM) > 30 ? 'text-green-400' : (etf4wM ?? etfM) < -30 ? 'text-red-400' : 'text-yellow-400'}`}>
+                    {etf4wM != null ? `${etf4wM >= 0 ? '+' : ''}${etf4wM.toFixed(0)}M` : `${etfM >= 0 ? '+' : ''}${etfM.toFixed(0)}M`}
                   </div>
                   <div className="text-[10px] text-[hsl(var(--muted-foreground))] opacity-70 mt-0.5">
-                    {etf4wM != null ? '4-тижневий MA' : 'weekly (MA недост.)'}
+                    {etf4wM != null ? `4-тижневий MA · ост. тиждень ${etfM >= 0 ? '+' : ''}${etfM.toFixed(0)}M` : 'weekly (MA недост.)'}
                   </div>
                 </div>
                 <div className="rounded p-2.5 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">

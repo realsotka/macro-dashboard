@@ -29,7 +29,8 @@ function Sparkline({ values }: { values: number[] }) {
 function PriceRow({ label, value, vs, vsLabel, statusPos }: {
   label: string; value: number; vs: number; vsLabel: string; statusPos: boolean;
 }) {
-  const pct = ((value / vs - 1) * 100);
+  // ціна vs EMA: наскільки ціна вище/нижче EMA (узгоджено зі статусом ABOVE/BELOW)
+  const pct = ((vs / value - 1) * 100);
   return (
     <tr className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
       <td className="px-4 py-3 text-xs text-[hsl(var(--muted-foreground))]">{label}</td>
@@ -141,7 +142,7 @@ export default function TechnicalSection({ report }: { report: any }) {
   });
 
   // Binance funding rate — public API, no key needed
-  const { data: bnFR } = useQuery<BinanceFR>({
+  const { data: bnFR, isError: bnError } = useQuery<BinanceFR>({
     queryKey: ["/binance/fr"],
     queryFn: async () => {
       async function bnFetch(path: string) {
@@ -212,8 +213,8 @@ export default function TechnicalSection({ report }: { report: any }) {
                 <td className="px-4 py-3 text-right num text-[hsl(var(--muted-foreground))]">—</td>
                 <td className="px-4 py-3 text-right text-xs text-[hsl(var(--muted-foreground))]">BTC-USDT-SWAP</td>
               </tr>
-              {ema21 > 0 && <PriceRow label="EMA21 (daily)" value={ema21} vs={price} vsLabel="21-денна EMA" statusPos={price > ema21} />}
-              {ema50 > 0 && <PriceRow label="EMA50 (daily)" value={ema50} vs={price} vsLabel="50-денна EMA" statusPos={price > ema50} />}
+              {ema21 > 0 && <PriceRow label="EMA21 (weekly)" value={ema21} vs={price} vsLabel="21-тижнева EMA" statusPos={price > ema21} />}
+              {ema50 > 0 && <PriceRow label="EMA50 (weekly)" value={ema50} vs={price} vsLabel="50-тижнева EMA" statusPos={price > ema50} />}
             </tbody>
           </table>
         </div>
@@ -283,7 +284,7 @@ export default function TechnicalSection({ report }: { report: any }) {
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xs font-semibold text-[hsl(var(--foreground))]">{exch.name}</span>
                 <span className="text-xs text-[hsl(var(--muted-foreground))]">{exch.sub}</span>
-                {!exch.data && <span className="text-[10px] text-[hsl(var(--muted-foreground))] ml-auto">— завантаження...</span>}
+                {!exch.data && <span className="text-[10px] text-[hsl(var(--muted-foreground))] ml-auto">{ei === 1 && bnError ? "⚠ недоступний (CORS/гео)" : "— завантаження..."}</span>}
               </div>
               <div className="grid grid-cols-3 gap-2 mb-3">
                 {[

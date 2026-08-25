@@ -1,6 +1,6 @@
 {
   "deposit_initial": 10000,
-  "deposit_current": 9973.0,
+  "deposit_current": 10026.85,
   "equity_curve": [
     {
       "date": "2026-07-27",
@@ -19,27 +19,15 @@
       "equity": 9973.0,
       "pnl": 0,
       "event": "T002 LONG відкрито @$77,563"
+    },
+    {
+      "date": "2026-08-25",
+      "equity": 10026.85,
+      "pnl": 53.85,
+      "event": "T002 TP LONG @$79,890.20 +53.85$"
     }
   ],
-  "open_position": {
-    "id": "T002",
-    "opened_at": "2026-08-25",
-    "direction": "LONG",
-    "regime": "neutral-up",
-    "composite_score": 54.4,
-    "entry_price": 77563.3,
-    "size_pct": 8,
-    "leverage": 1.5,
-    "notional": 1196.76,
-    "sl_price": 76399.85,
-    "tp_price": 79890.2,
-    "sl_pct": -1.5,
-    "tp_pct": 3.0,
-    "max_risk_usd": -17.95,
-    "max_reward_usd": 35.9,
-    "status": "open",
-    "note": "Neutral-Up: composite 54.4 ≥53, MVRV 1.468 ≤3.5, VIX 15.1 ≤30 — всі умови v3 виконані"
-  },
+  "open_position": null,
   "closed_trades": [
     {
       "id": "T001",
@@ -65,6 +53,26 @@
       "pnl_pct": -2.25,
       "result": "SL",
       "analysis": "SL спрацював на 64048 — BTC скорегувався після hawkish макро (FOMC тиждень). Позиція закрита щоденним кроном."
+    },
+    {
+      "id": "T002",
+      "opened_at": "2026-08-25",
+      "closed_at": "2026-08-25",
+      "direction": "LONG",
+      "regime": "neutral-up",
+      "composite_open": 54.4,
+      "composite_close": 57.5,
+      "entry_price": 77563.3,
+      "exit_price": 79890.2,
+      "exit_reason": "TP_HIT",
+      "size_pct": 8,
+      "leverage": 1.5,
+      "notional": 1196.76,
+      "pnl_pct": 4.5,
+      "pnl_usd": 53.85,
+      "deposit_before": 9973.0,
+      "deposit_after": 10026.85,
+      "note": "TP спрацював: ціна пробила 79890.2 (реальний пік 81,200+)"
     }
   ],
   "stats": {
@@ -113,5 +121,9 @@
       "exit_date": null,
       "pnl_pct": null
     }
-  ]
+  ],
+  "total_pnl": 26.85,
+  "win_count": 1,
+  "loss_count": 1,
+  "win_rate": 50.0
 }

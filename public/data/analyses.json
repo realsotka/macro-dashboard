@@ -1,20 +1,20 @@
 [
   {
-    "id": "mid-2026-08-24",
+    "id": "mid-2026-08-31",
     "type": "mid",
-    "date": "2026-08-24",
+    "date": "2026-08-31",
     "timeframe": "4–8 тижнів",
     "bias": "bullish",
-    "title": "Мід-терм W35: neutral-up | Composite 54.4",
-    "content": "Composite 54.4/100 (neutral-up). Tech: 67 | Crypto: 46 | Macro: 46. MVRV: 1.468. EMA21: $68,976 (BTC вище). RSI14 weekly: 51.3. Базовий: BTC утримує імпульс, composite ≥53; LONG позиція відкрита за правилами v3.\n\nРизик: корекція до EMA21 ($68,976) та погіршення RSI.\n\nТригер: composite ≥65 для LONG_S; вихід LONG при composite <46."
+    "title": "Мід-терм W36: neutral-up | Composite 57.8",
+    "content": "Composite 57.8/100 (neutral-up). Tech: 66 | Crypto: 56 | Macro: 47. MVRV: 1.464. EMA21: $70,569 (BTC вище). RSI14 weekly: 54.9.\n\nБазовий: BTC утримує імпульс, composite 57.8 і LONG позиція відкрита за правилами v3.\n\nРизик: корекція до EMA21 ($70,569) та погіршення RSI.\n\nТригер: composite ≥65 для LONG_S; вихід LONG при composite <46."
   },
   {
-    "id": "long-2026-08-24",
+    "id": "long-2026-08-31",
     "type": "long",
-    "date": "2026-08-24",
+    "date": "2026-08-31",
     "timeframe": "2–6 місяців",
     "bias": "bullish",
-    "title": "Лонг-терм: Акумуляція | MVRV 1.468",
-    "content": "MVRV 1.468 → фаза: Акумуляція. TIPS 10Y: 2.35% — структурний тиск на BTC (>2%). Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит. BTC ETF сукупний приток: $54.80B. COT: 83% percentile — переповнене ведмеже позиціонування, contrarian bullish для BTC. Умови LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30. Умови SHORT: composite <40 + MVRV ≥1.3. Поточний режим: neutral-up."
+    "title": "Лонг-терм: Акумуляція | MVRV 1.464",
+    "content": "MVRV 1.464 → фаза: Акумуляція. TIPS 10Y: 2.34% — структурний тиск на BTC (>2%). Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит. BTC ETF сукупний приток: $55.73B. COT: 75% percentile — нейтральне позиціонування. Умови LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30. Умови SHORT: composite <40 + MVRV ≥1.3. Поточний режим: neutral-up."
   }
 ]

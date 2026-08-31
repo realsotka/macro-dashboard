@@ -1,61 +1,61 @@
-## Macro Dashboard — Тижневий звіт W35 2026
+## Macro Dashboard — Тижневий звіт W36 2026
 
-### Composite Score: 54.4/100 — neutral-up
-- Tech: 67 | CRYPTO: 46 | Macro: 46
-- Formula: v3 (Macro 25%, Crypto 35%, Tech 40%) | Confidence: 0/100
+### Composite Score: 57.8/100 — neutral-up
+- Tech: 66 | CRYPTO: 56 | Macro: 47
+- Formula: v3 (Macro 25%, Crypto 35%, Tech 40%) | Confidence: 16/100
 
 ### BTC Технічний Аналіз
-- Ціна: $77563.30 | Weekly EMA21: $68975.68 (+12.45%)
-- Weekly RSI14: 51.33 | Funding rate: +0.0100% | OI WoW: -11.12%
+- Ціна: $78050.00 | Weekly EMA21: $70568.88 (+10.60%)
+- Weekly RSI14: 54.90 | Funding rate: +0.0065% | OI WoW: -7.79%
 - Структура: Neutral — структура не визначена
-- Коригування score: EMA +10, RSI +3, funding -2, OI +6
-- Рівні: W0 $78,054/$76,664; W1 $79,603/$62,685; W2 $65,500/$62,508
+- Коригування score: EMA +10, RSI +3, funding -2, OI +5
+- Рівні: W0 $79,388/$76,917; W1 $81,520/$76,664; W2 $79,603/$62,685
 
 ### Макро та ринки
-- TIPS 5Y: 2.05% | TIPS 10Y: 2.35% | Breakeven 10Y: 2.34%
-- Nominal 10Y: 4.69% | SOFR: 3.63% | VIX: 15.13
-- SPY: $765.72 | QQQ: $713.44 | Fear & Greed: 73 (Greed)
+- TIPS 5Y: 2.07% | TIPS 10Y: 2.34% | Breakeven 10Y: 2.31%
+- Nominal 10Y: 4.67% | SOFR: 3.64% | VIX: 14.43
+- SPY: $769.35 | QQQ: $716.43 | Fear & Greed: 62 (Greed)
 - Голова ФРС: Warsh; реальна дохідність вище 2% залишається headwind для risk-on.
 
 ### BTC та ETH ETF Flows
-- BTC за тиждень: +1917.8M | 4-тижневий середній: +584.1M | cumulative: $54.80B
-- ETH за тиждень: +692.6M | cumulative: $12.15B
-- BTC/ETH ratio: 2.77 | Rotation: BOTH_POSITIVE
+- BTC за тиждень: +924.5M | 4-тижневий середній: +830.6M | cumulative: $55.73B
+- ETH за тиждень: +815.7M | cumulative: $12.97B
+- BTC/ETH ratio: 1.13 | Rotation: BOTH_POSITIVE
 
 ### Секторні ETF
-- Tech Sector (XLK): $183.31 (-3.68% WoW)
-- Energy Sector (XLE): $63.64 (+1.69% WoW)
-- Financials (XLF): $57.48 (-0.17% WoW)
-- Health Care (XLV): $174.62 (+4.53% WoW)
-- Industrials (XLI): $180.25 (-3.26% WoW)
-- Staples (XLP): $85.99 (+1.55% WoW)
-- Gold ETF (GLD): $423.36 (+4.41% WoW)
+- Tech Sector (XLK): $185.69 (+3.13% WoW)
+- Energy Sector (XLE): $62.68 (-0.68% WoW)
+- Financials (XLF): $58.10 (-0.21% WoW)
+- Health Care (XLV): $171.16 (-2.03% WoW)
+- Industrials (XLI): $177.14 (-1.04% WoW)
+- Staples (XLP): $85.45 (-2.29% WoW)
+- Gold ETF (GLD): $408.89 (-4.17% WoW)
 
 ### COT та MVRV
-- COT report date: 2026-08-18 | Leveraged funds net: -7439 | Percentile: 82.7% | Velocity: -387
-- Asset managers net: +2732 | 26-week WCI: 66.9
-- BTC MVRV: 1.468 | Фаза: Акумуляція
+- COT report date: 2026-08-25 | Leveraged funds net: -8089 | Percentile: 75.0% | Velocity: -650
+- Asset managers net: +2945 | 26-week WCI: 56.8
+- BTC MVRV: 1.464 | Фаза: Акумуляція
 
 ### Strategy / MSTR Fundamentals
-- Останній доступний офіційний рядок ledger: 03.08.2026 (сторінка цього запуску повернула 403) | BTC held: 842,138 | Average purchase price: $63,513
-- MSTR price: $119.25 | Assumed shares outstanding: 280M
-- Current mNAV: 0.5112x | Prior mNAV: 0.4867x | WoW: +0.0245x | Macro adjustment: -5
+- Ledger: archived official row used because the current page returned an access error | BTC held: 842,138 | Average purchase price: $63,513
+- MSTR price: $127.31 | Shares outstanding assumption: 560M
+- Current mNAV: 1.0847x | Prior mNAV: 1.0334x | WoW: +0.0513x | Macro adjustment: +0
 
 ### Paper Trading Position
-- Signal: neutral-up | Composite: 54.4
-- Trade action: OPENED_LONG @ 77563
+- Signal: neutral-up | Composite: 57.8
+- Trade action: OPENED_LONG T003 @ 78050 tp=80391.5 sl=76879.25
+- Position: {"id": "T003", "opened_at": "2026-08-31", "direction": "LONG", "regime": "neutral-up", "composite_score": 57.8, "entry_price": 78050.0, "size_pct": 8, "leverage": 1.5, "notional": 1203.22, "sl_price": 76879.25, "tp_price": 80391.5, "sl_pct": -1.5, "tp_pct": 3.0, "max_risk_usd": -27.07, "max_reward_usd": 54.14, "status": "open", "note": "neutral-up: composite=57.8, MVRV=1.464, VIX=14.4 — entry under Formula v3"}
 - Правила: LONG entry при composite ≥53, MVRV ≤3.5, VIX ≤30; LONG exit при composite <46. SHORT entry при composite <40, MVRV ≥1.3, VIX ≤30.
 
-### Макро-дані тижня (17.08–23.08.2026)
-- 18.08 COT Leveraged Funds percentile: 82.7% | prev 86.5% | impact -1 | Переповнене ведмеже позиціонування; contrarian bullish.
-- 20.08 Initial Jobless Claims: — | prev 199K | impact +0 | Щотижневий індикатор ринку праці; значення потребує ручного оновлення.
-- 24.08 BTC ETF тижневий потік: +1918M | prev -385M | impact +1 | Сильний інституційний приток.
-- 24.08 TIPS 10Y реальна дохідність: 2.35% | prev 2.39% | impact -1 | Структурний тиск на BTC (>2%).
-- 24.08 VIX (індекс волатильності): 15.13 | prev 14.25 | impact +1 | Низька волатильність — risk-on.
-- 24.08 MVRV Ratio: 1.468 | prev 1.193 | impact +0 | Рання бичача фаза.
+### Макро-дані тижня (24.08–30.08.2026)
+- 31.08 BTC ETF тижневий потік: +924M | impact +1 | Інституційний попит: тижневий потік позитивний.
+- 31.08 TIPS 10Y реальна дохідність: 2.34% | impact -1 | Структурний тиск на risk-on активи при реальній дохідності вище 2%.
+- 31.08 VIX волатильність: 14.43 | impact +1 | Низька волатильність підтримує risk-on.
+- 31.08 COT Leveraged Funds percentile: 75.0% | impact +0 | Позиціонування leveraged funds; contrarian сигнал оцінюється разом з динамікою.
+- 31.08 MVRV Ratio: 1.464 | impact +0 | MVRV визначає фазу циклу та обмеження для SHORT за Formula v3.
 
 ### Коментар
-Composite 54.4 (neutral-up). TIPS 10Y=2.35% | VIX=15.1 | COT 83% | MVRV 1.468. ETF потік: +1918M — приток. Структурний headwind від реальних ставок (TIPS >2%). COT 83% — contrarian bullish, хедж-фонди зберігають значний шорт. Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит.
+Composite 57.8 (neutral-up). W36 — макрофон: позитивний (2 позитивних / 1 негативних). TIPS 10Y=2.34% | VIX=14.4 | COT 75% | MVRV 1.464. ETF потік: +924M — приток. Структурний headwind від реальних ставок (TIPS >2%). Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит.
 
 ### Sources
 - FRED DFII5: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII5
@@ -73,3 +73,4 @@ Composite 54.4 (neutral-up). TIPS 10Y=2.35% | VIX=15.1 | COT 83% | MVRV 1.468. E
 - OKX weekly candles: https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=55
 - CoinMetrics MVRV API: https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur&frequency=1d&page_size=3
 - Strategy Bitcoin Ledger: https://www.strategy.com/ledger
+- EdgeCypher calendar: https://api.edgecypher.com/api/v1/calendar

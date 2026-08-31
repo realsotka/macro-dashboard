@@ -25,9 +25,33 @@
       "equity": 10026.85,
       "pnl": 53.85,
       "event": "T002 TP LONG @$79,890.20 +53.85$"
+    },
+    {
+      "date": "2026-08-31",
+      "equity": 10026.85,
+      "pnl": 0,
+      "event": "T003 LONG opened @78,050.00"
     }
   ],
-  "open_position": null,
+  "open_position": {
+    "id": "T003",
+    "opened_at": "2026-08-31",
+    "direction": "LONG",
+    "regime": "neutral-up",
+    "composite_score": 57.8,
+    "entry_price": 78050.0,
+    "size_pct": 8,
+    "leverage": 1.5,
+    "notional": 1203.22,
+    "sl_price": 76879.25,
+    "tp_price": 80391.5,
+    "sl_pct": -1.5,
+    "tp_pct": 3.0,
+    "max_risk_usd": -27.07,
+    "max_reward_usd": 54.14,
+    "status": "open",
+    "note": "neutral-up: composite=57.8, MVRV=1.464, VIX=14.4 — entry under Formula v3"
+  },
   "closed_trades": [
     {
       "id": "T001",

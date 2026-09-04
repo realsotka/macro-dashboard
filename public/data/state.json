@@ -129,10 +129,10 @@
   "tech_detail": {
     "ema21_adj": 10,
     "rsi_adj": 3,
-    "fr_cur_adj": -2,
-    "oi_adj": 5,
-    "pct_vs_ema21": 10.6,
-    "rsi14": 54.9
+    "fr_cur_adj": 1,
+    "oi_adj": 3,
+    "pct_vs_ema21": 14.61,
+    "rsi14": 58.1
   },
   "crypto_score": 56,
   "btc_rsi14": 58.1,

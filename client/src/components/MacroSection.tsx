@@ -1,5 +1,6 @@
 import type { Report } from "@shared/schema";
 import MstrBlock from "./MstrBlock";
+import MomentumFilterBlock from "./MomentumFilterBlock";
 
 function Sparkline({ values, colors }: { values: (number | null)[]; colors?: string[] }) {
   const valid = values.filter(v => v !== null) as number[];
@@ -865,6 +866,9 @@ export default function MacroSection({ report }: { report: Report }) {
 
       {/* ── BLOCK 6: MSTR / STRATEGY ── */}
       <MstrBlock />
+
+      {/* ── BLOCK 7: MOMENTUM FILTER (інформаційний, НЕ інтегрований у Formula v3) ── */}
+      <MomentumFilterBlock />
     </div>
   );
 }

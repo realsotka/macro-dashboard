@@ -84,17 +84,23 @@ export default function MstrBlock() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const F = (stateData as any)?.mstr_fundamentals ?? MSTR_FALLBACK;
+  // Prefer nested mstr_fundamentals if present, otherwise map the flat mstr_* fields
+  // that the weekly cron actually writes to state.json (mstr_btc_total, mstr_avg_price, etc.)
+  const S = (stateData as any) ?? {};
+  const F = S.mstr_fundamentals ?? {};
   const { btc_held, debt, preferred, cash, shares_basic, shares_fds, avg_cost_per_btc } = {
-    btc_held:         F.btc_held         ?? MSTR_FALLBACK.btc_held,
-    avg_cost_per_btc: F.avg_cost_per_btc ?? MSTR_FALLBACK.avg_cost_per_btc,
-    debt:             F.debt             ?? MSTR_FALLBACK.debt,
-    preferred:        F.preferred        ?? MSTR_FALLBACK.preferred,
-    cash:             F.cash             ?? MSTR_FALLBACK.cash,
-    shares_basic:     F.shares_basic     ?? MSTR_FALLBACK.shares_basic,
-    shares_fds:       F.shares_fds       ?? MSTR_FALLBACK.shares_fds,
+    btc_held:         F.btc_held         ?? S.mstr_btc_total         ?? MSTR_FALLBACK.btc_held,
+    avg_cost_per_btc: F.avg_cost_per_btc ?? S.mstr_avg_price         ?? MSTR_FALLBACK.avg_cost_per_btc,
+    debt:             F.debt             ?? S.mstr_debt              ?? MSTR_FALLBACK.debt,
+    preferred:        F.preferred        ?? S.mstr_preferred         ?? MSTR_FALLBACK.preferred,
+    cash:             F.cash             ?? S.mstr_cash              ?? MSTR_FALLBACK.cash,
+    shares_basic:     F.shares_basic     ?? S.mstr_shares_outstanding ?? MSTR_FALLBACK.shares_basic,
+    shares_fds:       F.shares_fds       ?? S.mstr_shares_fds         ?? MSTR_FALLBACK.shares_fds,
   };
-  const as_of = F.as_of ?? MSTR_FALLBACK.as_of;
+  const as_of = F.as_of ?? S.last_updated_daily ?? MSTR_FALLBACK.as_of;
+  // Server-side (state.json) MSTR stock price — written weekly by the cron. Used as the
+  // primary source; the live client-side fetch below is a best-effort enhancement only.
+  const stateStockPrice: number | null = typeof S.mstr_stock_price === "number" ? S.mstr_stock_price : null;
 
   // Fetch MSTR stock price via Yahoo Finance (public, no key needed)
   const { data: mstr, isLoading } = useQuery<MstrLive>({
@@ -129,11 +135,12 @@ export default function MstrBlock() {
       }
 
       const price = await yf("MSTR");
-      const mktcap = price * MSTR_FALLBACK.shares_basic;
+      const mktcap = price * shares_basic;
       return { price, mktcap };
     },
     staleTime: 5 * 60 * 1000,
     retry: 1,
+    enabled: stateStockPrice == null,
   });
 
   // We also need current BTC price — fetch from OKX
@@ -158,9 +165,11 @@ export default function MstrBlock() {
   });
 
   // ─── Calculations ───
+  // MSTR price: prefer state.json (written weekly by the cron from a server-side fetch),
+  // fall back to the client-side live fetch, which itself may fail due to CORS in-browser.
   const btcP = btcPrice ?? 63_500;
-  const mstrP = mstr?.price ?? null;
-  const mktcap = mstr ? mstr.price * shares_basic : null;
+  const mstrP = stateStockPrice ?? mstr?.price ?? null;
+  const mktcap = mstrP != null ? mstrP * shares_basic : null;
 
   // mNAV
   const btcNAV = btc_held * btcP;
@@ -350,7 +359,7 @@ export default function MstrBlock() {
           ? "mNAV ~1.0x — MSTR торгується майже без премії до BTC. Ринок не закладає growth premium — потенційно краща точка входу в MSTR ніж пряме BTC."
           : mnav != null && mnav > 2.0
           ? "mNAV вище 2.0x — ринок в ейфорії, MSTR переоцінений відносно BTC. Підвищений ризик різкого падіння MSTR при корекції BTC."
-          : "mNAV в нейтральній зоні. Bankruptcy distance {distancePct.toFixed(0)}% — системний ризик від MSTR мінімальний поки BTC вище $22–23K."
+          : `mNAV в нейтральній зоні. Bankruptcy distance ${distancePct.toFixed(0)}% — системний ризик від MSTR мінімальний поки BTC вище $22–23K.`
         }{" "}
         Борги + preferred з'їдають {haircut.toFixed(0)}% BTC резерву — класичний BPS завищує реальну частку акціонера.
       </div>

@@ -28,7 +28,7 @@ async function fetchViaGithubApi(filename: string): Promise<any> {
     headers: { Accept: "application/vnd.github.raw+json" }
   });
   if (!res.ok) throw new Error(`GH API ${filename}: ${res.status}`);
-  return filename.endsWith(".md") ? res.text() : res.json();
+  return filename.endsWith(".md") ? await res.text() : await res.json();
 }
 
 async function fetchJson(filename: string): Promise<any> {
@@ -43,7 +43,7 @@ async function fetchJson(filename: string): Promise<any> {
   // 2. Same-origin /public/data/ — works on GitHub Pages (files committed to repo)
   try {
     const res = await fetch(bustUrl(`/macro-dashboard/public/data/${filename}`));
-    if (res.ok) return res.json();
+    if (res.ok) return await res.json();
   } catch {}
 
   // 3. GitHub Contents API — high limit, works even after many pushes
@@ -63,14 +63,14 @@ async function fetchText(filename: string): Promise<string> {
 
   try {
     const res = await fetch(bustUrl(`/macro-dashboard/public/data/${filename}`));
-    if (res.ok) return res.text();
+    if (res.ok) return await res.text();
   } catch {}
 
   try {
     const res = await fetch(`${GITHUB_API}/${filename}`, {
       headers: { Accept: "application/vnd.github.raw+json" }
     });
-    if (res.ok) return res.text();
+    if (res.ok) return await res.text();
   } catch {}
 
   const res = await fetch(bustUrl(`${GITHUB_RAW}/public/data/${filename}`));

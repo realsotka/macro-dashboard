@@ -1,7 +1,7 @@
 {
   "bias_text": "🟡↑ Neutral-Up",
   "breakeven_10y": 2.35,
-  "btc_ema21": 70731.55726617122,
+  "btc_ema21": 70730.91181162576,
   "btc_ema50": 63375.86,
   "btc_fr_avg_7d": 0.0027,
   "btc_fr_cur": 0.00038666626551000003,
@@ -9,7 +9,7 @@
   "btc_oi_chg_wow": -4.005340480880514,
   "btc_oi_cur": 2854221.470000012,
   "btc_oi_current": 2741797.0,
-  "btc_price": 79839.4,
+  "btc_price": 79832.3,
   "btc_weekly_structure": "Neutral — структура не визначена",
   "composite_score": 58.1,
   "confidence": 16,
@@ -131,7 +131,7 @@
     "rsi_adj": 3,
     "fr_cur_adj": 1,
     "oi_adj": 3,
-    "pct_vs_ema21": 12.88,
+    "pct_vs_ema21": 12.87,
     "rsi14": 56.83
   },
   "crypto_score": 56,

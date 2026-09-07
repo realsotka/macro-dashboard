@@ -37,9 +37,33 @@
       "equity": 9999.78,
       "pnl": -27.07,
       "event": "T003 SL_HIT @$76,879.25 -27.07$ (retroactive fix)"
+    },
+    {
+      "date": "2026-09-07",
+      "equity": 9999.78,
+      "pnl": 0,
+      "event": "T004 LONG opened @79,580.10"
     }
   ],
-  "open_position": null,
+  "open_position": {
+    "id": "T004",
+    "opened_at": "2026-09-07",
+    "direction": "LONG",
+    "regime": "neutral-up",
+    "composite_score": 61.0,
+    "entry_price": 79580.1,
+    "size_pct": 8,
+    "leverage": 1.5,
+    "notional": 1199.97,
+    "sl_price": 78386.4,
+    "tp_price": 81967.5,
+    "sl_pct": -1.5,
+    "tp_pct": 3.0,
+    "max_risk_usd": -27.0,
+    "max_reward_usd": 54.0,
+    "status": "open",
+    "note": "neutral-up: composite=61.0, MVRV=1.51, VIX=14.5 — v3"
+  },
   "closed_trades": [
     {
       "id": "T001",

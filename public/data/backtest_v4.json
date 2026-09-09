@@ -1,0 +1,205 @@
+{
+  "meta": {
+    "run_date": "2026-09-09",
+    "n_weeks": 99,
+    "date_range": [
+      "2024-10-20",
+      "2026-09-06"
+    ],
+    "actual_data_depth": {
+      "oi_history_weeks": 100,
+      "funding_history_days": 93.0,
+      "cot_history_weeks": 200,
+      "mvrv_history_days": 900,
+      "vix_history_weeks": 106,
+      "etf_flow_history_days": 682,
+      "dvol_history_days": 741,
+      "stablecoin_history_days": {
+        "USDT": 3207,
+        "USDC": 2921,
+        "PYUSD": 1129
+      }
+    },
+    "limitations": [
+      "TIPS_10y used as a CONSTANT proxy (2.43%) for the entire window \u2014 FRED (stlouisfed.org) was unreachable from the sandbox at run time. macro_score's TIPS component carries no real historical variation in this backtest; only VIX (real weekly history) varies it.",
+      "options_score in this backtest uses a DVOL-percentile proxy, NOT real historical skew_25d -- Deribit's public API has no free historical options-chain/skew endpoint. Only the CURRENT live week (see state.json v4_shadow.options) reflects a real skew_25d measurement.",
+      "OI weekly history only reaches back 100 weeks (to 2024-10-13); weeks before that use oi_chg=0 (neutral), not a fabricated value.",
+      "Funding rate history from OKX's public endpoint only covers the trailing ~93 days; weeks before that use fr_cur=0 (neutral).",
+      "Block A (CME futures basis/carry) is not implemented \u2014 no free/keyless data source found. Its would-be 0.10 weight and the oi_regime tech-correction described in the v4 spec are both absent from composite_v4 here; the tech component uses the unmodified v3 tech_score."
+    ]
+  },
+  "v3": {
+    "trades": [
+      {
+        "side": "LONG",
+        "entry_price": 67790.1,
+        "entry_date": "2024-10-20",
+        "entry_idx": 0,
+        "exit_price": 83062.2,
+        "exit_date": "2025-03-02",
+        "exit_idx": 19,
+        "pnl_pct": 22.53
+      },
+      {
+        "side": "LONG",
+        "entry_price": 95415.3,
+        "entry_date": "2025-04-27",
+        "entry_idx": 27,
+        "exit_price": 87033.2,
+        "exit_date": "2025-11-16",
+        "exit_idx": 56,
+        "pnl_pct": -8.78
+      },
+      {
+        "side": "LONG",
+        "entry_price": 78632.2,
+        "entry_date": "2026-04-26",
+        "entry_idx": 79,
+        "exit_price": 62065.0,
+        "exit_date": "2026-05-31",
+        "exit_idx": 84,
+        "pnl_pct": -21.07
+      },
+      {
+        "side": "LONG",
+        "entry_price": 77137.8,
+        "entry_date": "2026-08-16",
+        "entry_idx": 95,
+        "exit_price": 79658.5,
+        "exit_date": "2026-09-06 (open)",
+        "exit_idx": 98,
+        "pnl_pct": 3.27
+      }
+    ],
+    "n_trades": 4,
+    "win_rate": 50.0,
+    "cum_pnl_pct": -4.05,
+    "max_drawdown_pct": -29.85
+  },
+  "v3_plus_options": {
+    "trades": [
+      {
+        "side": "LONG",
+        "entry_price": 67790.1,
+        "entry_date": "2024-10-20",
+        "entry_idx": 0,
+        "exit_price": 83062.2,
+        "exit_date": "2025-03-02",
+        "exit_idx": 19,
+        "pnl_pct": 22.53
+      },
+      {
+        "side": "LONG",
+        "entry_price": 93847.5,
+        "entry_date": "2025-04-20",
+        "entry_idx": 26,
+        "exit_price": 87033.2,
+        "exit_date": "2025-11-16",
+        "exit_idx": 56,
+        "pnl_pct": -7.26
+      },
+      {
+        "side": "SHORT",
+        "entry_price": 91395.1,
+        "entry_date": "2025-11-23",
+        "entry_idx": 57,
+        "exit_price": 89504.4,
+        "exit_date": "2025-11-30",
+        "exit_idx": 58,
+        "pnl_pct": 2.07
+      },
+      {
+        "side": "LONG",
+        "entry_price": 78005.2,
+        "entry_date": "2026-04-19",
+        "entry_idx": 78,
+        "exit_price": 63984.9,
+        "exit_date": "2026-06-07",
+        "exit_idx": 85,
+        "pnl_pct": -17.97
+      },
+      {
+        "side": "LONG",
+        "entry_price": 77137.8,
+        "entry_date": "2026-08-16",
+        "entry_idx": 95,
+        "exit_price": 79658.5,
+        "exit_date": "2026-09-06 (open)",
+        "exit_idx": 98,
+        "pnl_pct": 3.27
+      }
+    ],
+    "n_trades": 5,
+    "win_rate": 60.0,
+    "cum_pnl_pct": 2.64,
+    "max_drawdown_pct": -23.16
+  },
+  "v4": {
+    "trades": [
+      {
+        "side": "LONG",
+        "entry_price": 68102.3,
+        "entry_date": "2024-10-27",
+        "entry_idx": 1,
+        "exit_price": 83062.2,
+        "exit_date": "2025-03-02",
+        "exit_idx": 19,
+        "pnl_pct": 21.97
+      },
+      {
+        "side": "LONG",
+        "entry_price": 93847.5,
+        "entry_date": "2025-04-20",
+        "entry_idx": 26,
+        "exit_price": 87033.2,
+        "exit_date": "2025-11-16",
+        "exit_idx": 56,
+        "pnl_pct": -7.26
+      },
+      {
+        "side": "SHORT",
+        "entry_price": 91395.1,
+        "entry_date": "2025-11-23",
+        "entry_idx": 57,
+        "exit_price": 88415.8,
+        "exit_date": "2026-01-18",
+        "exit_idx": 65,
+        "pnl_pct": 3.26
+      },
+      {
+        "side": "LONG",
+        "entry_price": 78632.2,
+        "entry_date": "2026-04-26",
+        "entry_idx": 79,
+        "exit_price": 62065.0,
+        "exit_date": "2026-05-31",
+        "exit_idx": 84,
+        "pnl_pct": -21.07
+      },
+      {
+        "side": "LONG",
+        "entry_price": 77137.8,
+        "entry_date": "2026-08-16",
+        "entry_idx": 95,
+        "exit_price": 79658.5,
+        "exit_date": "2026-09-06 (open)",
+        "exit_idx": 98,
+        "pnl_pct": 3.27
+      }
+    ],
+    "n_trades": 5,
+    "win_rate": 60.0,
+    "cum_pnl_pct": 0.17,
+    "max_drawdown_pct": -25.07
+  },
+  "buy_and_hold_pct": 17.51,
+  "regime_diff_weeks": 29,
+  "regime_diff_pct": 29.3,
+  "composite_stats": {
+    "v3_mean": 53.1,
+    "v4_mean": 53.5,
+    "v3_stdev": 9.9,
+    "v4_stdev": 10.4,
+    "correlation": 0.93
+  }
+}

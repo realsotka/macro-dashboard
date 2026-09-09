@@ -1,6 +1,6 @@
 {
   "deposit_initial": 10000,
-  "deposit_current": 9999.78,
+  "deposit_current": 9972.78,
   "equity_curve": [
     {
       "date": "2026-07-27",
@@ -43,27 +43,15 @@
       "equity": 9999.78,
       "pnl": 0,
       "event": "T004 LONG opened @79,580.10"
+    },
+    {
+      "date": "2026-09-09",
+      "equity": 9972.78,
+      "pnl": -27.0,
+      "event": "T004 SL_HIT $78,386.40 -27.00"
     }
   ],
-  "open_position": {
-    "id": "T004",
-    "opened_at": "2026-09-07",
-    "direction": "LONG",
-    "regime": "neutral-up",
-    "composite_score": 61.0,
-    "entry_price": 79580.1,
-    "size_pct": 8,
-    "leverage": 1.5,
-    "notional": 1199.97,
-    "sl_price": 78386.4,
-    "tp_price": 81967.5,
-    "sl_pct": -1.5,
-    "tp_pct": 3.0,
-    "max_risk_usd": -27.0,
-    "max_reward_usd": 54.0,
-    "status": "open",
-    "note": "neutral-up: composite=61.0, MVRV=1.51, VIX=14.5 — v3"
-  },
+  "open_position": null,
   "closed_trades": [
     {
       "id": "T001",
@@ -132,6 +120,26 @@
       "deposit_before": 10026.85,
       "deposit_after": 9999.78,
       "note": "SL_HIT (retroactive fix 2026-09-02): BTC пробив SL $76,879.25 внутрішньоденно 2026-09-01 (мінімум $76,366, дані OKX 1H), але денний крон перевіряв лише миттєвий снепшот ціни раз на добу і пропустив пробій. Закрито retroactively на рівні SL після виправлення логіки крону на перевірку intraday high/low."
+    },
+    {
+      "id": "T004",
+      "opened_at": "2026-09-07",
+      "closed_at": "2026-09-09",
+      "direction": "LONG",
+      "regime": "neutral-up",
+      "composite_open": 61.0,
+      "composite_close": 58.5,
+      "entry_price": 79580.1,
+      "exit_price": 78386.4,
+      "exit_reason": "SL_HIT",
+      "size_pct": 8,
+      "leverage": 1.5,
+      "notional": 1199.97,
+      "pnl_pct": -2.25,
+      "pnl_usd": -27.0,
+      "deposit_before": 9999.78,
+      "deposit_after": 9972.78,
+      "note": "SL_HIT: cur=78506.50 tp=81967.5 sl=78386.4 composite=58.5"
     }
   ],
   "stats": {
@@ -169,8 +177,8 @@
       }
     }
   },
-  "total_pnl": -0.22,
+  "total_pnl": -27.22,
   "win_count": 1,
-  "loss_count": 2,
-  "win_rate": 33.3
+  "loss_count": 3,
+  "win_rate": 25.0
 }

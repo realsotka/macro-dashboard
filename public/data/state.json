@@ -240,5 +240,53 @@
   "mstr_stock_price": 142.8,
   "mstr_shares_outstanding": 560000000,
   "vix_prev": 16.34,
-  "mstr_purchased_week": 0.0
+  "mstr_purchased_week": 0.0,
+  "v4_shadow": {
+    "basis": {
+      "status": "not_implemented",
+      "reason": "no free/keyless CME futures basis source available"
+    },
+    "options": {
+      "skew_25d": -2.66,
+      "iv_term": -2.27,
+      "gex_sign": "positive",
+      "dvol": 40.15,
+      "status": "ok",
+      "expiry_30d_used": "2026-09-25",
+      "expiry_7d_used": "2026-09-18"
+    },
+    "stables": {
+      "stable_supply_total": 260760314233.0,
+      "stable_netflow_30d": 2411025604.0,
+      "stable_netflow_30d_pct": 0.933,
+      "stable_netflow_90d": -3996262111.0,
+      "status": "ok",
+      "per_coin": {
+        "USDT": {
+          "current": 183429526759.77252,
+          "d30_ago": 183215271475,
+          "d90_ago": 186901301278
+        },
+        "USDC": {
+          "current": 74502816708.65785,
+          "d30_ago": 72353218703,
+          "d90_ago": 75003922778
+        },
+        "PYUSD": {
+          "current": 2827970764.1119485,
+          "d30_ago": 2780798451,
+          "d90_ago": 2851352288
+        }
+      }
+    },
+    "scores": {
+      "options_score": 72.9,
+      "stables_score": 32.7,
+      "composite_v4": 58.0,
+      "composite_v3": 58.5,
+      "regime_v4": "neutral-up",
+      "regime_v3": "neutral-up"
+    },
+    "updated_at": "2026-09-09 09:11 UTC"
+  }
 }

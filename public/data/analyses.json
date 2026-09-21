@@ -1,20 +1,20 @@
 [
   {
-    "id": "mid-2026-09-14",
+    "id": "mid-2026-09-21",
     "type": "mid",
-    "date": "2026-09-14",
+    "date": "2026-09-21",
     "timeframe": "4–8 тижнів",
-    "bias": "bullish",
-    "title": "Мід-терм W38: neutral-up | Composite 57.9",
-    "content": "Composite 57.9/100 (neutral-up). Tech: 68 | Crypto: 57 | Macro: 43. MVRV: 1.443. EMA21: $72,225 (BTC вище). RSI14 weekly: 69.5.\n\nБазовий: BTC торгується вище EMA21 ($72,225), але тижневий ETF-потік змінився на відтік -288.1M; composite 57.9 зберігає neutral-up.\n\nРизик: закріплення нижче EMA21 ($72,225) або падіння composite нижче 46 закриє LONG за momentum-правилом.\n\nТригер продовження: composite ≥53, MVRV ≤3.5 та VIX ≤30; тригер захисту — ціна нижче SL відкритої позиції $76,446.93."
+    "bias": "neutral",
+    "title": "Мід-терм W39: neutral-down | Composite 51.0",
+    "content": "Composite 51.0/100 (neutral-down). Tech 59 (bullish), Crypto 47 (neutral), Macro 44 (bearish). MVRV 1.524; EMA21 $73,717; weekly RSI14 72.5.\n\nБазовий: BTC у боковику, composite 51.0 у FLAT-зоні 38–52.\n\nБичачий тригер: повернення composite до 53+ та утримання BTC вище EMA21 $73,717.\n\nВедмежий тригер: composite нижче 38; SHORT дозволений лише за MVRV не нижче 1.3 та VIX не вище 30."
   },
   {
-    "id": "long-2026-09-14",
+    "id": "long-2026-09-21",
     "type": "long",
-    "date": "2026-09-14",
+    "date": "2026-09-21",
     "timeframe": "2–6 місяців",
     "bias": "bullish",
-    "title": "Лонг-терм: Акумуляція | MVRV 1.443",
-    "content": "MVRV 1.443 → фаза: Акумуляція. TIPS 10Y: 2.55% — структурний тиск на BTC (>2%). Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит. BTC ETF сукупний приток: $56.25B; поточний тиждень -288.1M. COT: 77% percentile — переповнене ведмеже позиціонування, contrarian bullish для BTC. Умови входу LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30. Умови SHORT: composite <40 + MVRV ≥1.3. Поточний режим: neutral-up."
+    "title": "Лонг-терм: Рання бичача фаза | MVRV 1.524",
+    "content": "MVRV 1.524 означає фазу: Рання бичача фаза. TIPS 10Y 2.61% — структурний тиск на risk-on активи залишається підвищеним, оскільки реальна дохідність вище 2%. BTC ETF сукупно: $56.26B; COT leveraged funds: 94.2% percentile. Поточний режим: neutral-down. Голова ФРС — Warsh; hawkish ставка/реальна дохідність обмежують risk-on апетит."
   }
 ]

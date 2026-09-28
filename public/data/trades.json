@@ -61,9 +61,33 @@
       "equity": 9945.85,
       "pnl": -26.93,
       "event": "T005 SL_HIT $76,446.93 -26.93"
+    },
+    {
+      "date": "2026-09-28",
+      "equity": 9945.85,
+      "pnl": 0,
+      "event": "T006 LONG opened @83180.40"
     }
   ],
-  "open_position": null,
+  "open_position": {
+    "id": "T006",
+    "opened_at": "2026-09-28",
+    "direction": "LONG",
+    "regime": "neutral-up",
+    "composite_score": 55.9,
+    "entry_price": 83180.4,
+    "size_pct": 8,
+    "leverage": 1.5,
+    "notional": 1193.5,
+    "sl_price": 81932.69,
+    "tp_price": 85675.81,
+    "sl_pct": -1.5,
+    "tp_pct": 3.0,
+    "max_risk_usd": -26.85,
+    "max_reward_usd": 53.71,
+    "status": "open",
+    "note": "neutral-up: composite=55.9, MVRV=1.58, VIX=14.9"
+  },
   "closed_trades": [
     {
       "id": "T001",

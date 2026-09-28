@@ -11,8 +11,8 @@
   "btc_oi_current": 2741797.0,
   "btc_price": 83161.3,
   "btc_weekly_structure": "Neutral - undefined",
-  "composite_score": 59.0,
-  "confidence": 18,
+  "composite_score": 55.9,
+  "confidence": 12,
   "cot_btc_net_pos": -7052,
   "cot_btc_oi": 20019.0,
   "cot_btc_oi_trend_pct": 5.6,
@@ -135,15 +135,15 @@
     "pct_vs_ema21": 11.84,
     "rsi14": 80.28
   },
-  "crypto_score": 56,
+  "crypto_score": 47,
   "btc_rsi14": 80.28,
   "week_label": "W40 2026",
   "nominal_10y": 5.18,
   "sofr": 3.88,
   "etf_history_4w": [
     -288.1,
+    -288.1,
     6.1,
-    2385.8,
     2385.8
   ],
   "rotation_signal": "BOTH_NEGATIVE",

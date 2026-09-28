@@ -1,51 +1,40 @@
-## Macro Dashboard — Тижневий звіт W39 2026
+## Macro Dashboard - Weekly Report W40 2026
 
-### Composite Score: 51.0/100 — neutral-down
-- Tech: 59 | CRYPTO: 47 | Macro: 44
-- Formula: v3 (Macro 25%, CRYPTO 35%, Tech 40%)
-- Market regime: neutral-down
+### Composite Score: 59.0/100 - neutral-up
+- Tech: 71 | CRYPTO: 56 | Macro: 44
+- Formula version: v3
 
 ### BTC Technical Analysis
-- Price: $81,591.90 | EMA21 weekly: $73,717.46 (+10.68%)
-- RSI14 weekly: 72.48 | Funding: +0.0093% | OI WoW: +7.98%
-- Weekly structure: HH/HL — висхідна
+- Price: $83161.30 | EMA21: $74354.61 (+11.84%)
+- RSI14 weekly: 80.28 | Funding: +0.0046% | OI change: -4.80%
+- Weekly structure: Neutral - undefined
 
 ### Macro
-- TIPS 10Y: 2.61% | TIPS 5Y: 2.46% | 10Y breakeven: 2.33%
-- Nominal 10Y: 4.94% | SOFR: 3.85% | VIX: 14.81
-- SPY: $761.69 | QQQ: $721.45
+- TIPS 10Y: 2.85% | TIPS 5Y: 2.70% | Breakeven 10Y: 2.34%
+- Nominal 10Y: 5.18% | SOFR: 3.88% | VIX: 14.87
+- SPY: $771.35 | QQQ: $744.50
 
-### BTC and ETH ETF Flows
-- BTC weekly: +6.1M | BTC 4-week average: 440.5M | BTC cumulative: $56.26B
-- ETH weekly: -140.6M | Rotation: BOTH_NEGATIVE
+### BTC ETF Flows
+- Weekly BTC: +2385.8M | 4-week average: 678.5M | Cumulative: 58.64B
+- Weekly ETH: +689.8M | BTC/ETH weekly ratio: 3.46
 
-### Positioning and Cycle
-- COT date: 2026-09-15 | Leveraged funds percentile: 94.2% | Velocity: +1538
-- MVRV: 1.524 | Cycle phase: Рання бичача фаза
-- Fear and Greed: 70 (Greed)
+### Positioning and Valuation
+- COT date: 2026-09-22 | Leveraged funds percentile: 71.2% | Net: -7953
+- MVRV: 1.576 | Phase: Early bull
+- Fear & Greed: 74 (Greed)
 
-### MSTR Fundamentals
-- BTC holdings: 845,050 BTC | Average purchase price: $75,412
-- Stock price: $153.92 | Shares: 560,000,000
-- mNAV: 1.2501 | WoW change: +0.1317 (prior 1.1184)
+### Sectors
+- XLK: $196.27 vs $194.85 (+0.73%)
+- XLE: $62.04 vs $62.46 (-0.67%)
+- XLF: $54.84 vs $55.90 (-1.90%)
+- XLV: $170.70 vs $169.01 (+1.00%)
+- XLI: $170.43 vs $169.98 (+0.26%)
+- XLP: $82.06 vs $81.92 (+0.17%)
+- GLD: $393.41 vs $398.38 (-1.25%)
 
-### Macro Events of the Week (14.09–20.09.2026)
-- 16.09 = Прогнози FOMC: actual —, forecast —, previous —. Оновлення макропрогнозів без числового сюрпризу в календарі; вплив на BTC нейтральний.
-- 16.09 - Ставка федеральних фондів: actual 4.0%, forecast 4.0%, previous 3.75%. Фактична ставка 4.0% проти 3.75% раніше: підвищення ставки посилює hawkish-імпульс і тисне на risk-on активи.
-- 16.09 = Заява FOMC: actual —, forecast —, previous —. Текстова подія без окремого числового результату в календарі; окремий вплив не оцінюється.
-- 16.09 = Пресконференція FOMC: actual —, forecast —, previous —. Пресконференція без окремого числового результату в календарі; окремий вплив не оцінюється.
+### MSTR
+- BTC holdings: 846000 | Average purchase price: $75412
+- Stock: $158.61 | mNAV: 1.2624871294939572
 
 ### Paper Trading
-- Action: HOLD
-- Open position: none
-- Deposit: $9,945.85 | Total P&L: $-54.15
-
-### Sources
-- FRED: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10
-- Farside BTC ETF flows: https://farside.co.uk/bitcoin-etf-flow-all-data/
-- Farside ETH ETF flows: https://farside.co.uk/ethereum-etf-flow-all-data/
-- Yahoo Finance market data: https://query1.finance.yahoo.com/v8/finance/chart/SPY?interval=1d&range=5d
-- CFTC COT: https://publicreporting.cftc.gov/resource/gpe5-46if.json
-- OKX market data: https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=55
-- Coin Metrics MVRV: https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur&frequency=1d&page_size=3
-- EdgeCypher calendar: https://api.edgecypher.com/api/v1/calendar
+- Signal: neutral-up | Action: HOLD_LONG pnl=-0.0%

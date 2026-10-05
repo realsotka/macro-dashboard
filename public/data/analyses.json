@@ -1,20 +1,20 @@
 [
   {
-    "id": "mid-2026-09-28",
+    "id": "mid-2026-10-05",
     "type": "mid",
-    "date": "2026-09-28",
+    "date": "2026-10-05",
     "timeframe": "4-8 weeks",
     "bias": "bullish",
-    "title": "Mid-term W40: neutral-up | Composite 55.9",
-    "content": "Composite 55.9/100 (neutral-up). Tech 71; Crypto 47; Macro 44. MVRV 1.576. EMA21 $74,355; weekly RSI14 80.3."
+    "title": "Mid-term W41: neutral-up | Composite 54.5",
+    "content": "Composite 54.5/100 (neutral-up). Tech 62; Crypto 54; Macro 43. MVRV 1.611. EMA21 $75,386; weekly RSI14 82.5."
   },
   {
-    "id": "long-2026-09-28",
+    "id": "long-2026-10-05",
     "type": "long",
-    "date": "2026-09-28",
+    "date": "2026-10-05",
     "timeframe": "2-6 months",
     "bias": "bullish",
-    "title": "Long-term: Early bull | MVRV 1.576",
-    "content": "MVRV 1.576 indicates Early bull. TIPS 10Y 2.85%; BTC ETF cumulative flow $58.64B; COT percentile 71%. Fed Chair Warsh remains the policy reference in this report."
+    "title": "Long-term: Early bull | MVRV 1.611",
+    "content": "MVRV 1.611 indicates Early bull. TIPS 10Y 2.88%; BTC ETF cumulative flow $58.73B; COT percentile 86%. Fed Chair Warsh remains the policy reference in this report."
   }
 ]

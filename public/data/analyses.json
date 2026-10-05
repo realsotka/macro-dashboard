@@ -3,18 +3,18 @@
     "id": "mid-2026-10-05",
     "type": "mid",
     "date": "2026-10-05",
-    "timeframe": "4-8 weeks",
+    "timeframe": "4–8 тижнів",
     "bias": "bullish",
-    "title": "Mid-term W41: neutral-up | Composite 54.5",
-    "content": "Composite 54.5/100 (neutral-up). Tech 62; Crypto 54; Macro 43. MVRV 1.611. EMA21 $75,386; weekly RSI14 82.5."
+    "title": "Мід-терм W41: neutral-up | Composite 54.5",
+    "content": "Composite 54.5/100 (neutral-up). Tech 62; Crypto 54; Macro 43. MVRV 1.611. EMA21 $75,386; weekly RSI14 82.55. Базовий сценарій: утримання над EMA21 з ризиком корекції через RSI у зоні перекупленості. LONG залишається чинним за умовами v3; composite <46 є виходом."
   },
   {
     "id": "long-2026-10-05",
     "type": "long",
     "date": "2026-10-05",
-    "timeframe": "2-6 months",
+    "timeframe": "2–6 місяців",
     "bias": "bullish",
-    "title": "Long-term: Early bull | MVRV 1.611",
-    "content": "MVRV 1.611 indicates Early bull. TIPS 10Y 2.88%; BTC ETF cumulative flow $58.73B; COT percentile 86%. Fed Chair Warsh remains the policy reference in this report."
+    "title": "Лонг-терм: Рання бичача фаза | MVRV 1.611",
+    "content": "MVRV 1.611 відповідає фазі «рання бичача фаза». TIPS 10Y 2.88%; накопичений BTC ETF потік $58.73B; COT leveraged-funds percentile 86.5% при net -6,856. ФРС очолює Kevin Warsh. Тривала реальна дохідність вище 2% залишається структурним ризиком."
   }
 ]

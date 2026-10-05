@@ -73,9 +73,33 @@
       "equity": 9999.56,
       "pnl": 53.71,
       "event": "T006 TP_HIT @85,675.81 +53.71$"
+    },
+    {
+      "date": "2026-10-05",
+      "equity": 9999.56,
+      "pnl": 0,
+      "event": "T007 LONG opened @86301.30"
     }
   ],
-  "open_position": null,
+  "open_position": {
+    "id": "T007",
+    "opened_at": "2026-10-05",
+    "direction": "LONG",
+    "regime": "neutral-up",
+    "composite_score": 54.5,
+    "entry_price": 86301.3,
+    "size_pct": 8,
+    "leverage": 1.5,
+    "notional": 1199.95,
+    "sl_price": 85006.78,
+    "tp_price": 88890.34,
+    "sl_pct": -1.5,
+    "tp_pct": 3.0,
+    "max_risk_usd": -27.0,
+    "max_reward_usd": 54.0,
+    "status": "open",
+    "note": "neutral-up: composite=54.5, MVRV=1.61, VIX=15.3"
+  },
   "closed_trades": [
     {
       "id": "T001",

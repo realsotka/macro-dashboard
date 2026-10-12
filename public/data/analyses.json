@@ -1,20 +1,20 @@
 [
   {
-    "id": "mid-2026-10-05",
+    "id": "mid-2026-10-12",
     "type": "mid",
-    "date": "2026-10-05",
+    "date": "2026-10-12",
     "timeframe": "4–8 тижнів",
     "bias": "bullish",
-    "title": "Мід-терм W41: neutral-up | Composite 54.5",
-    "content": "Composite 54.5/100 (neutral-up). Tech 62; Crypto 54; Macro 43. MVRV 1.611. EMA21 $75,386; weekly RSI14 82.55. Базовий сценарій: утримання над EMA21 з ризиком корекції через RSI у зоні перекупленості. LONG залишається чинним за умовами v3; composite <46 є виходом."
+    "title": "Мід-терм W42: neutral-up | Composite 56.3",
+    "content": "Composite 56.3/100 (neutral-up). Tech: 67 | Crypto: 53 | Macro: 44. MVRV: 1.553. EMA21: $75,621 (BTC вище). RSI14 weekly: 78.3 — перекупленість.\n\nБазовий: BTC утримує імпульс, composite 56.3 ≥53 → LONG-позиція активна.\n\nРизик: корекція до EMA21 ($75,621) та охолодження RSI14 weekly (78.3).\n\nТригер сильного режиму: composite ≥65 → LONG_S; контроль ризику за стопом відкритої позиції."
   },
   {
-    "id": "long-2026-10-05",
+    "id": "long-2026-10-12",
     "type": "long",
-    "date": "2026-10-05",
+    "date": "2026-10-12",
     "timeframe": "2–6 місяців",
     "bias": "bullish",
-    "title": "Лонг-терм: Рання бичача фаза | MVRV 1.611",
-    "content": "MVRV 1.611 відповідає фазі «рання бичача фаза». TIPS 10Y 2.88%; накопичений BTC ETF потік $58.73B; COT leveraged-funds percentile 86.5% при net -6,856. ФРС очолює Kevin Warsh. Тривала реальна дохідність вище 2% залишається структурним ризиком."
+    "title": "Лонг-терм: Рання бичача фаза | MVRV 1.553",
+    "content": "MVRV 1.553 → фаза: Рання бичача фаза. TIPS 10Y: 2.87% — структурний тиск на BTC (>2%). BTC ETF сукупний потік: $58.21B; COT: 86.5% percentile. Kevin Warsh — голова ФРС. Умови LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30; SHORT: composite <40 + MVRV ≥1.3 + VIX ≤30. Поточний режим: neutral-up."
   }
 ]

@@ -58,12 +58,15 @@
 - XLP (Staples): $83.43 проти $81.04 (+2.95%).
 - GLD (Gold ETF): $384.58 проти $379.55 (+1.33%).
 
+- Джерело котирувань: [Yahoo Finance XLK chart API](https://query1.finance.yahoo.com/v8/finance/chart/XLK?interval=1d&range=5d) (ті самі chart API для XLE, XLF, XLV, XLI, XLP і GLD).
+
 ## MSTR (Strategy)
 
 - BTC у резерві: **848,000 BTC**; зміна до попереднього збереженого показника: **+334 BTC**; середня ціна придбання: **$75,412**.
 - Акція MSTR: **$154.34**; використані акції в обігу: **560,000,000**.
 - Розрахунковий mNAV: **1.2100x**; зміна до попереднього тижня: **-0.0149x**; макрокорекція за правилом mNAV: **+0**.
-- Джерела: [Strategy Bitcoin ledger](https://www.strategy.com/ledger), [Yahoo Finance MSTR chart API](https://query1.finance.yahoo.com/v8/finance/chart/MSTR?interval=1d&range=5d).
+- Strategy ledger повернув HTTP 200, але очікуваний формат запису не розпізнано; загальну кількість BTC взято з [BitcoinTreasuries Strategy profile](https://bitcointreasuries.net/public-companies/strategy), а середню ціну **$75,412** залишено з попереднього стану до оновлення читабельних даних ledger.
+- Джерела котирування: [Strategy Bitcoin ledger](https://www.strategy.com/ledger), [Yahoo Finance MSTR chart API](https://query1.finance.yahoo.com/v8/finance/chart/MSTR?interval=1d&range=5d).
 
 ## Макроподії попереднього тижня (05.10–11.10)
 

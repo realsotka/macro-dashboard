@@ -1,20 +1,20 @@
 [
   {
-    "id": "mid-2026-10-12",
+    "id": "mid-2026-10-19",
     "type": "mid",
-    "date": "2026-10-12",
+    "date": "2026-10-19",
     "timeframe": "4–8 тижнів",
     "bias": "bullish",
-    "title": "Мід-терм W42: neutral-up | Composite 56.3",
-    "content": "Composite 56.3/100 (neutral-up). Tech: 67 | Crypto: 53 | Macro: 44. MVRV: 1.553. EMA21: $75,621 (BTC вище). RSI14 weekly: 78.3 — перекупленість.\n\nБазовий: BTC утримує імпульс, composite 56.3 ≥53 → LONG-позиція активна.\n\nРизик: корекція до EMA21 ($75,621) та охолодження RSI14 weekly (78.3).\n\nТригер сильного режиму: composite ≥65 → LONG_S; контроль ризику за стопом відкритої позиції."
+    "title": "Мід-терм W43: neutral-up | Composite 53.4",
+    "content": "Composite 53.4/100 (neutral-up). Tech: 62 | Crypto: 51 | Macro: 43. MVRV: 1.521. EMA21: $74,459 (BTC вище). RSI14 weekly: 73.4 — перекупленість.\n\nБазовий: composite 53.4 ≥53 зберігає умову входу LONG, якщо MVRV ≤3.5 і VIX ≤30.\n\nРизик: корекція до EMA21 ($74,459) та охолодження RSI14 weekly (73.4).\n\nТригер сильного режиму: composite ≥65 → LONG_S; контроль ризику за стопом позиції."
   },
   {
-    "id": "long-2026-10-12",
+    "id": "long-2026-10-19",
     "type": "long",
-    "date": "2026-10-12",
+    "date": "2026-10-19",
     "timeframe": "2–6 місяців",
     "bias": "bullish",
-    "title": "Лонг-терм: Рання бичача фаза | MVRV 1.553",
-    "content": "MVRV 1.553 → фаза: Рання бичача фаза. TIPS 10Y: 2.87% — структурний тиск на BTC (>2%). BTC ETF сукупний потік: $58.21B; COT: 86.5% percentile. Kevin Warsh — голова ФРС. Умови LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30; SHORT: composite <40 + MVRV ≥1.3 + VIX ≤30. Поточний режим: neutral-up."
+    "title": "Лонг-терм: Рання бичача фаза | MVRV 1.521",
+    "content": "MVRV 1.521 → фаза: Рання бичача фаза. TIPS 10Y: 2.78% — структурний тиск на BTC (>2%). BTC ETF сукупний потік: $57.98B; COT: 98.1% percentile. COT percentile вище 75 — contrarian bullish за правилом моделі. Kevin Warsh — голова ФРС. Умови LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30; SHORT: composite <40 + MVRV ≥1.3 + VIX ≤30. Поточний режим: neutral-up."
   }
 ]

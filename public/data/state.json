@@ -1,6 +1,6 @@
 {
   "bias_text": "Neutral-Down",
-  "breakeven_10y": 400.0,
+  "breakeven_10y": 2.35,
   "btc_ema21": 74576.82139848698,
   "btc_ema50": 63375.86,
   "btc_fr_avg_7d": 0.0027,
@@ -98,8 +98,8 @@
   "qqq_close": 709.8,
   "spy_close": 763.25,
   "tech_score": 64,
-  "tips_10y": 400.0,
-  "tips_5y": 400.0,
+  "tips_10y": 2.8,
+  "tips_5y": 2.56,
   "ust_10y": 4.94,
   "vix": 19.99,
   "mstr_mnav_cur": 1.0905,

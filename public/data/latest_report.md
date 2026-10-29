@@ -1,61 +1,100 @@
-## Macro Dashboard — Тижневий звіт W37 2026
+# Macro Dashboard — тижневий звіт W44 2026
 
-### Composite Score: 61.0/100 — neutral-up
-- Tech: 75 | CRYPTO: 55 | Macro: 47
-- Formula: v3 (Macro 25% / CRYPTO 35% / Tech 40%)
-- Режим: neutral-up | Confidence: 22
+**Дата:** 2026-10-26  
+**Composite:** 52.8/100 — **neutral-down**  
+**Формула:** v3 (Macro 25%, Crypto 35%, Tech 40%); пороги: LONG_S ≥65, LONG_W ≥53, FLAT 38–52, SHORT <38.
 
-### BTC Технічний Аналіз
-- Ціна: $79,580.10 | EMA21 weekly: $71,819.45 (+10.81%)
-- RSI14 weekly: 75.87 | Funding: -0.0002% | OI зміна: -5.60%
-- Структура: Neutral — структура не визначена | W0 high/low: $80,550/$79,507
+## Ключовий висновок
 
-### Macro (FRED / ринки)
-- TIPS 10Y: 2.42% | TIPS 5Y: 2.15% | Breakeven 10Y: 2.35%
-- Nominal 10Y: 4.67% | SOFR: 3.64% | VIX: 14.53
-- SPY: $770.19 | QQQ: $718.96 | Fear & Greed: 71 (Greed)
+Композит **52.8/100** відповідає режиму **neutral-down**. BTC лишається вище EMA21, але RSI14 weekly підвищений; тижневий BTC ETF-потік повернувся до притоку, хоча 4-тижневе середнє від’ємне. ETH ETF-потік від’ємний, реальна дохідність 10Y TIPS перевищує 2%, а VIX — нижче 20. LONG-позицію було закрито раніше цього тижня за стопом; нового входу цього понеділка немає.
 
-### BTC та ETH ETF Flows
-- BTC тижневий: +986.7M | 4w average: 861.0M | кумулятивний: $56.71B
-- ETH тижневий: +215.3M | кумулятивний: $13.19B
-- BTC/ETH weekly ratio: 4.58 | Signal: BOTH_POSITIVE
+## Тижневі показники та оцінки
 
-### COT та MVRV
-- COT date: 2026-09-01 | Leveraged Funds net: -7,620 | Percentile: 78.8% | Velocity: +469
-- MVRV: 1.510 | Фаза: Рання бичача фаза
+| Блок | Значення |
+|---|---:|
+| Composite | 52.8/100 |
+| Tech | 65/100 |
+| Crypto | 46/100 |
+| Macro | 43/100 |
+| Режим / сигнал | neutral-down |
+| Упевненість за формулою | 6 |
+| Деталі формули | Macro 25% + Crypto 35% + Tech 40% |
+| Бали компонентів моделі | Crypto: ETF 65, COT 5, MVRV 62; Macro: TIPS 20, VIX 58 |
 
-### MSTR Fundamentals
-- BTC holdings: 845,050 BTC | Average purchase price: $75,412
-- MSTR: $142.80 | Shares: 560,000,000 | mNAV: 1.1891 (WoW +0.1023)
-- Macro adjustment: +0
+## BTC: технічний аналіз
 
-### Sector ETFs
-- Tech Sector (XLK): $187.28 vs $186.50 (+0.42%)
-- Energy Sector (XLE): $64.06 vs $63.96 (+0.16%)
-- Financials (XLF): $58.10 vs $57.71 (+0.68%)
-- Health Care (XLV): $171.45 vs $170.54 (+0.53%)
-- Industrials (XLI): $175.27 vs $175.13 (+0.08%)
-- Staples (XLP): $84.58 vs $84.98 (-0.47%)
-- Gold ETF (GLD): $406.77 vs $408.42 (-0.40%)
+- Ціна: **$80,159.90**; тижнева EMA21: **$75,052.16** (+6.81%).
+- RSI14 (тижневі свічки): **70.20**; funding: **+0.0070%**; OI зміна WoW: **+0.82%**.
+- Тижнева структура: **Neutral - undefined**.
+- Оцінка Tech 65: EMA +10, RSI +7, funding -2, OI +0.
+- Тижневі рівні: W0 $79,322.90–$80,919.00; W-1 $79,168.00–$84,876.00; W-2 $79,725.30–$84,348.20.
+- Дані: [OKX weekly BTC-SWAP candles](https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=55), [OKX funding history](https://www.okx.com/api/v5/public/funding-rate-history?instId=BTC-USDT-SWAP&limit=3), [OKX open-interest history](https://www.okx.com/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1W&limit=3&instId=BTC-USDT-SWAP).
 
-### Макро-події тижня (31.08–06.09.2026)
-- 09.01 | ISM Manufacturing PMI: actual 54.6 vs forecast 55.2 (prev 55.6) | impact + — Факт 54.6 нижче прогнозу 55.2 — ділова активність послабилась помірно, що підвищує шанси на м’якшу політику ФРС і підтримує risk-on.
-- 09.04 | Середня погодинна зарплата м/м: actual 0.3% vs forecast 0.3% (prev 0.1%) | impact - — Факт 0.3% відповів прогнозу, але прискорився з 0.1% — стійкий тиск на зарплати може стримувати швидке пом’якшення ФРС.
-- 09.04 | Зміна зайнятості поза с/г (NFP): actual 162K vs forecast 55K (prev -23K) | impact - — Факт 162K значно вище прогнозу 55K — ринок праці сильніший за очікування, менше шансів на найближче зниження ставки.
-- 09.04 | Рівень безробіття: actual 4.1% vs forecast 4.1% (prev 4.1%) | impact = — Факт 4.1% відповів прогнозу та попередньому значенню — без нового сюрпризу для risk-on настрою.
+## Макро та ринки
 
-### Trading Position
-- Торгова дія: OPENED_LONG T004 @ 79580 tp=81967.5 sl=78386.4
-- Deposit: $9,999.78 | Total PnL: $-0.22
-- Open position: {"id": "T004", "opened_at": "2026-09-07", "direction": "LONG", "regime": "neutral-up", "composite_score": 61.0, "entry_price": 79580.1, "size_pct": 8, "leverage": 1.5, "notional": 1199.97, "sl_price": 78386.4, "tp_price": 81967.5, "sl_pct": -1.5, "tp_pct": 3.0, "max_risk_usd": -27.0, "max_reward_usd": 54.0, "status": "open", "note": "neutral-up: composite=61.0, MVRV=1.51, VIX=14.5 — v3"}
+- Реальна дохідність TIPS: 5Y **2.33%**, 10Y **2.64%**; breakeven 10Y **2.34%**.
+- Номінальна дохідність 10Y: **4.96%**; SOFR: **3.90%**; VIX: **19.45**.
+- Ринкові закриття станом на 23.10.2026 проти 19.10: SPY **$759.97** (-0.85%), QQQ **$704.40** (-1.94%), VIX **19.45** (+12.36%).
+- Джерела макроданих: [FRED DFII5](https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII5), [FRED DFII10](https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10), [FRED T10YIE](https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10YIE), [FRED DGS10](https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10), [FRED SOFR](https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR); VIX — [Yahoo Finance chart API](https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=5d).
+- Ринкові закриття акцій та ETF отримані з [підключеного фінансового потоку](https://www.perplexity.ai/finance/); тижневе вікно — 19–23 жовтня.
 
-### Джерела
-- FRED: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII5 (TIPS 5Y), https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10 (TIPS 10Y), https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10YIE (breakeven), https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10 (nominal 10Y), https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR (SOFR)
-- Farside BTC ETF flows: https://farside.co.uk/bitcoin-etf-flow-all-data/
-- Farside ETH ETF flows: https://farside.co.uk/ethereum-etf-flow-all-data/
-- Yahoo Finance chart API: https://query1.finance.yahoo.com/v8/finance/chart/SPY?interval=1d&range=5d and corresponding ticker endpoints
-- CFTC COT API: https://publicreporting.cftc.gov/resource/gpe5-46if.json
-- OKX market data: https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=55
-- Coin Metrics MVRV: https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur&frequency=1d&page_size=3
-- Strategy ledger: https://www.strategy.com/ledger
-- EdgeCypher calendar: https://api.edgecypher.com/api/v1/calendar
+## ETF-потоки
+
+- BTC ETF: **+301.2 млн дол.** за тиждень; середнє за останні чотири тижні **-91.2 млн дол.**; накопичений потік **58.28 млрд дол.**.
+- ETH ETF: **-220.7 млн дол.** за тиждень; сукупно **12.75 млрд дол.**; співвідношення BTC/ETH потоку: **-1.36**.
+- Джерела: [Farside BTC ETF flows](https://farside.co.uk/bitcoin-etf-flow-all-data/) та [Farside ETH ETF flows](https://farside.co.uk/ethereum-etf-flow-all-data/).
+
+## Позиціонування та оцінка циклу
+
+- COT (звіт 2026-10-20): leveraged funds net **-4,942**, asset managers net **+2,999**; 52-тижневий leveraged-funds percentile **100.0%**, z-score **+1.553**, модельний COT score **66**; 26-тижневий діапазон **100.0%**; швидкість зміни **+902**, прискорення **-106**.
+- MVRV: **1.480** — акумуляція; Fear & Greed: **50 (Neutral)**.
+- Джерела: [CFTC Bitcoin futures report API](https://publicreporting.cftc.gov/resource/gpe5-46if.json), [Coin Metrics MVRV API](https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur&frequency=1d&page_size=3), [Alternative.me Fear & Greed API](https://api.alternative.me/fng/?limit=1).
+
+## Сектори та золото
+
+- XLK (Tech Sector): $183.23 проти $185.96 (-1.47%).
+- XLE (Energy Sector): $69.33 проти $67.80 (+2.26%).
+- XLF (Financials): $55.90 проти $55.06 (+1.53%).
+- XLV (Health Care): $179.28 проти $175.65 (+2.07%).
+- XLI (Industrials): $164.62 проти $166.68 (-1.24%).
+- XLP (Staples): $88.26 проти $87.21 (+1.20%).
+- GLD (Gold ETF): $366.61 проти $379.69 (-3.44%).
+
+- Ціни секторних ETF і GLD — закриття 23.10 проти 19.10 з [підключеного фінансового потоку](https://www.perplexity.ai/finance/).
+
+## MSTR (Strategy)
+
+- BTC у резерві та середня ціна придбання: **848,250 BTC** за **$75,412** — це останні збережені значення, не оновлені цього запуску.
+- Акція MSTR: **$146.01** (закриття 23.10; +7.34% за тиждень); використані акції в обігу: **560,000,000**.
+- Розрахункова капіталізація **$81.77 млрд** проти вартості BTC-резерву **$68.00 млрд**; mNAV **1.2025x**, зміна до попереднього тижня **+0.1120x**; макрокорекція за правилом mNAV: **+0**.
+- Для mNAV використано закриття MSTR, модельний запас BTC зі збереженого стану, **560,000,000** акцій і поточну ціну BTC. Дані про баланс BTC та середню ціну не перезавантажувалися з [Strategy ledger](https://www.strategy.com/ledger), тому зміну запасу BTC за тиждень не оцінюємо; збережені значення доступні в [поточному state.json](https://api.github.com/repos/realsotka/macro-dashboard/contents/public/data/state.json).
+- Ціна акції з [підключеного фінансового потоку](https://www.perplexity.ai/finance/).
+
+## Макроподії попереднього тижня (19.10–25.10)
+
+Impact показує очікуваний вплив на risk-on активи, а не оцінку стану економіки; факти, прогнози й попередні значення отримані з [EdgeCypher US economic calendar](https://api.edgecypher.com/api/v1/calendar?start_date=2026-10-19&end_date=2026-10-25).
+
+- 22.10 − **Первинні заявки на допомогу з безробіття**: факт 194K, прогноз 200K, попереднє 199K. 194K проти прогнозу 200K — заявки нижчі за очікування, тобто ринок праці трохи сильніший; це зменшує терміновість зниження ставки ФРС і тисне на risk-on.
+- 23.10 = **Звіт Мінфіну США щодо валют**: факт —, прогноз —, попереднє —. Календарний запис не містить числового результату або окремого напрямного сюрпризу; вплив на risk-on не класифікується.
+- 23.10 − **Попередній виробничий PMI США**: факт 56.0, прогноз 55.4, попереднє 57.0. 56.0 проти прогнозу 55.4 — промислова активність сильніша за очікування; це може зменшити терміновість пом’якшення політики ФРС і є помірно негативним для risk-on.
+- 23.10 = **Попередній PMI сфери послуг США**: факт 57.9, прогноз 57.9, попереднє 58.7. 57.9 збігся з прогнозом 57.9; попри зниження з попередніх 58.7, сюрпризу відносно очікувань ринку немає.
+- 23.10 − **Переглянутий індекс споживчих настроїв Мічиганського університету**: факт 48.0, прогноз 46.3, попереднє 46.3. 48.0 проти прогнозу 46.3 — настрої споживачів виявилися сильнішими за очікування; це може підтримати попит і зменшити очікування швидких знижень ставки.
+- 23.10 = **Переглянуті інфляційні очікування Мічиганського університету**: факт 4.7%, прогноз —, попереднє 4.7%. Факт 4.7% дорівнює попередньому значенню; оцінка не містить прогнозу, тож явний сюрприз для очікувань ставки не встановлений.
+
+Підсумок: **негативний** (0 позитивних, 3 негативних, 3 нейтральних подій). Голова ФРС — Kevin Warsh.
+
+## Паперова торгівля
+
+- Дія цього тижня: **FLAT_NO_ENTRY — entry thresholds not met**.
+- Позиція: Відкритої позиції немає. Остання: T009 LONG закрито 2026-10-20 за SL $81,591.79; реалізований P&L -26.85 USD.
+- Поточний депозит: **$9,918.78**; розмір позиції — 8% депозиту з плечем 1,5x.
+- Правила виходу: LONG при composite <46 або TP/SL; SHORT при composite >44, MVRV <1.0 або TP/SL.
+
+## Сценарії
+
+- **Базовий (4–8 тижнів):** composite 52.8 залишається в нейтрально-низхідному режимі; ціна вище EMA21, але RSI14 підвищений, а 4-тижневе середнє BTC ETF-потоку від’ємне.
+- **Позитивний тригер:** composite ≥65 переведе сигнал у LONG_S; стабілізація ETF-потоків і збереження підтримки EMA21 посилять підтвердження.
+- **Ризик:** технічний стоп LONG T009 спрацював цього тижня; новий вхід у цьому самому запуску не відкривався. TIPS 10Y вище 2% лишається зустрічним вітром.
+- **Довший горизонт (2–6 місяців):** MVRV 1.480 відповідає фазі «акумуляція»; реальна дохідність 10Y 2.64% залишається вище 2%. Керівник ФРС у цьому аналізі — Kevin Warsh.
+
+*Цей звіт є аналітичним підсумком та записом паперової торгівлі, а не інвестиційною рекомендацією.*

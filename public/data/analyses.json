@@ -1,20 +1,20 @@
 [
   {
-    "id": "mid-2026-09-07",
+    "id": "mid-2026-10-26",
     "type": "mid",
-    "date": "2026-09-07",
+    "date": "2026-10-26",
     "timeframe": "4–8 тижнів",
-    "bias": "bullish",
-    "title": "Мід-терм W37: neutral-up | Composite 61.0",
-    "content": "Composite 61.0/100 (neutral-up). Tech: 75 | Crypto: 55 | Macro: 47. MVRV: 1.510. EMA21: $71,819 (BTC вище). RSI14 weekly: 75.9.\n\nБазовий: BTC утримує імпульс, composite 61.0 — LONG позиція відкрита за правилами v3.\n\nРизик: корекція до EMA21 ($71,819) та перегрів RSI.\n\nТригер: composite ≥65 для сильного LONG; вихід LONG при composite <46."
+    "bias": "neutral",
+    "title": "Мід-терм W44: neutral-down | Composite 52.8",
+    "content": "Composite 52.8/100 (neutral-down). Tech: 65 | Crypto: 46 | Macro: 43. MVRV: 1.480. EMA21: $75,052 (BTC вище). RSI14 weekly: 70.2 — перекупленість.\n\nБазовий: composite 52.8 у нейтральній зоні — новий вхід за правилами v3 відсутній.\n\nБичачий тригер: composite ≥53 за умови MVRV ≤3.5 та VIX ≤30.\n\nВедмежий тригер: composite <40 за умови MVRV ≥1.3 та VIX ≤30; EMA21 $75,052 — технічний орієнтир."
   },
   {
-    "id": "long-2026-09-07",
+    "id": "long-2026-10-26",
     "type": "long",
-    "date": "2026-09-07",
+    "date": "2026-10-26",
     "timeframe": "2–6 місяців",
     "bias": "bullish",
-    "title": "Лонг-терм: Рання бичача фаза | MVRV 1.510",
-    "content": "MVRV 1.510 → фаза: Рання бичача фаза. TIPS 10Y: 2.42% — структурний тиск на BTC (>2%). Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит. BTC ETF сукупний приток: $56.71B. COT: 79% percentile — переповнене ведмеже позиціонування, contrarian bullish для BTC. Умови LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30. Умови SHORT: composite <40 + MVRV ≥1.3. Поточний режим: neutral-up."
+    "title": "Лонг-терм: Акумуляція | MVRV 1.480",
+    "content": "MVRV 1.480 → фаза: Акумуляція. TIPS 10Y: 2.64% — структурний тиск на BTC (>2%). BTC ETF сукупний потік: $58.28B; COT: 100.0% percentile. COT percentile вище 75 — contrarian bullish за правилом моделі. Kevin Warsh — голова ФРС. Умови LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30; SHORT: composite <40 + MVRV ≥1.3 + VIX ≤30. Поточний режим: neutral-down."
   }
 ]

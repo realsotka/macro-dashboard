@@ -1,6 +1,6 @@
 {
   "deposit_initial": 10000,
-  "deposit_current": 9972.78,
+  "deposit_current": 9918.78,
   "equity_curve": [
     {
       "date": "2026-07-27",
@@ -49,6 +49,66 @@
       "equity": 9972.78,
       "pnl": -27.0,
       "event": "T004 SL_HIT $78,386.40 -27.00"
+    },
+    {
+      "date": "2026-09-14",
+      "equity": 9972.78,
+      "pnl": 0,
+      "event": "T005 LONG opened @77,611.10"
+    },
+    {
+      "date": "2026-09-15",
+      "equity": 9945.85,
+      "pnl": -26.93,
+      "event": "T005 SL_HIT $76,446.93 -26.93"
+    },
+    {
+      "date": "2026-09-28",
+      "equity": 9945.85,
+      "pnl": 0,
+      "event": "T006 LONG opened @83180.40"
+    },
+    {
+      "date": "2026-10-03",
+      "equity": 9999.56,
+      "pnl": 53.71,
+      "event": "T006 TP_HIT @85,675.81 +53.71$"
+    },
+    {
+      "date": "2026-10-05",
+      "equity": 9999.56,
+      "pnl": 0,
+      "event": "T007 LONG opened @86301.30"
+    },
+    {
+      "date": "2026-10-06",
+      "equity": 9972.56,
+      "pnl": -27.0,
+      "event": "T007 SL_HIT $85,006.78 -27.00"
+    },
+    {
+      "date": "2026-10-12",
+      "equity": 9972.56,
+      "pnl": 0,
+      "event": "T008 LONG opened @$84,232.90"
+    },
+    {
+      "date": "2026-10-13",
+      "equity": 9945.63,
+      "pnl": -26.93,
+      "event": "T008 SL_HIT $82,969.41 -26.93"
+    },
+    {
+      "date": "2026-10-19",
+      "equity": 9945.63,
+      "pnl": 0,
+      "event": "T009 LONG opened @$82,834.30"
+    },
+    {
+      "date": "2026-10-20",
+      "equity": 9918.78,
+      "pnl": -26.85,
+      "event": "T009 SL_HIT $81,591.79 -26.85"
     }
   ],
   "open_position": null,
@@ -140,6 +200,106 @@
       "deposit_before": 9999.78,
       "deposit_after": 9972.78,
       "note": "SL_HIT: cur=78506.50 tp=81967.5 sl=78386.4 composite=58.5"
+    },
+    {
+      "id": "T005",
+      "opened_at": "2026-09-14",
+      "closed_at": "2026-09-15",
+      "direction": "LONG",
+      "regime": "neutral-up",
+      "composite_open": 58.7,
+      "composite_close": 56.2,
+      "entry_price": 77611.1,
+      "exit_price": 76446.93,
+      "exit_reason": "SL_HIT",
+      "size_pct": 8,
+      "leverage": 1.5,
+      "notional": 1196.73,
+      "pnl_pct": -2.25,
+      "pnl_usd": -26.93,
+      "deposit_before": 9972.78,
+      "deposit_after": 9945.85,
+      "note": "SL_HIT: cur=78141.40 tp=79939.43 sl=76446.93 composite=56.2"
+    },
+    {
+      "id": "T006",
+      "opened_at": "2026-09-28",
+      "closed_at": "2026-10-03",
+      "direction": "LONG",
+      "regime": "neutral-up",
+      "composite_open": 55.9,
+      "composite_close": 60.6,
+      "entry_price": 83180.4,
+      "exit_price": 85675.81,
+      "exit_reason": "TP_HIT",
+      "size_pct": 8,
+      "leverage": 1.5,
+      "notional": 1193.5,
+      "pnl_pct": 4.5,
+      "pnl_usd": 53.71,
+      "deposit_before": 9945.85,
+      "deposit_after": 9999.56,
+      "note": "TP_HIT: price=84462.20, tp=85675.81, sl=81932.69, composite=60.6"
+    },
+    {
+      "id": "T007",
+      "opened_at": "2026-10-05",
+      "closed_at": "2026-10-06",
+      "direction": "LONG",
+      "regime": "neutral-up",
+      "composite_open": 54.5,
+      "composite_close": 57.6,
+      "entry_price": 86301.3,
+      "exit_price": 85006.78,
+      "exit_reason": "SL_HIT",
+      "size_pct": 8,
+      "leverage": 1.5,
+      "notional": 1199.95,
+      "pnl_pct": -2.25,
+      "pnl_usd": -27.0,
+      "deposit_before": 9999.56,
+      "deposit_after": 9972.56,
+      "note": "SL_HIT: cur=85828.60 tp=88890.34 sl=85006.78 composite=57.6"
+    },
+    {
+      "id": "T008",
+      "opened_at": "2026-10-12",
+      "closed_at": "2026-10-13",
+      "direction": "LONG",
+      "regime": "neutral-up",
+      "composite_open": 56.3,
+      "composite_close": 55.5,
+      "entry_price": 84232.9,
+      "exit_price": 82969.41,
+      "exit_reason": "SL_HIT",
+      "size_pct": 8,
+      "leverage": 1.5,
+      "notional": 1196.71,
+      "pnl_pct": -2.25,
+      "pnl_usd": -26.93,
+      "deposit_before": 9972.56,
+      "deposit_after": 9945.63,
+      "note": "SL_HIT: cur=81887.80 tp=86759.89 sl=82969.41 composite=55.5"
+    },
+    {
+      "id": "T009",
+      "opened_at": "2026-10-19",
+      "closed_at": "2026-10-20",
+      "direction": "LONG",
+      "regime": "neutral-up",
+      "composite_open": 53.4,
+      "composite_close": 52.8,
+      "entry_price": 82834.3,
+      "exit_price": 81591.79,
+      "exit_reason": "SL_HIT",
+      "size_pct": 8,
+      "leverage": 1.5,
+      "notional": 1193.48,
+      "pnl_pct": -2.25,
+      "pnl_usd": -26.85,
+      "deposit_before": 9945.63,
+      "deposit_after": 9918.78,
+      "note": "SL_HIT: cur=81888.80 tp=85319.33 sl=81591.79 composite=52.8"
     }
   ],
   "stats": {
@@ -177,8 +337,8 @@
       }
     }
   },
-  "total_pnl": -27.22,
-  "win_count": 1,
-  "loss_count": 3,
-  "win_rate": 25.0
+  "total_pnl": -81.22,
+  "win_count": 2,
+  "loss_count": 7,
+  "win_rate": 22.2
 }

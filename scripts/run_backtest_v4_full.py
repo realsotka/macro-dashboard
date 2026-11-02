@@ -381,6 +381,18 @@ for s in SNAP.values():
         s[v] = round(comp(s, v), 1)
 
 
+def daily_atr_pct(t, n=14):
+    """ATR(14) of daily bars built from 1H, in % of price, as of t."""
+    i = bisect.bisect_left(h1_ts, t)
+    bars = h1[max(0, i - 24 * (n + 1)):i]
+    days = [bars[k:k + 24] for k in range(len(bars) % 24, len(bars), 24)]
+    trs = []; pc = None
+    for dd in days:
+        hi = max(b[2] for b in dd); lo = min(b[3] for b in dd); cl = dd[-1][4]
+        trs.append(max(hi - lo, abs(hi - pc), abs(lo - pc)) if pc else hi - lo); pc = cl
+    return sum(trs[-n:]) / len(trs[-n:]) / bars[-1][4] * 100
+
+
 def bars_between(t0, t1):
     i0 = bisect.bisect_left(h1_ts, t0)
     i1 = bisect.bisect_left(h1_ts, t1 - H + 1)
@@ -388,7 +400,7 @@ def bars_between(t0, t1):
 
 
 # ── simulation ───────────────────────────────────────────────────────────
-def simulate(variant, mode, el=53, xl=46, es=40, xs=44, t0=None, t1=None):
+def simulate(variant, mode, el=53, xl=46, es=40, xs=44, t0=None, t1=None, tp_pct=3.0, sl_pct=1.5, atr_mult=None, use_momentum=True):
     """mode: 'tpsl_first_touch' | 'tpsl_prod_priority' | 'hold_momentum'"""
     dep = 10000.0; peak = dep; mdd = 0.0
     pos = None; trades = []; last_t = None
@@ -419,7 +431,7 @@ def simulate(variant, mode, el=53, xl=46, es=40, xs=44, t0=None, t1=None):
                             if lo <= pos["tp"]: close = ("TP", pos["tp"], t)
                             elif hi >= pos["sl"]: close = ("SL", pos["sl"], t)
                 pos["checked_to"] = t
-            if close is None:
+            if close is None and use_momentum:
                 if pos["dir"] == "LONG" and c < xl:
                     close = ("MOMENTUM", price, t)
                 elif pos["dir"] == "SHORT" and c > xs:
@@ -431,7 +443,7 @@ def simulate(variant, mode, el=53, xl=46, es=40, xs=44, t0=None, t1=None):
                 move = (px / pos["entry"] - 1) if pos["dir"] == "LONG" else (pos["entry"] / px - 1)
                 pnl = pos["notional"] * move * 1.5            # production formula (leverage applied in pnl_pct)
                 dep += pnl
-                trades.append(dict(dir=pos["dir"], opened=dstr(pos["t_open"]), closed=dstr(tc), entry=round(pos["entry"], 1),
+                trades.append(dict(t_open=pos["t_open"], slp=round(pos["slp"], 3), dir=pos["dir"], opened=dstr(pos["t_open"]), closed=dstr(tc), entry=round(pos["entry"], 1),
                                    exit=round(px, 1), reason=reason, comp_open=pos["comp"], comp_close=c,
                                    move_pct=round(move * 100, 2), pnl_usd=round(pnl, 2), dep_after=round(dep, 2)))
                 pos = None
@@ -444,9 +456,13 @@ def simulate(variant, mode, el=53, xl=46, es=40, xs=44, t0=None, t1=None):
             dr = "LONG" if (c >= el and mv <= 3.5 and vx <= 30) else "SHORT" if (c < es and mv >= 1.3 and vx <= 30) else None
             if dr:
                 notional = dep * 0.08 * 1.5
-                tp = price * (1.03 if dr == "LONG" else 0.97)
-                sl = price * (0.985 if dr == "LONG" else 1.015)
-                pos = dict(dir=dr, entry=price, tp=tp, sl=sl, notional=notional, t_open=t, checked_to=t, comp=c)
+                slp = sl_pct
+                if atr_mult:
+                    slp = atr_mult * daily_atr_pct(t)
+                tpp = tp_pct if tp_pct else 1e9
+                tp = price * (1 + tpp / 100) if dr == "LONG" else price * max(0.0001, 1 - tpp / 100)
+                sl = price * (1 - slp / 100 if dr == "LONG" else 1 + slp / 100)
+                pos = dict(dir=dr, entry=price, tp=tp, sl=sl, notional=notional, t_open=t, checked_to=t, comp=c, slp=slp)
         # mark-to-market drawdown on deposit
         if pos:
             move = (price / pos["entry"] - 1) if pos["dir"] == "LONG" else (pos["entry"] / price - 1)

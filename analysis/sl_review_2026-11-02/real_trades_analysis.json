@@ -1,0 +1,110 @@
+[
+ {
+  "id": "T001",
+  "opened": "07-27 12:00",
+  "result": "SL_HIT",
+  "entry": 65023.4,
+  "sl_after_h": 10,
+  "tp_reached_after_d": null,
+  "mae_before_tp": null,
+  "mfe7": 1.01,
+  "mae7": -4.3,
+  "ret_next_monday": -3.84
+ },
+ {
+  "id": "T002",
+  "opened": "08-24 07:00",
+  "result": "TP_HIT",
+  "entry": 77563.3,
+  "sl_after_h": null,
+  "tp_reached_after_d": 0.3,
+  "mae_before_tp": -0.95,
+  "mfe7": 5.1,
+  "mae7": -0.95,
+  "ret_next_monday": 0.63
+ },
+ {
+  "id": "T003",
+  "opened": "08-31 07:00",
+  "result": "SL_HIT",
+  "entry": 78050.0,
+  "sl_after_h": 35,
+  "tp_reached_after_d": 3.3,
+  "mae_before_tp": -2.36,
+  "mfe7": 5.42,
+  "mae7": -2.36,
+  "ret_next_monday": 2.01
+ },
+ {
+  "id": "T004",
+  "opened": "09-07 07:00",
+  "result": "SL_HIT",
+  "entry": 79580.1,
+  "sl_after_h": 23,
+  "tp_reached_after_d": 13.8,
+  "mae_before_tp": -5.89,
+  "mfe7": 0.39,
+  "mae7": -4.67,
+  "ret_next_monday": -2.54
+ },
+ {
+  "id": "T005",
+  "opened": "09-14 07:00",
+  "result": "SL_HIT",
+  "entry": 77611.1,
+  "sl_after_h": 30,
+  "tp_reached_after_d": 4.2,
+  "mae_before_tp": -3.5,
+  "mfe7": 5.77,
+  "mae7": -3.5,
+  "ret_next_monday": 5.15
+ },
+ {
+  "id": "T006",
+  "opened": "09-28 07:00",
+  "result": "TP_HIT",
+  "entry": 83180.4,
+  "sl_after_h": null,
+  "tp_reached_after_d": 3.9,
+  "mae_before_tp": -0.82,
+  "mfe7": 4.88,
+  "mae7": -0.82,
+  "ret_next_monday": 3.65
+ },
+ {
+  "id": "T007",
+  "opened": "10-05 07:00",
+  "result": "SL_HIT",
+  "entry": 86301.3,
+  "sl_after_h": 9,
+  "tp_reached_after_d": null,
+  "mae_before_tp": null,
+  "mfe7": 0.45,
+  "mae7": -6.89,
+  "ret_next_monday": -2.46
+ },
+ {
+  "id": "T008",
+  "opened": "10-12 07:00",
+  "result": "SL_HIT",
+  "entry": 84232.9,
+  "sl_after_h": 5,
+  "tp_reached_after_d": null,
+  "mae_before_tp": null,
+  "mfe7": 0.09,
+  "mae7": -5.35,
+  "ret_next_monday": -1.69
+ },
+ {
+  "id": "T009",
+  "opened": "10-19 07:00",
+  "result": "SL_HIT",
+  "entry": 82834.3,
+  "sl_after_h": 17,
+  "tp_reached_after_d": null,
+  "mae_before_tp": null,
+  "mfe7": 2.46,
+  "mae7": -4.43,
+  "ret_next_monday": -3.31
+ }
+]

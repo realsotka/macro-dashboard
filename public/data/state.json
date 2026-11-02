@@ -11,8 +11,8 @@
   "btc_oi_current": 2741797.0,
   "btc_price": 77846.7,
   "btc_weekly_structure": "Neutral — структура не визначена",
-  "composite_score": 45.9,
-  "confidence": 8,
+  "composite_score": 42.4,
+  "confidence": 15,
   "cot_btc_net_pos": -7052,
   "cot_btc_oi": 20019.0,
   "cot_btc_oi_trend_pct": 5.6,
@@ -112,7 +112,7 @@
   "fomc_date": "2026-09-16",
   "mvrv": 1.446503145463846,
   "trade_signal": "neutral-down",
-  "formula_version": "v3",
+  "formula_version": "v4-lite",
   "cot_net_lev": -3979,
   "cot_net_asset": 2754,
   "cot_asset_percentile": 19.2,
@@ -249,5 +249,20 @@
   "mstr_stock_price": 130.51,
   "mstr_shares_outstanding": 560000000,
   "vix_prev": 17.2,
-  "mstr_purchased_week": 0.0
+  "mstr_purchased_week": 0.0,
+  "composite_v3": 45.9,
+  "strategy": "v4-lite swing grid",
+  "stables_score": 1.9,
+  "stables_nf30_pct": -2.475,
+  "stables_supply_total": 254483230952,
+  "stables_netflow_30d": -6458114795,
+  "stables_status": "ok",
+  "options_score_fixed": 50.0,
+  "formula_weights": {
+    "macro": 0.2,
+    "crypto": 0.3,
+    "tech": 0.3,
+    "options": 0.12,
+    "stables": 0.08
+  }
 }

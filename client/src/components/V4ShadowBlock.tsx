@@ -81,16 +81,33 @@ function ScoreBar({ value }: { value: number | null }) {
 }
 
 export default function V4ShadowBlock({ report }: { report: any }) {
-  const shadow: V4ShadowData | undefined = report?.v4_shadow;
+  // v4-lite production: stables come from state.json (stables_* fields); options are informational only.
+  const shadow: V4ShadowData | undefined = report?.v4_shadow ?? (report?.stables_score !== undefined ? {
+    basis: { status: "n/a" },
+    options: { skew_25d: null, iv_term: null, gex_sign: "unknown", dvol: null, status: "partial" },
+    stables: {
+      stable_supply_total: report.stables_supply_total ?? null,
+      stable_netflow_30d: report.stables_netflow_30d ?? null,
+      stable_netflow_30d_pct: report.stables_nf30_pct ?? null,
+      stable_netflow_90d: null,
+      status: String(report.stables_status ?? "ok").startsWith("ok") ? "ok" : "partial",
+    },
+    scores: {
+      options_score: 50, stables_score: report.stables_score ?? null,
+      composite_v4: report.composite_score ?? null, composite_v3: report.composite_v3 ?? null,
+      regime_v4: report.market_regime ?? null, regime_v3: null,
+    },
+    updated_at: report.last_updated_daily ?? report.last_run ?? "",
+  } : undefined);
 
   if (!shadow) {
     return (
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-1 flex items-center gap-2">
-          <span>🧪</span> БЛОК 8 — V4 SHADOW
+          <span>🪙</span> БЛОК 8 — STABLECOINS + OPTIONS
         </h2>
         <div className="p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))]">
-          Дані v4 shadow ще не опубліковано в state.json.
+          Дані стейблкоїнів ще не опубліковано в state.json.
         </div>
       </section>
     );
@@ -101,15 +118,15 @@ export default function V4ShadowBlock({ report }: { report: any }) {
   return (
     <section>
       <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-1 flex items-center gap-2">
-        <span>🧪</span> БЛОК 8 — V4 SHADOW
-        <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30">
-          SHADOW — не впливає на сигнали
+        <span>🪙</span> БЛОК 8 — STABLECOINS + OPTIONS
+        <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-green-500/15 text-green-300 border border-green-500/30">
+          Stables — у composite (8%)
         </span>
       </h2>
       <div className="mb-4 p-2.5 bg-purple-500/10 border border-purple-500/30 rounded-lg text-[11px] text-purple-300 leading-relaxed">
-        ⚠️ Тестовий блок нових даних (Options + Stablecoins). НЕ інтегровано у Formula v3 — не
-        впливає на tech_score / crypto_score / macro_score, composite_score чи trade_signal.
-        Basis/Carry (CME futures) не реалізовано — немає безкоштовного джерела без ключа.
+        З 2026-11-02 Stablecoins (приріст пропозиції USDT+USDC+PYUSD за 30 днів, перцентиль за 2 роки) входить у
+        composite v4-lite з вагою 8%. Options поки зафіксовано на 50 (вага 12%) — історії замало для перевірки,
+        тому показники Deribit тут лише інформаційні. Basis/Carry не використовується.
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
@@ -217,12 +234,12 @@ export default function V4ShadowBlock({ report }: { report: any }) {
       {/* ── Composite comparison ── */}
       {scores.composite_v4 !== null && scores.composite_v3 !== null && (
         <div className="p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-          💬 <span className="text-[hsl(var(--foreground))] font-medium">Composite v3 (production):</span>{" "}
-          <span className="num text-[hsl(var(--foreground))]">{fmtNum(scores.composite_v3, 1)}</span> ({scores.regime_v3}){" "}
+          💬 <span className="text-[hsl(var(--foreground))] font-medium">Стара v3 (для порівняння):</span>{" "}
+          <span className="num text-[hsl(var(--foreground))]">{fmtNum(scores.composite_v3, 1)}</span> {scores.regime_v3 ? `(${scores.regime_v3})` : ""}{" "}
           vs{" "}
-          <span className="text-[hsl(var(--foreground))] font-medium">Composite v4 shadow:</span>{" "}
+          <span className="text-[hsl(var(--foreground))] font-medium">Composite v4-lite (production):</span>{" "}
           <span className="num text-[hsl(var(--foreground))]">{fmtNum(scores.composite_v4, 1)}</span> ({scores.regime_v4}).{" "}
-          Formula v4 = 0.20·macro + 0.30·crypto + 0.30·tech + 0.12·options + 0.08·stables (без Basis/Carry).
+          Formula v4 = 0.20·macro + 0.30·crypto + 0.30·tech + 0.12·options(50) + 0.08·stables.
         </div>
       )}
 

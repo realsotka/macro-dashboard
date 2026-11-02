@@ -124,6 +124,8 @@ function ResultBadge({ result }: { result: string }) {
   if (result === "TP")   return <span className="px-2 py-0.5 rounded text-xs font-bold bg-green-500/15 text-green-400 border border-green-500/30">✅ TP</span>;
   if (result === "SL")   return <span className="px-2 py-0.5 rounded text-xs font-bold bg-red-500/15 text-red-400 border border-red-500/30">🛑 SL</span>;
   if (result === "MANUAL") return <span className="px-2 py-0.5 rounded text-xs font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30">🔵 Manual</span>;
+  if (result === "STOP") return <span className="px-2 py-0.5 rounded text-xs font-bold bg-red-500/15 text-red-400 border border-red-500/30">🛑 Стоп</span>;
+  if (result === "STRATEGY_SWITCH") return <span className="px-2 py-0.5 rounded text-xs font-bold bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]">🔁 Зміна стратегії</span>;
   if (result === "MOMENTUM") return <span className="px-2 py-0.5 rounded text-xs font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">📉 Momentum</span>;
   return <span className="px-2 py-0.5 rounded text-xs font-bold bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]">{result ?? "—"}</span>;
 }
@@ -132,7 +134,7 @@ function ResultBadge({ result }: { result: string }) {
 // Daily cron writes: composite_open/composite_close, exit_reason (TP_HIT/SL_HIT/MOMENTUM_EXIT), note.
 // Older records use: composite_score, result (TP/SL/MANUAL), analysis.
 function normalizeTrade(t: any) {
-  const exitMap: Record<string, string> = { TP_HIT: "TP", SL_HIT: "SL", MOMENTUM_EXIT: "MOMENTUM", MANUAL: "MANUAL" };
+  const exitMap: Record<string, string> = { TP_HIT: "TP", SL_HIT: "SL", STOP_HIT: "SL", MOMENTUM_EXIT: "MOMENTUM", REGIME_EXIT: "MOMENTUM", MVRV_BOTTOM_EXIT: "MOMENTUM", MANUAL: "MANUAL" };
   return {
     ...t,
     composite_score: t.composite_score ?? t.composite_open ?? null,
@@ -216,18 +218,25 @@ export default function TradingSection() {
   const closed: any[] = (trades.closed_trades ?? []).map(normalizeTrade);
   const stats = computeStats(trades.closed_trades ?? [], trades.deposit_initial ?? 10000);
 
-  // Live PnL calculation
-  const curPrice = livePrice ?? pos?.entry_price;
+  // Live PnL calculation (swing_v1: qty-based, no leverage; legacy: % × leverage)
+  const isSwing = pos?.engine === "swing_v1";
+  const curPrice = livePrice ?? pos?.cur_price ?? pos?.entry_price;
   let livePnlUsd = 0, livePnlPct = 0;
-  if (pos && pos.status === "open" && curPrice) {
+  if (pos && pos.status === "open" && curPrice && pos.entry_price) {
     const direction = pos.direction === "LONG" ? 1 : -1;
-    livePnlPct = direction * ((curPrice - pos.entry_price) / pos.entry_price) * 100 * pos.leverage;
-    livePnlUsd = (livePnlPct / 100) * pos.notional;
+    if (isSwing) {
+      livePnlUsd = direction * pos.filled_qty * (curPrice - pos.entry_price) - (pos.fees_usd ?? 0) - (pos.funding_usd ?? 0);
+      livePnlPct = pos.notional ? (livePnlUsd / pos.notional) * 100 : 0;
+    } else {
+      livePnlPct = direction * ((curPrice - pos.entry_price) / pos.entry_price) * 100 * (pos.leverage ?? 1);
+      livePnlUsd = (livePnlPct / 100) * (pos.notional ?? 0);
+    }
   }
 
-  // Distance to SL/TP
-  const distSL = pos ? ((pos.sl_price - curPrice) / curPrice * 100) : 0;
-  const distTP = pos ? ((pos.tp_price - curPrice) / curPrice * 100) : 0;
+  // Distance to stop
+  const stopPx = pos ? (pos.stop_price ?? pos.sl_price) : null;
+  const distSL = pos && stopPx && curPrice ? ((stopPx - curPrice) / curPrice * 100) : 0;
+  const fmt = (v: number | null | undefined) => v == null ? "—" : `$${v.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
 
   return (
     <div className="p-6 space-y-6 max-w-5xl">
@@ -298,12 +307,17 @@ export default function TradingSection() {
             {/* Position details grid */}
             <div className="grid grid-cols-3 gap-3 mb-4">
               {[
-                { label: "Ціна входу",  value: `$${pos.entry_price.toLocaleString("en-US", { maximumFractionDigits: 0 })}`, color: "text-[hsl(var(--foreground))]" },
-                { label: "Поточна ціна", value: curPrice ? `$${curPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}` : "—", color: "text-cyan-400" },
-                { label: "Плече",       value: `${pos.leverage}x`, color: "text-[hsl(var(--foreground))]" },
-                { label: "Notional",    value: `$${pos.notional.toLocaleString()}`, color: "text-[hsl(var(--foreground))]" },
-                { label: "Розмір",      value: `${pos.size_pct}% депозиту`, color: "text-[hsl(var(--foreground))]" },
-                { label: "Composite",   value: `${pos.composite_score}/100`, color: "text-cyan-400" },
+                { label: "Середня ціна входу", value: fmt(pos.entry_price), color: "text-[hsl(var(--foreground))]" },
+                { label: "Поточна ціна", value: fmt(curPrice), color: "text-cyan-400" },
+                { label: "Ціна сигналу", value: fmt(pos.signal_price ?? pos.entry_price), color: "text-[hsl(var(--foreground))]" },
+                { label: "Набрано", value: isSwing ? `${(pos.filled_qty ?? 0).toFixed(4)} BTC · ${fmt(pos.notional)}` : fmt(pos.notional), color: "text-[hsl(var(--foreground))]" },
+                { label: "Ризик при стопі", value: isSwing ? `${pos.risk_pct}% · $${(pos.risk_usd ?? 0).toFixed(0)}` : `${pos.size_pct}% депозиту`, color: "text-red-400" },
+                { label: "Composite (вхід)", value: `${pos.composite_score}/100`, color: "text-cyan-400" },
+                ...(isSwing ? [
+                  { label: "Комісії", value: `-$${(pos.fees_usd ?? 0).toFixed(2)}`, color: "text-[hsl(var(--muted-foreground))]" },
+                  { label: "Фандинг", value: `${(pos.funding_usd ?? 0) > 0 ? "-" : "+"}$${Math.abs(pos.funding_usd ?? 0).toFixed(2)}`, color: (pos.funding_usd ?? 0) > 0 ? "text-red-400" : "text-green-400" },
+                  { label: "Плече", value: "1× (без плеча)", color: "text-[hsl(var(--foreground))]" },
+                ] : []),
               ].map((item, i) => (
                 <div key={i} className="bg-[hsl(var(--muted)/0.5)] rounded p-3 border border-[hsl(var(--border))]">
                   <div className="text-xs text-[hsl(var(--muted-foreground))] mb-1">{item.label}</div>
@@ -312,44 +326,53 @@ export default function TradingSection() {
               ))}
             </div>
 
-            {/* SL / TP bar */}
+            {/* Grid orders */}
+            {isSwing && Array.isArray(pos.orders) && (
+              <div className="mb-4">
+                <div className="text-xs text-[hsl(var(--muted-foreground))] mb-2">
+                  Сітка набору · незаповнені лімітки скасовуються {pos.cancel_limits_after}
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {pos.orders.map((o: any) => (
+                    <div key={o.level} className={`rounded p-2 border text-xs ${o.status === "filled" ? "border-green-500/30 bg-green-500/5" : o.status === "cancelled" ? "border-[hsl(var(--border))] opacity-50" : "border-cyan-500/30 bg-cyan-500/5"}`}>
+                      <div className="font-semibold text-[hsl(var(--foreground))]">{o.level === 0 ? "Ринок" : `L${o.level} · ${o.offset_pct > 0 ? "+" : ""}${o.offset_pct}%`}</div>
+                      <div className="num text-[hsl(var(--muted-foreground))]">{fmt(o.price)} · {Math.round(o.frac * 100)}%</div>
+                      <div className={o.status === "filled" ? "text-green-400" : o.status === "cancelled" ? "text-[hsl(var(--muted-foreground))]" : "text-cyan-400"}>
+                        {o.status === "filled" ? `✔ заповнено ${o.filled_at ?? ""}` : o.status === "cancelled" ? "скасовано" : "очікує"}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Stop bar (no fixed TP — exit by regime) */}
             <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <Shield size={12} className="text-red-400 shrink-0" />
                 <div className="flex-1">
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-red-400 font-medium">SL: ${pos.sl_price.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+                    <span className="text-red-400 font-medium">Стоп: {fmt(stopPx)}</span>
                     <span className={`num ${distSL < 0 ? "text-red-400" : "text-[hsl(var(--muted-foreground))]"}`}>
-                      {distSL.toFixed(2)}% від ціни
+                      {distSL >= 0 ? "+" : ""}{distSL.toFixed(2)}% від ціни
                     </span>
-                    <span className="text-red-400">-${Math.abs(pos.max_risk_usd).toFixed(0)}</span>
+                    <span className="text-red-400">-${Math.abs(pos.risk_usd ?? pos.max_risk_usd ?? 0).toFixed(0)} (при повній сітці)</span>
                   </div>
                   <div className="h-1.5 bg-[hsl(var(--border))] rounded-full overflow-hidden">
-                    <div className="h-full bg-red-500/40 rounded-full" style={{ width: `${Math.min(100, Math.abs(distSL) / 3 * 100)}%` }} />
+                    <div className="h-full bg-red-500/40 rounded-full" style={{ width: `${Math.min(100, Math.abs(distSL) / 12 * 100)}%` }} />
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 text-xs text-[hsl(var(--muted-foreground))]">
                 <Target size={12} className="text-green-400 shrink-0" />
-                <div className="flex-1">
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-green-400 font-medium">TP: ${pos.tp_price.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
-                    <span className={`num ${distTP > 0 ? "text-green-400" : "text-[hsl(var(--muted-foreground))]"}`}>
-                      {distTP >= 0 ? "+" : ""}{distTP.toFixed(2)}% від ціни
-                    </span>
-                    <span className="text-green-400">+${pos.max_reward_usd.toFixed(0)}</span>
-                  </div>
-                  <div className="h-1.5 bg-[hsl(var(--border))] rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500/40 rounded-full" style={{ width: `${Math.min(100, Math.abs(distTP) / 3 * 100)}%` }} />
-                  </div>
-                </div>
+                Фіксованого тейку немає — вихід, коли composite {pos.direction === "LONG" ? "падає нижче 46" : "піднімається вище 44 (або MVRV < 1)"}
               </div>
             </div>
           </div>
         ) : (
           <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-8 flex items-center justify-center gap-3 text-[hsl(var(--muted-foreground))]">
             <Minus size={16} />
-            <span className="text-sm">Немає відкритих позицій — наступний сигнал у понеділок</span>
+            <span className="text-sm">Немає відкритої позиції — сигнали на вхід перевіряються щопонеділка (07:00 UTC)</span>
           </div>
         )}
       </section>
@@ -420,7 +443,7 @@ export default function TradingSection() {
               <tbody>
                 {closed.map((t: any, i: number) => (
                   <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
-                    <td className="px-3 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">{t.id}</td>
+                    <td className="px-3 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">{t.id}<div className="text-[9px] opacity-70">{String(t.strategy ?? "v3").startsWith("v3") ? "v3" : "v4 swing"}</div></td>
                     <td className="px-3 py-2.5 text-xs">{t.opened_at}</td>
                     <td className="px-3 py-2.5 text-xs">{t.closed_at}</td>
                     <td className="px-3 py-2.5"><DirBadge dir={t.direction} /></td>
@@ -476,62 +499,33 @@ export default function TradingSection() {
         </section>
       )}
 
-      {/* ── FORMULA C SIGNAL LEGEND ── */}
+      {/* ── v4-lite SWING RULES ── */}
       <section>
-        <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-3 flex items-center gap-2">
-          ⚙️ Formula v3 — правила системи
-          <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Macro 25% · CRYPTO 35% · Tech 40%</span>
+        <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-3 flex items-center gap-2 flex-wrap">
+          ⚙️ v4-lite Swing — правила системи
+          <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Macro 20% · Crypto 30% · Tech 30% · Options 12% · Stables 8%</span>
+          <span className="text-[10px] text-[hsl(var(--muted-foreground))]">з 2026-11-02</span>
         </h2>
-        <div className="grid grid-cols-2 gap-3 mb-3">
-          {[
-            { label: '🟢 LONG Strong', range: '≥ 65', size: '15%', lev: '2×', color: 'border-green-500/30 bg-green-500/5', badge: 'text-green-400' },
-            { label: '🟡 LONG Weak', range: '53 – 64', size: '12%', lev: '1.5×', color: 'border-yellow-500/30 bg-yellow-500/5', badge: 'text-yellow-400' },
-            { label: '⚪ FLAT', range: '38 – 52', size: '—', lev: '—', color: 'border-[hsl(var(--border))] bg-[hsl(var(--muted)/0.3)]', badge: 'text-[hsl(var(--muted-foreground))]' },
-            { label: '🔴 SHORT', range: '< 38', size: '12%', lev: '1.5×', color: 'border-red-500/30 bg-red-500/5', badge: 'text-red-400' },
-          ].map((s, i) => (
-            <div key={i} className={`rounded-lg border p-3 ${s.color}`}>
-              <div className={`text-sm font-bold mb-2 ${s.badge}`}>{s.label}</div>
-              <div className="grid grid-cols-2 gap-x-4 text-xs">
-                <div><span className="text-[hsl(var(--muted-foreground))]">Composite: </span><span className="num font-medium text-[hsl(var(--foreground))]">{s.range}</span></div>
-                <div><span className="text-[hsl(var(--muted-foreground))]">Плече: </span><span className="num font-medium text-[hsl(var(--foreground))]">{s.lev}</span></div>
-                <div className="col-span-2"><span className="text-[hsl(var(--muted-foreground))]">Розмір: </span><span className="num font-medium text-[hsl(var(--foreground))]">{s.size}</span></div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {/* MVRV SHORT filter explanation */}
-        <div className="p-3 rounded-lg bg-orange-500/5 border border-orange-500/20 text-xs mb-3">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-orange-400 font-semibold">🔆 MVRV SHORT-фільтр</span>
-            <span className="text-[hsl(var(--muted-foreground))]">(активний)</span>
+        <div className="grid grid-cols-2 gap-3 mb-3 text-xs">
+          <div className="rounded-lg border border-green-500/30 bg-green-500/5 p-3">
+            <div className="text-sm font-bold mb-2 text-green-400">🟢 LONG</div>
+            <div className="text-[hsl(var(--muted-foreground))]">Вхід: composite ≥ <strong className="text-[hsl(var(--foreground))]">53</strong>, MVRV ≤ 3.5, VIX ≤ 30</div>
+            <div className="text-[hsl(var(--muted-foreground))]">Сітка: 40% по ринку + 20% на −3% / −6% / −9%</div>
+            <div className="text-[hsl(var(--muted-foreground))]">Вихід: composite &lt; <strong className="text-[hsl(var(--foreground))]">46</strong> або стоп −12%</div>
           </div>
-          <div className="text-[hsl(var(--muted-foreground))] leading-relaxed">
-            Якщо composite &lt; 38 (ризик-офф) <strong className="text-[hsl(var(--foreground))]">ALE</strong> MVRV &lt; 1.3 — сигнал змінюється на <strong className="text-orange-400">FLAT_MVRV_FILTER</strong>.
-            {' '}Низький MVRV означає: ринок вже дешевовартісний — шорт непрацює без чіткого перепродажу. Поріг MVRV: <strong className="text-[hsl(var(--foreground))]">1.3</strong>.
+          <div className="rounded-lg border border-red-500/30 bg-red-500/5 p-3">
+            <div className="text-sm font-bold mb-2 text-red-400">🔴 SHORT</div>
+            <div className="text-[hsl(var(--muted-foreground))]">Вхід: composite &lt; <strong className="text-[hsl(var(--foreground))]">40</strong>, MVRV ≥ 1.3, VIX ≤ 30</div>
+            <div className="text-[hsl(var(--muted-foreground))]">Сітка: 40% по ринку + 20% на +3% / +6% / +9%</div>
+            <div className="text-[hsl(var(--muted-foreground))]">Вихід: composite &gt; <strong className="text-[hsl(var(--foreground))]">44</strong>, MVRV &lt; 1 або стоп +12%</div>
           </div>
         </div>
-        {/* v3 Momentum hold explanation */}
-        <div className="p-3 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-xs">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-cyan-400 font-semibold">📌 v3 — Momentum Hold</span>
-            <span className="text-[10px] px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/20 text-cyan-400 rounded font-mono">NEW</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-[hsl(var(--muted-foreground))]">
-            <div className="rounded bg-green-500/5 border border-green-500/20 p-2">
-              <div className="text-green-400 font-semibold mb-1">LONG</div>
-              <div>Вхід: composite ≥ <strong className="text-[hsl(var(--foreground))]">53</strong></div>
-              <div>Вихід: composite &lt; <strong className="text-[hsl(var(--foreground))]">46</strong></div>
-            </div>
-            <div className="rounded bg-red-500/5 border border-red-500/20 p-2">
-              <div className="text-red-400 font-semibold mb-1">SHORT</div>
-              <div>Вхід: composite &lt; <strong className="text-[hsl(var(--foreground))]">40</strong> + MVRV ≥ 1.3</div>
-              <div>Вихід: composite &gt; <strong className="text-[hsl(var(--foreground))]">44</strong></div>
-            </div>
-          </div>
-          <div className="mt-2 text-[hsl(var(--muted-foreground))] leading-relaxed">
-            Позиція утримується <strong className="text-[hsl(var(--foreground))]">необмежено</strong> до спрацювання momentum exit — не щотижневий flip.
-            {' '}Бектест: 4 угоди за 52 тижні | WR=<strong className="text-green-400">75%</strong> | PnL=<strong className="text-green-400">+44.3%</strong> vs BTC -43.2%
-          </div>
+        <div className="p-3 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-xs text-[hsl(var(--muted-foreground))] leading-relaxed space-y-1">
+          <div><strong className="text-cyan-400">Розмір:</strong> якщо заповниться вся сітка і спрацює стоп — втрата 2% депозиту. Без плеча, без фіксованого тейку.</div>
+          <div><strong className="text-cyan-400">Ритм:</strong> вхід лише в тижневий запуск (понеділок 07:00 UTC); стоп, заповнення сітки й вихід за режимом перевіряються щодня по годинних свічках OKX. Незаповнені лімітки скасовуються через 28 днів.</div>
+          <div><strong className="text-cyan-400">Витрати:</strong> taker 0.05% / maker 0.02% і реальний фандинг OKX кожні 8 год.</div>
+          <div><strong className="text-cyan-400">Бектест 2024-02 → 2026-11:</strong> 9 угод, +1 115 $ на 10 000 $, макс. просідання −6.8%, PF 4.1. Вибірка мала — 3 найкращі угоди дали більшу частину прибутку.</div>
+          <div>Угоди T001–T009 — попередня стратегія v3 (TP +3% / SL −1.5%), залишені в журналі для історії.</div>
         </div>
       </section>
 

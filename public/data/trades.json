@@ -109,6 +109,12 @@
       "equity": 9918.78,
       "pnl": -26.85,
       "event": "T009 SL_HIT $81,591.79 -26.85"
+    },
+    {
+      "date": "2026-11-02",
+      "equity": 9918.78,
+      "pnl": 0,
+      "event": "Перехід на v4-lite swing (сітка, стоп −12%, ризик 2%, без TP)"
     }
   ],
   "open_position": null,
@@ -136,7 +142,8 @@
       "pnl_usd": -27.0,
       "pnl_pct": -2.25,
       "result": "SL",
-      "analysis": "SL спрацював на 64048 — BTC скорегувався після hawkish макро (FOMC тиждень). Позиція закрита щоденним кроном."
+      "analysis": "SL спрацював на 64048 — BTC скорегувався після hawkish макро (FOMC тиждень). Позиція закрита щоденним кроном.",
+      "strategy": "v3 TP3/SL1.5"
     },
     {
       "id": "T002",
@@ -159,7 +166,8 @@
       "note": "TP спрацював: ціна пробила 79890.2 (реальний пік 81,200+)",
       "composite_score": 54.4,
       "result": "TP",
-      "analysis": "TP спрацював: ціна пробила 79,890.2 (реальний пік 81,266). LONG за v3 momentum-hold, composite 54.4→57.5. Закрито денним кроном за ціновою логікою TP_HIT."
+      "analysis": "TP спрацював: ціна пробила 79,890.2 (реальний пік 81,266). LONG за v3 momentum-hold, composite 54.4→57.5. Закрито денним кроном за ціновою логікою TP_HIT.",
+      "strategy": "v3 TP3/SL1.5"
     },
     {
       "id": "T003",
@@ -179,7 +187,8 @@
       "pnl_usd": -27.07,
       "deposit_before": 10026.85,
       "deposit_after": 9999.78,
-      "note": "SL_HIT (retroactive fix 2026-09-02): BTC пробив SL $76,879.25 внутрішньоденно 2026-09-01 (мінімум $76,366, дані OKX 1H), але денний крон перевіряв лише миттєвий снепшот ціни раз на добу і пропустив пробій. Закрито retroactively на рівні SL після виправлення логіки крону на перевірку intraday high/low."
+      "note": "SL_HIT (retroactive fix 2026-09-02): BTC пробив SL $76,879.25 внутрішньоденно 2026-09-01 (мінімум $76,366, дані OKX 1H), але денний крон перевіряв лише миттєвий снепшот ціни раз на добу і пропустив пробій. Закрито retroactively на рівні SL після виправлення логіки крону на перевірку intraday high/low.",
+      "strategy": "v3 TP3/SL1.5"
     },
     {
       "id": "T004",
@@ -199,7 +208,8 @@
       "pnl_usd": -27.0,
       "deposit_before": 9999.78,
       "deposit_after": 9972.78,
-      "note": "SL_HIT: cur=78506.50 tp=81967.5 sl=78386.4 composite=58.5"
+      "note": "SL_HIT: cur=78506.50 tp=81967.5 sl=78386.4 composite=58.5",
+      "strategy": "v3 TP3/SL1.5"
     },
     {
       "id": "T005",
@@ -219,7 +229,8 @@
       "pnl_usd": -26.93,
       "deposit_before": 9972.78,
       "deposit_after": 9945.85,
-      "note": "SL_HIT: cur=78141.40 tp=79939.43 sl=76446.93 composite=56.2"
+      "note": "SL_HIT: cur=78141.40 tp=79939.43 sl=76446.93 composite=56.2",
+      "strategy": "v3 TP3/SL1.5"
     },
     {
       "id": "T006",
@@ -239,7 +250,8 @@
       "pnl_usd": 53.71,
       "deposit_before": 9945.85,
       "deposit_after": 9999.56,
-      "note": "TP_HIT: price=84462.20, tp=85675.81, sl=81932.69, composite=60.6"
+      "note": "TP_HIT: price=84462.20, tp=85675.81, sl=81932.69, composite=60.6",
+      "strategy": "v3 TP3/SL1.5"
     },
     {
       "id": "T007",
@@ -259,7 +271,8 @@
       "pnl_usd": -27.0,
       "deposit_before": 9999.56,
       "deposit_after": 9972.56,
-      "note": "SL_HIT: cur=85828.60 tp=88890.34 sl=85006.78 composite=57.6"
+      "note": "SL_HIT: cur=85828.60 tp=88890.34 sl=85006.78 composite=57.6",
+      "strategy": "v3 TP3/SL1.5"
     },
     {
       "id": "T008",
@@ -279,7 +292,8 @@
       "pnl_usd": -26.93,
       "deposit_before": 9972.56,
       "deposit_after": 9945.63,
-      "note": "SL_HIT: cur=81887.80 tp=86759.89 sl=82969.41 composite=55.5"
+      "note": "SL_HIT: cur=81887.80 tp=86759.89 sl=82969.41 composite=55.5",
+      "strategy": "v3 TP3/SL1.5"
     },
     {
       "id": "T009",
@@ -299,7 +313,8 @@
       "pnl_usd": -26.85,
       "deposit_before": 9945.63,
       "deposit_after": 9918.78,
-      "note": "SL_HIT: cur=81888.80 tp=85319.33 sl=81591.79 composite=52.8"
+      "note": "SL_HIT: cur=81888.80 tp=85319.33 sl=81591.79 composite=52.8",
+      "strategy": "v3 TP3/SL1.5"
     }
   ],
   "stats": {
@@ -340,5 +355,52 @@
   "total_pnl": -81.22,
   "win_count": 2,
   "loss_count": 7,
-  "win_rate": 22.2
+  "win_rate": 22.2,
+  "strategy": {
+    "name": "v4-lite swing grid",
+    "since": "2026-11-02",
+    "deposit_at_switch": 9918.78,
+    "previous": "v3 TP +3% / SL −1.5% (T001–T009)",
+    "params": {
+      "options_fixed": 50.0,
+      "entry_long": 53.0,
+      "exit_long": 46.0,
+      "entry_short": 40.0,
+      "exit_short": 44.0,
+      "mvrv_long_max": 3.5,
+      "mvrv_short_min": 1.3,
+      "mvrv_short_exit": 1.0,
+      "vix_max": 30.0,
+      "grid": [
+        [
+          0.0,
+          0.4
+        ],
+        [
+          3.0,
+          0.2
+        ],
+        [
+          6.0,
+          0.2
+        ],
+        [
+          9.0,
+          0.2
+        ]
+      ],
+      "stop_pct": 12.0,
+      "risk_pct": 2.0,
+      "cancel_days": 28,
+      "taker": 0.0005,
+      "maker": 0.0002
+    },
+    "weights": {
+      "macro": 0.2,
+      "crypto": 0.3,
+      "tech": 0.3,
+      "options": 0.12,
+      "stables": 0.08
+    }
+  }
 }

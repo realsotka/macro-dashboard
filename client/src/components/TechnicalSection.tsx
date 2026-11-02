@@ -461,8 +461,8 @@ export default function TechnicalSection({ report }: { report: any }) {
       {/* ── TECH SCORE BREAKDOWN (Formula v3) ── */}
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
-          <span>⚙️</span> Tech Score — Formula v3
-          <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">40% ваги</span>
+          <span>⚙️</span> Tech Score
+          <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">30% ваги</span>
           {report?.tech_score !== undefined && (
             <span className="ml-auto num text-lg font-bold text-[hsl(var(--foreground))]">{report.tech_score}/100</span>
           )}
@@ -545,24 +545,24 @@ export default function TechnicalSection({ report }: { report: any }) {
               {report?.macro_score_adj !== undefined && (report?.crypto_score !== undefined || report?.cot_score !== undefined) && (
                 <div className="p-3 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-xs">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-cyan-400 font-semibold">🧮 Composite preview (Formula v3)</span>
-                    <span className="text-[hsl(var(--muted-foreground))]">Macro×0.25 + Crypto×0.35 + Tech×0.40</span>
+                    <span className="text-cyan-400 font-semibold">🧮 Composite preview (v4-lite)</span>
+                    <span className="text-[hsl(var(--muted-foreground))]">Macro×0.20 + Crypto×0.30 + Tech×0.30 + Options 50×0.12 + Stables×0.08</span>
                   </div>
                   <div className="num text-sm">
                     <span className="text-[hsl(var(--muted-foreground))]">= </span>
                     <span className="text-[hsl(var(--foreground))]">{report.macro_score_adj}</span>
-                    <span className="text-[hsl(var(--muted-foreground))]">×0.25</span>
+                    <span className="text-[hsl(var(--muted-foreground))]">×0.20</span>
                     <span className="text-[hsl(var(--muted-foreground))] mx-1">+</span>
                     <span className="text-[hsl(var(--foreground))]">{report.crypto_score}</span>
-                    <span className="text-[hsl(var(--muted-foreground))]">×0.35</span>
+                    <span className="text-[hsl(var(--muted-foreground))]">×0.30</span>
                     <span className="text-[hsl(var(--muted-foreground))] mx-1">+</span>
                     <span className="text-cyan-400 font-bold">{techLive}</span>
-                    <span className="text-[hsl(var(--muted-foreground))]">×0.40</span>
+                    <span className="text-[hsl(var(--muted-foreground))]">×0.30 + 50×0.12 + {(report as any).stables_score ?? 50}×0.08</span>
                     <span className="text-[hsl(var(--muted-foreground))] mx-2">=</span>
                     <span className={`font-bold text-base ${
-                      (() => { const c = +(report.macro_score_adj * 0.25 + (report.crypto_score ?? report.cot_score) * 0.35 + techLive * 0.40).toFixed(1); return c >= 65 ? 'text-green-400' : c >= 53 ? 'text-yellow-400' : c >= 38 ? 'text-orange-400' : 'text-red-400'; })()
+                      (() => { const c = +(report.macro_score_adj * 0.20 + (report.crypto_score ?? report.cot_score) * 0.30 + techLive * 0.30 + 50 * 0.12 + ((report as any).stables_score ?? 50) * 0.08).toFixed(1); return c >= 65 ? 'text-green-400' : c >= 53 ? 'text-yellow-400' : c >= 38 ? 'text-orange-400' : 'text-red-400'; })()
                     }`}>
-                      {(report.macro_score_adj * 0.25 + (report.crypto_score ?? report.cot_score) * 0.35 + techLive * 0.40).toFixed(1)}
+                      {(report.macro_score_adj * 0.20 + (report.crypto_score ?? report.cot_score) * 0.30 + techLive * 0.30 + 50 * 0.12 + ((report as any).stables_score ?? 50) * 0.08).toFixed(1)}
                     </span>
                     <span className="text-[hsl(var(--muted-foreground))] ml-1 text-[10px]">(saved: {report.composite_score})</span>
                   </div>

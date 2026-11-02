@@ -1,6 +1,7 @@
 import type { Report } from "@shared/schema";
 import MstrBlock from "./MstrBlock";
 import MomentumFilterBlock from "./MomentumFilterBlock";
+import V4ShadowBlock from "./V4ShadowBlock";
 
 function Sparkline({ values, colors }: { values: (number | null)[]; colors?: string[] }) {
   const valid = values.filter(v => v !== null) as number[];
@@ -85,7 +86,7 @@ export default function MacroSection({ report }: { report: Report }) {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
               🧮 COMPOSITE SCORE
-              <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Formula v3</span>
+              <span className="text-xs px-1.5 py-0.5 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 rounded font-mono">Formula v4-lite</span>
             </h2>
             <div className="flex items-center gap-3">
               {oversold && (
@@ -109,9 +110,9 @@ export default function MacroSection({ report }: { report: Report }) {
           {/* Score breakdown */}
           <div className="grid grid-cols-3 gap-3 mb-3">
             {([
-              { label: 'Macro',  score: macroScore,  scoreAdj: macroAdj, weight: '25%', icon: '📊' },
-              { label: 'CRYPTO', score: cryptoScore ?? cotScore, scoreAdj: undefined, weight: '35%', icon: '🪙' },
-              { label: 'Tech',   score: techScore,  scoreAdj: undefined, weight: '40%', icon: '⚙️' },
+              { label: 'Macro',  score: macroScore,  scoreAdj: macroAdj, weight: '20%', icon: '📊' },
+              { label: 'CRYPTO', score: cryptoScore ?? cotScore, scoreAdj: undefined, weight: '30%', icon: '🪙' },
+              { label: 'Tech',   score: techScore,  scoreAdj: undefined, weight: '30%', icon: '⚙️' },
             ] as const).map(({ label, score: s, scoreAdj, weight, icon }) => (
               <div key={label} className="rounded p-3 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
                 <div className="flex justify-between items-center mb-2">
@@ -223,26 +224,25 @@ export default function MacroSection({ report }: { report: Report }) {
           {/* Live composite formula calc row */}
           {macroAdj !== undefined && (cryptoScore ?? cotScore) !== undefined && techScore !== undefined && compScore !== undefined && (
             <div className="p-3 rounded-lg bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))] text-xs">
-              <div className="text-[hsl(var(--muted-foreground))] mb-1.5 font-medium">Formula v3 (Macro×0.25 + CRYPTO×0.35 + Tech×0.40):</div>
+              <div className="text-[hsl(var(--muted-foreground))] mb-1.5 font-medium">Formula v4-lite (Macro×0.20 + Crypto×0.30 + Tech×0.30 + Options×0.12 + Stables×0.08):</div>
               <div className="num flex items-baseline gap-1 flex-wrap">
                 <span className="text-[hsl(var(--foreground))] font-medium">{macroAdj}</span>
-                <span className="text-[hsl(var(--muted-foreground))]">(макро)</span>
-                <span className="text-[hsl(var(--muted-foreground))]">×0.25</span>
-                <span className="text-[hsl(var(--muted-foreground))] mx-0.5">+</span>
+                <span className="text-[hsl(var(--muted-foreground))]">(макро)×0.20 +</span>
                 <span className="text-yellow-400 font-medium">{cryptoScore ?? cotScore}</span>
-                <span className="text-[hsl(var(--muted-foreground))]">(crypto)</span>
-                <span className="text-[hsl(var(--muted-foreground))]">×0.35</span>
-                <span className="text-[hsl(var(--muted-foreground))] mx-0.5">+</span>
+                <span className="text-[hsl(var(--muted-foreground))]">(crypto)×0.30 +</span>
                 <span className="text-cyan-400 font-medium">{techScore}</span>
-                <span className="text-[hsl(var(--muted-foreground))]">(tech)</span>
-                <span className="text-[hsl(var(--muted-foreground))]">×0.40</span>
+                <span className="text-[hsl(var(--muted-foreground))]">(tech)×0.30 +</span>
+                <span className="text-[hsl(var(--foreground))] font-medium">50</span>
+                <span className="text-[hsl(var(--muted-foreground))]">(options, фікс.)×0.12 +</span>
+                <span className="text-green-400 font-medium">{(report as any).stables_score ?? 50}</span>
+                <span className="text-[hsl(var(--muted-foreground))]">(stables)×0.08</span>
                 <span className="text-[hsl(var(--muted-foreground))] mx-1">=</span>
                 <span className={`font-bold text-base ${
-                  compScore >= 65 ? 'text-green-400' : compScore >= 50 ? 'text-yellow-400' : compScore >= 38 ? 'text-orange-400' : 'text-red-400'
+                  compScore >= 65 ? 'text-green-400' : compScore >= 53 ? 'text-yellow-400' : compScore >= 38 ? 'text-orange-400' : 'text-red-400'
                 }`}>{compScore}</span>
-                <span className="text-[hsl(var(--muted-foreground))] text-[10px]">
-                  = {(macroAdj * 0.25).toFixed(1)} + {((cryptoScore ?? cotScore ?? 50) * 0.35).toFixed(1)} + {(techScore * 0.40).toFixed(1)}
-                </span>
+                {(report as any).composite_v3 !== undefined && (
+                  <span className="text-[hsl(var(--muted-foreground))] text-[10px] ml-2">(стара v3: {(report as any).composite_v3})</span>
+                )}
               </div>
             </div>
           )}
@@ -647,7 +647,7 @@ export default function MacroSection({ report }: { report: Report }) {
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
           <span className="text-yellow-400">🪙</span> БЛОК 5 — CRYPTO SCORE (ETF + COT + MVRV)
           <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">
-            Formula v3 · ваги 50/30/20
+            ваги всередині блоку 50/30/20
           </span>
         </h2>
 
@@ -867,8 +867,11 @@ export default function MacroSection({ report }: { report: Report }) {
       {/* ── BLOCK 6: MSTR / STRATEGY ── */}
       <MstrBlock />
 
-      {/* ── BLOCK 7: MOMENTUM FILTER (інформаційний, НЕ інтегрований у Formula v3) ── */}
+      {/* ── BLOCK 7: MOMENTUM FILTER (інформаційний, НЕ входить у composite) ── */}
       <MomentumFilterBlock />
+
+      {/* ── BLOCK 8: Stablecoins (у composite v4-lite) + Options (інформаційно) ── */}
+      <V4ShadowBlock report={report} />
     </div>
   );
 }

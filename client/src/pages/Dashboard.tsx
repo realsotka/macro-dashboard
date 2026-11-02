@@ -137,14 +137,14 @@ export default function Dashboard() {
                 confidence={report.confidence ?? undefined}
               />
             )}
-            {/* Formula v3 badge */}
+            {/* Formula badge */}
             <span className="text-[10px] px-1.5 py-0.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded font-mono">
-              Formula v3
+              Formula v4-lite · Swing
             </span>
             {/* Composite formula row */}
             {report && report.macro_score_adj !== undefined && (
               <span className="num text-[10px] text-[hsl(var(--muted-foreground))]">
-                {report.macro_score_adj}&times;0.25 + {(report as any).crypto_score ?? report.cot_score}&times;0.35 + {report.tech_score}&times;0.40 = 
+                {report.macro_score_adj}&times;0.2 + {(report as any).crypto_score ?? report.cot_score}&times;0.3 + {report.tech_score}&times;0.3 + 50&times;0.12 + {(report as any).stables_score ?? 50}&times;0.08 = 
                 <span className="font-bold text-[hsl(var(--foreground))]">{report.composite_score}</span>
               </span>
             )}

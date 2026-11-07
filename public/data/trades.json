@@ -185,12 +185,12 @@
     "entry_price": 78547.96,
     "notional": 1431.14,
     "fees_usd": 0.5696,
-    "funding_usd": -1.0948,
+    "funding_usd": -1.2269,
     "leverage": 1,
     "size_pct": 14.43,
-    "last_checked_ts": 1793923200000,
-    "cur_price": 76255.0,
-    "unrealized_usd": 42.3,
+    "last_checked_ts": 1794009600000,
+    "cur_price": 75866.3,
+    "unrealized_usd": 49.52,
     "deposit_at_open": 9918.78,
     "events": [
       {
@@ -207,7 +207,7 @@
       }
     ],
     "note": "neutral-down: composite=39.1 → SHORT; 40% по ринку, лімітки 20/20/20% на +3/6/9%, стоп 87,103 (−12% від сигналу), ризик 2.0%",
-    "composite_now": 36.8
+    "composite_now": 35.9
   },
   "closed_trades": [
     {
@@ -496,10 +496,10 @@
   },
   "last_engine_run": {
     "mode": "daily",
-    "at": "2026-11-06T00:04:24Z",
-    "price": 76255.0,
-    "composite": 36.8,
-    "action": "HOLD T010 SHORT levels=2/4 avg=78548 stop=87103 uPnL=+42.30$",
+    "at": "2026-11-07T00:04:47Z",
+    "price": 75866.3,
+    "composite": 35.9,
+    "action": "HOLD T010 SHORT levels=2/4 avg=78548 stop=87103 uPnL=+49.52$",
     "bars_processed": 24
   }
 }

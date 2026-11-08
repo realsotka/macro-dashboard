@@ -185,12 +185,12 @@
     "entry_price": 78547.96,
     "notional": 1431.14,
     "fees_usd": 0.5696,
-    "funding_usd": -1.2269,
+    "funding_usd": -1.4002,
     "leverage": 1,
     "size_pct": 14.43,
-    "last_checked_ts": 1794009600000,
-    "cur_price": 75866.3,
-    "unrealized_usd": 49.52,
+    "last_checked_ts": 1794096000000,
+    "cur_price": 75791.8,
+    "unrealized_usd": 51.05,
     "deposit_at_open": 9918.78,
     "events": [
       {
@@ -496,10 +496,10 @@
   },
   "last_engine_run": {
     "mode": "daily",
-    "at": "2026-11-07T00:04:47Z",
-    "price": 75866.3,
+    "at": "2026-11-08T00:04:49Z",
+    "price": 75791.8,
     "composite": 35.9,
-    "action": "HOLD T010 SHORT levels=2/4 avg=78548 stop=87103 uPnL=+49.52$",
+    "action": "HOLD T010 SHORT levels=2/4 avg=78548 stop=87103 uPnL=+51.05$",
     "bars_processed": 24
   }
 }

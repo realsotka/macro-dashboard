@@ -205,7 +205,7 @@ export default function MstrBlock() {
       </h2>
 
       {/* ── Row 1: Stock + BTC NAV overview ── */}
-      <div className="grid grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
         {[
           {
             label: "MSTR ціна",
@@ -241,7 +241,7 @@ export default function MstrBlock() {
       </div>
 
       {/* ── Row 2: 3 key metrics ── */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
 
         {/* mNAV */}
         <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-4">

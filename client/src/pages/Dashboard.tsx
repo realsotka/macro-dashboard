@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Menu, X } from "lucide-react";
 import { fetchState } from "@/lib/dataClient";
 import MacroSection from "@/components/MacroSection";
 import TechnicalSection from "@/components/TechnicalSection";
@@ -9,6 +9,8 @@ import LongTermSection from "@/components/LongTermSection";
 import TradingSection from "@/components/TradingSection";
 import ReportModal from "@/components/ReportModal";
 import { useTheme, THEMES } from "@/lib/theme";
+import BootLoader from "@/components/BootLoader";
+import MatrixRain from "@/components/MatrixRain";
 
 type Section = "macro" | "technical" | "mid" | "long" | "trading";
 
@@ -50,10 +52,11 @@ export default function Dashboard() {
   const [active, setActive] = useState<Section>("macro");
   const [reportOpen, setReportOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
   const queryClient = useQueryClient();
   const { theme, setTheme } = useTheme();
 
-  const { data: report, isLoading } = useQuery({
+  const { data: report, isLoading, isError } = useQuery({
     queryKey: ["state"],
     queryFn: fetchState,
     staleTime: 5 * 60 * 1000,
@@ -67,12 +70,26 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="dashboard flex h-full bg-[hsl(var(--background))]">
-      {/* Sidebar */}
-      <aside className="app-sidebar w-56 flex-shrink-0 border-r border-[hsl(var(--border))] flex flex-col">
-        <div className="retro-only retro-titlebar"><span>Macro 98</span><span className="ctl"><span>_</span><span>□</span><span>×</span></span></div>
+    <div className="dashboard relative flex h-full bg-[hsl(var(--background))]">
+      <BootLoader theme={theme} ready={!isLoading || isError} />
+
+      {/* Matrix digital rain behind everything */}
+      {theme === "matrix" && (
+        <div className="matrix-rain fixed inset-0 z-0"><MatrixRain /></div>
+      )}
+
+      {/* Mobile drawer backdrop */}
+      {navOpen && (
+        <div className="fixed inset-0 z-30 bg-black/60 md:hidden" onClick={() => setNavOpen(false)} aria-hidden="true" />
+      )}
+
+      {/* Sidebar: drawer on phones, fixed column from md */}
+      <aside
+        className={`app-sidebar fixed md:relative inset-y-0 left-0 z-40 w-64 md:w-52 lg:w-56 flex-shrink-0 border-r border-[hsl(var(--border))] flex flex-col bg-[hsl(var(--background))] transition-transform duration-200 md:translate-x-0 ${navOpen ? "translate-x-0" : "-translate-x-full"}`}
+        aria-label="Навігація"
+      >
         {/* Logo */}
-        <div className="p-5 border-b border-[hsl(var(--border))]">
+        <div className="p-4 lg:p-5 border-b border-[hsl(var(--border))]">
           <div className="flex items-center gap-2.5">
             <svg viewBox="0 0 32 32" width="28" height="28" fill="none" aria-label="Macro Dashboard">
               <rect width="32" height="32" rx="8" style={{ fill: "hsl(var(--primary) / 0.15)" }} />
@@ -83,16 +100,23 @@ export default function Dashboard() {
               <div className="brand-name text-sm font-semibold text-[hsl(var(--foreground))]">Macro</div>
               <div className="text-xs text-[hsl(var(--muted-foreground))]">BTC Dashboard</div>
             </div>
+            <button
+              className="ml-auto md:hidden p-1.5 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
+              onClick={() => setNavOpen(false)}
+              aria-label="Закрити меню"
+            >
+              <X size={18} />
+            </button>
           </div>
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 p-3 space-y-1">
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {NAV_ITEMS.map(item => (
             <button
               key={item.id}
               data-testid={`nav-${item.id}`}
-              onClick={() => setActive(item.id)}
+              onClick={() => { setActive(item.id); setNavOpen(false); }}
               className={`w-full flex items-start gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
                 active === item.id
                   ? "nav-active bg-[hsl(var(--primary)/0.12)] border border-[hsl(var(--primary)/0.25)] text-[hsl(var(--foreground))]"
@@ -130,9 +154,6 @@ export default function Dashboard() {
               </button>
             ))}
           </div>
-          <div className="retro-only mt-2 text-[11px] text-[hsl(var(--muted-foreground))]">
-            Відвідувачів: <span className="retro-counter">004517</span>
-          </div>
         </div>
 
         {/* Report button */}
@@ -151,16 +172,18 @@ export default function Dashboard() {
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="relative z-10 flex-1 flex flex-col min-w-0">
         {/* Top bar */}
-        <div className="retro-only">
-          <div className="retro-titlebar" style={{ margin: "6px 6px 0 6px" }}>
-            <span>C:\MACRO\DASHBOARD.EXE — {NAV_ITEMS.find(n => n.id === active)?.label}</span>
-            <span className="ctl"><span>_</span><span>□</span><span>×</span></span>
-          </div>
-        </div>
-        <header className="app-header h-14 flex items-center justify-between px-6 border-b border-[hsl(var(--border))] flex-shrink-0">
-          <div className="flex items-center gap-3 flex-wrap">
+        <header className="app-header min-h-14 flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 px-3 sm:px-4 lg:px-6 py-2 border-b border-[hsl(var(--border))] flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap min-w-0">
+            <button
+              className="md:hidden -ml-1 p-1.5 rounded border border-[hsl(var(--border))] text-[hsl(var(--foreground))]"
+              onClick={() => setNavOpen(true)}
+              aria-label="Відкрити меню"
+              data-testid="btn-menu"
+            >
+              <Menu size={18} />
+            </button>
             <h1 className="text-sm font-semibold text-[hsl(var(--foreground))]">
               {NAV_ITEMS.find(n => n.id === active)?.label}
             </h1>
@@ -172,12 +195,12 @@ export default function Dashboard() {
               />
             )}
             {/* Formula badge */}
-            <span className="text-[10px] px-1.5 py-0.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded font-mono">
+            <span className="hidden sm:inline text-[10px] px-1.5 py-0.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded font-mono">
               Formula v4-lite · Swing
             </span>
             {/* Composite formula row */}
             {report && report.macro_score_adj !== undefined && (
-              <span className="num text-[10px] text-[hsl(var(--muted-foreground))]">
+              <span className="hidden xl:inline num text-[10px] text-[hsl(var(--muted-foreground))]">
                 {report.macro_score_adj}&times;0.2 + {(report as any).crypto_score ?? report.cot_score}&times;0.3 + {report.tech_score}&times;0.3 + 50&times;0.12 + {(report as any).stables_score ?? 50}&times;0.08 = 
                 <span className="font-bold text-[hsl(var(--foreground))]">{report.composite_score}</span>
               </span>
@@ -189,9 +212,9 @@ export default function Dashboard() {
               </span>
             )}
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 ml-auto">
             {report && (
-              <span className="text-xs text-[hsl(var(--muted-foreground))] whitespace-nowrap">
+              <span className="hidden sm:inline text-xs text-[hsl(var(--muted-foreground))] whitespace-nowrap">
                 Тиждень {report.week_label}{report.date ? ` · ${report.date}` : ""}
               </span>
             )}
@@ -208,18 +231,18 @@ export default function Dashboard() {
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))] hover:bg-[hsl(var(--secondary))] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors disabled:opacity-50 text-xs"
             >
               <RefreshCw size={13} className={refreshing ? "animate-spin" : ""} />
-              {refreshing ? "Оновлення..." : "Оновити"}
+              <span className="hidden sm:inline">{refreshing ? "Оновлення..." : "Оновити"}</span>
             </button>
           </div>
         </header>
 
-        {/* Retro ticker */}
-        {theme === "retro" && report && (
-          <div className="retro-marquee" style={{ margin: "0 6px" }} aria-hidden="true">
+        {/* Matrix terminal ticker */}
+        {theme === "matrix" && report && (
+          <div className="matrix-ticker" aria-hidden="true">
             <div>
-              ★ Ласкаво просимо на мою домашню сторінку! ★ BTC ${report.btc_price?.toLocaleString("en-US", { maximumFractionDigits: 0 })}
-              {" "}★ Composite {report.composite_score}/100 ★ Режим: {report.market_regime} ★ MVRV {report.mvrv?.toFixed(2)} ★ VIX {report.vix}
-              {" "}★ Найкраще дивитись у Netscape Navigator 4.0 при 800×600 ★ Оновлено {report.last_updated_daily ?? report.date} ★
+              &gt; BTC ${report.btc_price?.toLocaleString("en-US", { maximumFractionDigits: 0 })}
+              {" "}// COMPOSITE {report.composite_score}/100 // REGIME {String(report.market_regime).toUpperCase()} // MVRV {report.mvrv?.toFixed(2)} // VIX {report.vix}
+              {" "}// THERE IS NO SPOON // СИСТЕМА ОНОВЛЕНА {report.last_updated_daily ?? report.date} //
             </div>
           </div>
         )}

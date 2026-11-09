@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-export type ThemeId = "default" | "premium" | "retro" | "paper";
+export type ThemeId = "default" | "premium" | "matrix" | "paper";
 export const THEMES: { id: ThemeId; label: string }[] = [
   { id: "default", label: "Поточна" },
   { id: "premium", label: "Преміум" },
-  { id: "retro",   label: "Ретро" },
+  { id: "matrix",  label: "Матриця" },
   { id: "paper",   label: "Газета" },
 ];
 const KEY = "macro-theme";
@@ -12,10 +12,12 @@ const KEY = "macro-theme";
 function initialTheme(): ThemeId {
   const ids = THEMES.map(t => t.id) as string[];
   try {
-    const q = new URLSearchParams(window.location.search).get("theme");
+    let q = new URLSearchParams(window.location.search).get("theme");
+    if (q === "retro") q = "matrix";
     if (q && ids.includes(q)) return q as ThemeId;
     if (!import.meta.env.VITE_PREVIEW) {
-      const s = window.localStorage.getItem(KEY);
+      let s = window.localStorage.getItem(KEY);
+      if (s === "retro") s = "matrix";
       if (s && ids.includes(s)) return s as ThemeId;
     }
   } catch {}

@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────────────────
-   Dashboard themes. <html data-theme="default|premium|retro|paper">
+   Dashboard themes. <html data-theme="default|premium|matrix|paper">
    Every theme sets: surface tokens (shadcn HSL), the accent palette used by
    Tailwind classes (text-cyan-400, bg-green-500/15 …, RGB triples), fonts,
    chart colors and a few shape rules. "default" = the original look.
@@ -24,14 +24,13 @@
   --chart-up: #34d399;
   --chart-down: #f87171;
   --scroll-thumb: hsl(220 15% 25%);
+  --spark: hsl(199 80% 52%);
 }
 
 body { font-family: var(--font-body); }
 .brand-name { font-family: var(--font-brand); }
 ::-webkit-scrollbar-thumb { background: var(--scroll-thumb) !important; }
 
-/* Retro-only decor is hidden everywhere else */
-html:not([data-theme="retro"]) .retro-only { display: none !important; }
 
 /* ═════════════════════════ 1. ЧОРНИЙ ПРЕМІУМ ═════════════════════════════
    Pure black, hairline borders, champagne-gold accent, quiet typography.   */
@@ -72,6 +71,7 @@ html[data-theme="premium"] {
   --chart-up: rgb(108 200 150);
   --chart-down: rgb(228 112 104);
   --scroll-thumb: hsl(38 10% 20%);
+  --spark: hsl(39 48% 62%);
 }
 html[data-theme="premium"] body { letter-spacing: 0.005em; }
 html[data-theme="premium"] .rounded-lg { border-radius: 3px; }
@@ -100,132 +100,110 @@ html[data-theme="premium"] main .rounded-lg.border {
   box-shadow: inset 0 1px 0 hsl(39 48% 62% / 0.10);
 }
 
-/* ═════════════════════════ 2. РЕТРО ІНТЕРНЕТ ═════════════════════════════
-   Windows-98 desktop: teal backdrop, silver bevelled windows, navy title
-   bars, pixel type, LCD numbers, a marquee ticker and a visitor counter.  */
-html[data-theme="retro"] {
-  --background: 180 100% 25%;
-  --foreground: 0 0% 0%;
-  --card: 0 0% 75%;
-  --card-foreground: 0 0% 0%;
-  --popover: 0 0% 75%;
-  --popover-foreground: 0 0% 0%;
-  --primary: 240 100% 25%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 68%;
-  --secondary-foreground: 0 0% 0%;
-  --muted: 0 0% 100%;
-  --muted-foreground: 0 0% 22%;
-  --accent: 240 100% 25%;
-  --accent-foreground: 0 0% 100%;
-  --border: 0 0% 50%;
-  --input: 0 0% 100%;
-  --ring: 240 100% 25%;
+/* ═════════════════════════ 2. МАТРИЦЯ ════════════════════════════════════
+   Black terminal, phosphor-green type, digital rain behind translucent
+   panels, faint scanlines. Red/amber stay for losses and warnings so the
+   numbers remain readable.                                                 */
+html[data-theme="matrix"] {
+  --background: 140 60% 2%;
+  --foreground: 128 80% 78%;
+  --card: 140 55% 3.5%;
+  --card-foreground: 128 80% 78%;
+  --popover: 140 55% 4%;
+  --popover-foreground: 128 80% 78%;
+  --primary: 135 100% 50%;
+  --primary-foreground: 140 60% 3%;
+  --secondary: 140 45% 9%;
+  --secondary-foreground: 128 60% 70%;
+  --muted: 140 45% 6%;
+  --muted-foreground: 130 38% 50%;
+  --accent: 135 100% 50%;
+  --accent-foreground: 140 60% 3%;
+  --border: 135 60% 16%;
+  --input: 140 45% 8%;
+  --ring: 135 100% 50%;
 
-  --tw-cyan-300: 0 0 150;    --tw-cyan-400: 0 0 128;    --tw-cyan-500: 0 0 128;
-  --tw-green-300: 0 110 0;   --tw-green-400: 0 112 0;   --tw-green-500: 0 128 0;
-  --tw-red-50: 255 255 255;  --tw-red-300: 170 0 0;     --tw-red-400: 176 0 0;    --tw-red-500: 192 0 0;
-  --tw-yellow-300: 112 84 0; --tw-yellow-400: 116 86 0; --tw-yellow-500: 168 128 0;
-  --tw-orange-400: 150 64 0; --tw-orange-500: 192 96 0;
-  --tw-amber-300: 112 84 0;  --tw-amber-400: 116 86 0;  --tw-amber-500: 168 128 0;
-  --tw-purple-300: 110 0 120; --tw-purple-500: 128 0 128;
-  --tw-blue-400: 0 0 200;    --tw-blue-500: 0 0 170;
-  --tw-emerald-400: 0 112 0;
+  --tw-cyan-300: 120 255 150;  --tw-cyan-400: 0 255 65;     --tw-cyan-500: 0 220 60;
+  --tw-green-300: 150 255 190; --tw-green-400: 90 255 140;  --tw-green-500: 40 220 110;
+  --tw-red-50: 255 236 236;    --tw-red-300: 255 150 150;   --tw-red-400: 255 92 92;   --tw-red-500: 235 60 60;
+  --tw-yellow-300: 230 255 140; --tw-yellow-400: 214 255 64; --tw-yellow-500: 190 230 40;
+  --tw-orange-400: 255 176 60; --tw-orange-500: 240 150 40;
+  --tw-amber-300: 240 240 130; --tw-amber-400: 224 236 90;  --tw-amber-500: 200 214 60;
+  --tw-purple-300: 170 255 210; --tw-purple-500: 110 230 170;
+  --tw-blue-400: 80 240 200;   --tw-blue-500: 40 210 170;
+  --tw-emerald-400: 90 255 140;
 
-  --font-body: "Pixelify Sans", "Tahoma", sans-serif;
-  --font-mono: "VT323", "Courier New", monospace;
-  --font-brand: "Pixelify Sans", sans-serif;
-  --chart-grid: #9a9a9a;
-  --chart-label: #202020;
-  --chart-up: #008000;
-  --chart-down: #c00000;
-  --scroll-thumb: #808080;
+  --font-body: "JetBrains Mono", "IBM Plex Mono", monospace;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", monospace;
+  --font-brand: "JetBrains Mono", monospace;
+  --chart-grid: hsl(135 60% 12%);
+  --chart-label: hsl(130 40% 48%);
+  --chart-up: #00ff41;
+  --chart-down: #ff5c5c;
+  --scroll-thumb: hsl(135 70% 18%);
+  --spark: #00ff41;
+  color-scheme: dark;
 }
-html[data-theme="retro"] .num { font-size: 1.05rem; letter-spacing: 0.02em; }
-html[data-theme="retro"] .rounded-lg,
-html[data-theme="retro"] .rounded,
-html[data-theme="retro"] .rounded-full,
-html[data-theme="retro"] .rounded-md { border-radius: 0 !important; }
-/* raised bevel on windows/cards */
-html[data-theme="retro"] main .rounded-lg.border,
-html[data-theme="retro"] .app-header,
-html[data-theme="retro"] .app-sidebar {
-  border-style: solid !important;
-  border-width: 2px !important;
-  border-color: #fff #404040 #404040 #fff !important;
-  box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+html[data-theme="matrix"] body { font-size: 15px; letter-spacing: 0; }
+html[data-theme="matrix"] .dashboard { background: #000 !important; }
+/* translucent chrome so the rain shows through */
+html[data-theme="matrix"] .app-sidebar { background: rgba(0, 8, 2, 0.88) !important; border-right-color: hsl(135 80% 22%) !important; }
+@media (max-width: 767px) { html[data-theme="matrix"] .app-sidebar { background: rgba(0, 6, 2, 0.97) !important; } }
+html[data-theme="matrix"] .app-header {
+  background: rgba(0, 10, 3, 0.82);
+  backdrop-filter: blur(3px);
+  border-bottom-color: hsl(135 80% 22%) !important;
 }
-html[data-theme="retro"] main .rounded-lg.border { background-color: #c0c0c0; }
-/* sunken fields (the small metric tiles) */
-html[data-theme="retro"] main .rounded.border {
-  border-style: solid !important;
-  border-width: 2px !important;
-  border-color: #808080 #fff #fff #808080 !important;
-  background-color: #fff !important;
+html[data-theme="matrix"] main .rounded-lg.border,
+html[data-theme="matrix"] main .rounded-xl.border {
+  background-color: rgba(0, 12, 4, 0.84) !important;
+  border-color: hsl(135 70% 18%) !important;
+  box-shadow: 0 0 0 1px rgba(0, 255, 65, 0.04), 0 0 18px -8px rgba(0, 255, 65, 0.35);
+  backdrop-filter: blur(2px);
 }
-/* section headings become window title bars */
-html[data-theme="retro"] main h2 {
-  background: linear-gradient(90deg, #000080, #1084d0);
-  color: #fff !important;
-  padding: 3px 8px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+html[data-theme="matrix"] .rounded-lg { border-radius: 2px; }
+html[data-theme="matrix"] .rounded,
+html[data-theme="matrix"] .rounded-full { border-radius: 1px; }
+html[data-theme="matrix"] main h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #00ff41;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.55);
 }
-html[data-theme="retro"] main h2 * { color: #fff !important; }
-html[data-theme="retro"] main h2 > span[class*="border"] { background: #c0c0c0 !important; color: #000 !important; border-color: #fff #404040 #404040 #fff !important; }
-html[data-theme="retro"] main h2 > span[class*="border"] * { color: #000 !important; }
-html[data-theme="retro"] .app-sidebar { background: #c0c0c0; margin: 6px 0 6px 6px; }
-html[data-theme="retro"] .app-sidebar .border-b,
-html[data-theme="retro"] .app-sidebar .border-t { border-color: #808080 !important; }
-html[data-theme="retro"] .app-header { background: #c0c0c0; margin: 6px 6px 0 6px; }
-html[data-theme="retro"] main { margin: 0 6px 6px 6px; }
-html[data-theme="retro"] .nav-active {
-  background: #000080 !important;
-  color: #fff !important;
-  border-color: #000080 !important;
+html[data-theme="matrix"] main h2::before { content: "> "; opacity: 0.7; }
+html[data-theme="matrix"] .num,
+html[data-theme="matrix"] .text-xl,
+html[data-theme="matrix"] .text-2xl,
+html[data-theme="matrix"] .text-3xl { text-shadow: 0 0 6px currentColor; }
+html[data-theme="matrix"] .brand-name {
+  font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #00ff41;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
 }
-html[data-theme="retro"] .nav-active * { color: #fff !important; }
-html[data-theme="retro"] button.border,
-html[data-theme="retro"] .theme-btn {
-  border-style: solid !important;
-  border-width: 2px !important;
-  border-color: #fff #404040 #404040 #fff !important;
-  background: #c0c0c0 !important;
-  color: #000 !important;
+html[data-theme="matrix"] .nav-active {
+  background: rgba(0, 255, 65, 0.08) !important;
+  border-color: rgba(0, 255, 65, 0.45) !important;
+  box-shadow: inset 3px 0 0 #00ff41, 0 0 14px -6px rgba(0, 255, 65, 0.7);
 }
-html[data-theme="retro"] .theme-btn[aria-pressed="true"] { border-color: #404040 #fff #fff #404040 !important; background: #b0b0b0 !important; }
-html[data-theme="retro"] table thead { background: #000080; }
-html[data-theme="retro"] table thead th { color: #fff !important; }
-html[data-theme="retro"] .retro-only { display: block; }
-html[data-theme="retro"] .brand-name { font-weight: 700; font-size: 1rem; }
-
-.retro-titlebar {
-  background: linear-gradient(90deg, #000080, #1084d0);
-  color: #fff;
-  font-family: "Pixelify Sans", sans-serif;
-  font-size: 13px;
-  padding: 2px 4px 2px 8px;
-  display: flex; align-items: center; justify-content: space-between;
+html[data-theme="matrix"] main thead,
+html[data-theme="matrix"] main th { color: #00ff41 !important; background: rgba(0, 255, 65, 0.05); }
+html[data-theme="matrix"] ::selection { background: #00ff41; color: #000; }
+/* faint CRT scanlines over the whole UI */
+html[data-theme="matrix"] .dashboard::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
 }
-.retro-titlebar .ctl { display: inline-flex; gap: 2px; }
-.retro-titlebar .ctl span {
-  width: 16px; height: 14px; line-height: 11px; text-align: center; font-size: 11px;
-  background: #c0c0c0; color: #000;
-  border: 1px solid; border-color: #fff #404040 #404040 #fff;
-}
-.retro-marquee {
+.matrix-ticker {
   overflow: hidden; white-space: nowrap;
-  background: #000; color: #00ff66;
-  font-family: "VT323", monospace; font-size: 18px; line-height: 22px;
-  border-top: 2px solid #404040;
+  background: rgba(0, 0, 0, 0.85);
+  border-bottom: 1px solid hsl(135 80% 22%);
+  color: #00ff41; font-family: var(--font-mono); font-size: 12px; padding: 4px 0;
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.6);
 }
-.retro-marquee > div { display: inline-block; padding-left: 100%; animation: retro-scroll 38s linear infinite; }
-@keyframes retro-scroll { to { transform: translateX(-100%); } }
-@media (prefers-reduced-motion: reduce) { .retro-marquee > div { animation: none; padding-left: 8px; } }
-.retro-counter {
-  font-family: "VT323", monospace; font-size: 20px; letter-spacing: 3px;
-  background: #000; color: #00ff66; padding: 0 6px; display: inline-block;
-  border: 2px solid; border-color: #808080 #fff #fff #808080;
+.matrix-ticker > div { display: inline-block; padding-left: 100%; animation: matrix-tick 38s linear infinite; }
+@keyframes matrix-tick { to { transform: translateX(-100%); } }
+@media (prefers-reduced-motion: reduce) {
+  .matrix-ticker > div { animation: none; padding-left: 12px; }
 }
 
 /* ═════════════════════════ 3. РАНКОВА ГАЗЕТА (на мій смак) ═══════════════
@@ -268,6 +246,7 @@ html[data-theme="paper"] {
   --chart-up: rgb(8 116 66);
   --chart-down: rgb(176 30 40);
   --scroll-thumb: hsl(25 20% 70%);
+  --spark: #0d7680;
 }
 html[data-theme="paper"] .rounded-lg,
 html[data-theme="paper"] .rounded { border-radius: 0; }
@@ -289,3 +268,99 @@ html[data-theme="paper"] .nav-active {
 }
 html[data-theme="paper"] main .rounded-lg.border { box-shadow: none; }
 html[data-theme="paper"] table thead { border-bottom: 2px solid hsl(20 6% 18%); }
+
+/* ═════════════════════════ RESPONSIVE HELPERS ═══════════════════════════ */
+/* Tables inside cards scroll sideways on narrow screens instead of squashing */
+main .overflow-hidden:has(> table) { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+@media (max-width: 1023px) {
+  main table th, main table td { white-space: nowrap; }
+}
+@media (max-width: 767px) {
+  main table th, main table td { padding-left: 0.6rem !important; padding-right: 0.6rem !important; }
+  .section-wrap .text-3xl { font-size: 1.6rem; }
+}
+/* very large monitors: slightly bigger base type so data fills the screen */
+@media (min-width: 1920px) {
+  .section-wrap { font-size: 1.04rem; }
+}
+
+/* ═════════════════════════ BOOT LOADER ══════════════════════════════════ */
+.boot {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  transition: opacity .5s ease, transform .5s ease, filter .5s ease;
+  overflow: hidden;
+}
+.boot-leave { opacity: 0; transform: scale(1.03); filter: blur(4px); pointer-events: none; }
+.boot-card { position: relative; width: min(360px, 86vw); text-align: center; display: flex; flex-direction: column; align-items: center; }
+.boot-logo { margin-bottom: 14px; filter: drop-shadow(0 0 18px hsl(var(--primary) / 0.45)); }
+.boot-path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: boot-draw 1.1s ease-out forwards, boot-pulse 1.6s 1.1s ease-in-out infinite; }
+.boot-dot { opacity: 0; animation: boot-pop .3s 1s ease-out forwards; }
+@keyframes boot-draw { to { stroke-dashoffset: 0; } }
+@keyframes boot-pop { from { opacity: 0; transform: scale(.2); transform-origin: 26px 14px; } to { opacity: 1; transform: scale(1); transform-origin: 26px 14px; } }
+@keyframes boot-pulse { 50% { opacity: .55; } }
+.boot-brand { font-family: var(--font-brand); font-size: 1.6rem; font-weight: 600; letter-spacing: .02em; line-height: 1.1; }
+.boot-sub { font-size: .8rem; color: hsl(var(--muted-foreground)); margin-top: 2px; }
+.boot-bar { width: 100%; height: 3px; margin-top: 22px; background: hsl(var(--muted)); border-radius: 99px; overflow: hidden; }
+.boot-bar > span {
+  display: block; height: 100%;
+  background: linear-gradient(90deg, hsl(var(--primary) / .5), hsl(var(--primary)));
+  box-shadow: 0 0 12px hsl(var(--primary) / .7);
+  transition: width .15s linear;
+}
+.boot-stage { margin-top: 10px; font-size: .75rem; color: hsl(var(--muted-foreground)); display: flex; gap: 8px; justify-content: center; }
+/* default: soft cyan glow on navy */
+.boot-default { background: radial-gradient(ellipse at 50% 40%, hsl(199 60% 12%), hsl(220 20% 6%) 70%); }
+
+/* premium: black, gold hairline, serif italic */
+.boot-premium { background: radial-gradient(ellipse at 50% 45%, #14110b, #000 65%); }
+.boot-premium .boot-brand { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; font-size: 3rem; color: hsl(39 48% 70%); }
+.boot-premium .boot-sub { text-transform: uppercase; letter-spacing: .32em; font-size: .62rem; }
+.boot-premium .boot-bar { height: 1px; background: hsl(38 12% 16%); border-radius: 0; }
+.boot-premium .boot-bar > span { background: hsl(39 48% 62%); box-shadow: 0 0 10px hsl(39 48% 62% / .8); }
+.boot-premium .boot-stage { text-transform: uppercase; letter-spacing: .18em; font-size: .62rem; }
+
+/* paper: newspaper masthead */
+.boot-paper { background: #FFF1E5; color: #1a1817; }
+.boot-paper .boot-card { width: min(520px, 90vw); }
+.boot-kicker { font-size: .7rem; text-transform: uppercase; letter-spacing: .24em; color: #990F3D; font-weight: 600; }
+.boot-masthead { font-family: "Instrument Serif", serif; font-size: clamp(2.6rem, 9vw, 4.2rem); line-height: 1; margin-top: 6px; }
+.boot-rule { width: 100%; height: 0; border-top: 3px solid #1a1817; border-bottom: 1px solid #1a1817; padding-top: 3px; margin-top: 12px; }
+.boot-dateline { margin-top: 8px; font-size: .78rem; color: #4d4845; }
+.boot-dateline::first-letter { text-transform: uppercase; }
+.boot-paper .boot-bar { height: 2px; border-radius: 0; background: #e6d6c8; margin-top: 28px; }
+.boot-paper .boot-bar > span { background: #990F3D; box-shadow: none; }
+.boot-paper .boot-stage { color: #4d4845; font-style: italic; }
+
+/* matrix: rain + terminal */
+.boot-matrix { background: #000; color: #00ff41; }
+.boot-terminal {
+  position: relative; width: min(620px, 92vw);
+  padding: 22px 24px; font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 2.6vw, 16px);
+  background: rgba(0, 0, 0, 0.78); border: 1px solid rgba(0, 255, 65, .35);
+  box-shadow: 0 0 40px -10px rgba(0, 255, 65, .55), inset 0 0 30px rgba(0, 255, 65, .05);
+  text-shadow: 0 0 8px rgba(0, 255, 65, .7);
+}
+.boot-line { min-height: 1.6em; line-height: 1.6; }
+.boot-line:first-child { color: #d8ffe0; }
+.boot-prompt { opacity: .7; }
+.boot-caret { animation: boot-blink .7s steps(1) infinite; margin-left: 1px; }
+@keyframes boot-blink { 50% { opacity: 0; } }
+.boot-ascii { margin-top: 14px; white-space: pre; letter-spacing: .02em; color: #00ff41; overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .boot, .boot-bar > span { transition: none; }
+  .boot-path { animation: none; stroke-dashoffset: 0; }
+  .boot-dot { animation: none; opacity: 1; }
+  .boot-caret { animation: none; }
+}
+
+/* phones/tablets: header rows with right-aligned info wrap instead of squeezing */
+@media (max-width: 1023px) {
+  .section-wrap .flex.justify-between { flex-wrap: wrap; row-gap: 0.4rem; column-gap: 0.75rem; }
+}
+@media (max-width: 639px) {
+  .section-wrap .p-5 { padding: 0.9rem; }
+}

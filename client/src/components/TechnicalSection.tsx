@@ -172,7 +172,7 @@ export default function TechnicalSection({ report }: { report: any }) {
   const rsi14Live = d?.rsi14 ?? report?.btc_rsi14 ?? 0;
 
   return (
-    <div className="p-6 space-y-8 max-w-5xl">
+    <div className="section-wrap w-full max-w-[1800px] mx-auto p-3 sm:p-4 lg:p-6 space-y-6 lg:space-y-8">
       {/* Live indicator */}
       <div className="flex items-center gap-2">
         {isLoading ? (
@@ -275,7 +275,7 @@ export default function TechnicalSection({ report }: { report: any }) {
         </h2>
 
         {/* OKX + Binance side-by-side */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           {[
             { name: "🟠 OKX", sub: "BTC-USDT-SWAP", data: d ? { avg: d.frAvg, cur: d.frCur, pos: d.frPos, total: d.frTotal } : null, fallbackAvg: report.btc_fr_avg_7d },
             { name: "🟡 Binance", sub: "BTCUSDT PERP", data: bnFR ? { avg: bnFR.frAvg, cur: bnFR.frCur, pos: bnFR.frPos, total: bnFR.frTotal } : null, fallbackAvg: null },

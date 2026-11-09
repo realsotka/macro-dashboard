@@ -29,7 +29,7 @@ export default function MidTermSection() {
   if (isLoading) return <div className="p-6 text-[hsl(var(--muted-foreground))] text-sm">Завантаження...</div>;
 
   return (
-    <div className="p-6 space-y-6 max-w-4xl">
+    <div className="section-wrap w-full max-w-[1800px] mx-auto p-3 sm:p-4 lg:p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-sm font-semibold text-[hsl(var(--foreground))]">🎯 Мід-терм аналіз</h2>

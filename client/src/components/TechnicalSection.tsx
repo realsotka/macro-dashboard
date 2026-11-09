@@ -3,6 +3,18 @@ import CrossExchangeBlock from "./CrossExchangeBlock";
 
 
 
+
+// Тижневі свічки OKX (1W) відкриваються в понеділок 00:00 за Гонконгом (UTC+8) — підписуємо тижні датами пн–нд.
+const DAY_MS = 86400000, HKT_MS = 8 * 3600000;
+const fmtDM = (ms: number) => { const d = new Date(ms); return `${String(d.getUTCDate()).padStart(2, "0")}.${String(d.getUTCMonth() + 1).padStart(2, "0")}`; };
+const weekRangeFromOpen = (openTs: number) => { const m = openTs + HKT_MS; return `${fmtDM(m)}–${fmtDM(m + 6 * DAY_MS)}`; };
+const weekRangeAgo = (k: number) => {
+  const d = new Date(Date.now() + HKT_MS);
+  const dow = (d.getUTCDay() + 6) % 7;
+  const mon = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) - dow * DAY_MS - k * 7 * DAY_MS;
+  return `${fmtDM(mon)}–${fmtDM(mon + 6 * DAY_MS)}`;
+};
+
 interface OkxData {
   price: number; ema21: number; ema50: number;
   frAvg: number; frCur: number; frPos: number; frTotal: number;
@@ -133,12 +145,9 @@ export default function TechnicalSection({ report }: { report: any }) {
       // Weekly structure table — use last 9 weekly candles
       const weekly = weeklyCandles.data.slice(0, 9).map((c: any) => {
         const openTs = parseInt(c[0]);
-        const openDate = new Date(openTs);
-        const closeDate = new Date(openTs + 6 * 24 * 60 * 60 * 1000);
-        const fmt = (d: Date) => d.toLocaleDateString("uk-UA", { day: "2-digit", month: "2-digit" });
         return {
-          t: fmt(openDate),
-          dateRange: `${fmt(openDate)}–${fmt(closeDate)}`,
+          t: fmtDM(openTs + HKT_MS),
+          dateRange: weekRangeFromOpen(openTs),
           o: parseFloat(c[1]), h: parseFloat(c[2]), l: parseFloat(c[3]), c: parseFloat(c[4]),
         };
       }).reverse();
@@ -266,10 +275,13 @@ export default function TechnicalSection({ report }: { report: any }) {
                   const prev = arr[i - 1];
                   const hh = prev ? (w.h > prev.h ? "HH ✅" : "LH") : "—";
                   const hl = prev ? (w.l > prev.l ? "HL ✅" : "LL") : "—";
-                  const label = i === arr.length - 1 ? "W-0 (cur)" : `W-${arr.length - 1 - i}`;
+                  const label = i === arr.length - 1 ? "W-0 · поточний" : `W-${arr.length - 1 - i}`;
                   return (
                     <tr key={i} className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-[hsl(var(--muted)/0.5)]">
-                      <td className="px-3 py-2.5 text-xs text-[hsl(var(--muted-foreground))]">{label}</td>
+                      <td className="px-3 py-2.5 text-xs whitespace-nowrap">
+                        <div className="text-[hsl(var(--foreground))] num">{w.dateRange}</div>
+                        <div className="text-[10px] text-[hsl(var(--muted-foreground))]">{label}</div>
+                      </td>
                       <td className="px-3 py-2.5 text-right num text-xs">${w.o.toLocaleString("en-US",{maximumFractionDigits:0})}</td>
                       <td className="px-3 py-2.5 text-right num text-xs text-green-400">${w.h.toLocaleString("en-US",{maximumFractionDigits:0})}</td>
                       <td className="px-3 py-2.5 text-right num text-xs text-red-400">${w.l.toLocaleString("en-US",{maximumFractionDigits:0})}</td>
@@ -421,12 +433,12 @@ export default function TechnicalSection({ report }: { report: any }) {
           const barPct = (p: number) => maxP > minP ? Math.min(100, Math.max(2, ((p - minP) / (maxP - minP)) * 100)) : 50;
 
           const levels = [
-            ...(w2High > 0 ? [{ label: "Resistance 2", price: w2High, type: "resistance", note: "Weekly High W-2" }] : []),
-            ...(w1High > 0 ? [{ label: "Resistance 1", price: w1High, type: "resistance", note: "Weekly High W-1" }] : []),
+            ...(w2High > 0 ? [{ label: "Resistance 2", price: w2High, type: "resistance", note: `Weekly High W-2 (${weekRangeAgo(2)})` }] : []),
+            ...(w1High > 0 ? [{ label: "Resistance 1", price: w1High, type: "resistance", note: `Weekly High W-1 (${weekRangeAgo(1)})` }] : []),
             { label: "→ Ціна", price: price, type: "current", note: "BTC зараз" },
             ...(ema21 ? [{ label: "Support 1", price: ema21, type: "support", note: "EMA21 weekly" }] : []),
-            ...(w1Low > 0 ? [{ label: "Support 2", price: w1Low, type: "support", note: "Weekly Low W-1" }] : []),
-            ...(w2Low > 0 ? [{ label: "Major Support", price: w2Low, type: "major", note: "Weekly Low W-2 / структурна" }] : []),
+            ...(w1Low > 0 ? [{ label: "Support 2", price: w1Low, type: "support", note: `Weekly Low W-1 (${weekRangeAgo(1)})` }] : []),
+            ...(w2Low > 0 ? [{ label: "Major Support", price: w2Low, type: "major", note: `Weekly Low W-2 (${weekRangeAgo(2)}) / структурна` }] : []),
           ].sort((a, b) => b.price - a.price);
 
           return (

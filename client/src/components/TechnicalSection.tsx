@@ -101,13 +101,7 @@ export default function TechnicalSection({ report }: { report: any }) {
       ]);
       if (!Array.isArray(weeklyCandles?.data) || !weeklyCandles.data.length || !Array.isArray(frRaw?.data)) throw new Error("OKX: no data");
       const wCloses = weeklyCandles.data.map((c: any) => parseFloat(c[4])).reverse();
-      const emaFn = (prices: number[], p: number) => {
-        const k = 2 / (p + 1); let e = prices[0];
-        for (const v of prices.slice(1)) e = v * k + e * (1 - k);
-        return e;
-      };
-      // Повна EMA (старт = SMA перших p свічок) — стандартний розрахунок, як у TradingView.
-      // Використовується лише для показу EMA50; EMA21 лишається як у кроні (правило системи).
+      // Повна EMA (старт = SMA перших p свічок) — стандартний розрахунок, як у TradingView і в кроні.
       const emaFullFn = (prices: number[], p: number) => {
         if (prices.length < p) return 0;
         const k = 2 / (p + 1);
@@ -133,7 +127,7 @@ export default function TechnicalSection({ report }: { report: any }) {
         return Math.round((100 - 100 / (1 + rs)) * 100) / 100;
       };
       const price = wCloses[wCloses.length - 1];
-      const ema21 = emaFn(wCloses.slice(-21), 21);
+      const ema21 = emaFullFn(wCloses, 21); // стандартна EMA21 по повній історії — як у кроні (з 2026-11-09)
       const ema50 = emaFullFn(wCloses, 50); // лише для показу в таблиці
       const rsi14 = rsi14Fn(wCloses);
       // Weekly structure table — use last 9 weekly candles

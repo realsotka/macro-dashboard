@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import CrossExchangeBlock from "./CrossExchangeBlock";
 
 
 
@@ -457,6 +458,9 @@ export default function TechnicalSection({ report }: { report: any }) {
           );
         })()}
       </section>
+
+      {/* ── CROSS-EXCHANGE DERIVATIVES (info only) ── */}
+      <CrossExchangeBlock report={report} />
 
       {/* ── TECH SCORE BREAKDOWN (Formula v3) ── */}
       <section>

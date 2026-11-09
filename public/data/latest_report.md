@@ -1,26 +1,26 @@
-## Macro Dashboard — Тижневий звіт W45 2026
+## Macro Dashboard — Тижневий звіт W46 2026
 
-### Composite Score: 45.9/100 — neutral-down
-- Tech: 59 | CRYPTO: 33 | Macro: 43
-- formula_version: v3
+### Composite Score: 34.5/100 — risk-off
+- Tech: 43 | CRYPTO: 26 | Macro: 39 | Stables: 0.0 | Options: 50 (фікс.)
+- formula_version: v4-lite (Macro 20% + Crypto 30% + Tech 30% + Options 12% + Stables 8%); стара v3 дала б 36.0
 
 ### BTC Технічний Аналіз
-- Ціна: $77846.70 | EMA21: $75150.89 (+3.59%)
-- RSI14: 69.01 | FR: +0.0086% | OI зміна: +11.00%
-- Tech score: EMA=+10 RSI=+7 FR=-2 OI=-6
+- Ціна: $74150.10 | EMA21: $74325.58 (-0.24%)
+- RSI14: 45.99 | FR: +0.0021% | OI зміна: +0.84%
+- Tech score: EMA=-5 RSI=-3 FR=+1 OI=+0
 
 ### Macro (FRED)
-- TIPS 10y: 2.63% | TIPS 5y: 2.31%
-- Breakeven 10y: 2.34% | VIX: 19.06
-- SPY: $755.72 | QQQ: $690.49
+- TIPS 10y: 2.63% | TIPS 5y: 2.35%
+- Breakeven 10y: 2.23% | VIX: 25.64
+- SPY: $735.29 | QQQ: $656.10
 
 ### BTC ETF Flows
-- Тижневий: -312.7M | 4w avg: -179.7M
-- Кумулятивний: 58.08B
+- Тижневий: -1281.7M | 4w avg: -352.8M
+- Кумулятивний: 56.79B
 
 ### MVRV
-- MVRV: 1.447 | Фаза: Акумуляція
+- MVRV: 1.390 | Фаза: Акумуляція
 
 ### Trading Position
-- Сигнал: neutral-down | Composite: 45.9
-- Торгова дія: HOLD
+- Сигнал: risk-off | Composite: 34.5
+- Торгова дія: HOLD T010 SHORT levels=2/4 avg=78548 stop=87103 uPnL=+81.96$

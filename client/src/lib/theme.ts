@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 
-export type ThemeId = "default" | "premium" | "matrix" | "paper";
+export type ThemeId = "default" | "matrix";
 export const THEMES: { id: ThemeId; label: string }[] = [
   { id: "default", label: "Поточна" },
-  { id: "premium", label: "Преміум" },
   { id: "matrix",  label: "Матриця" },
-  { id: "paper",   label: "Газета" },
 ];
 const KEY = "macro-theme";
 

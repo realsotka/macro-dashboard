@@ -89,17 +89,6 @@ export default function BootLoader({ theme, ready }: { theme: ThemeId; ready: bo
             [{"█".repeat(Math.round(pct / 5)).padEnd(20, "░")}] {String(pct).padStart(3, " ")}%
           </div>
         </div>
-      ) : theme === "paper" ? (
-        <div className="boot-card">
-          <div className="boot-kicker">Ранковий випуск · BTC</div>
-          <div className="boot-masthead">Макро-вісник</div>
-          <div className="boot-rule" />
-          <div className="boot-dateline">
-            {new Date().toLocaleDateString("uk-UA", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
-          </div>
-          <div className="boot-bar"><span style={{ width: `${pct}%` }} /></div>
-          <div className="boot-stage">Друкуємо свіжий номер · {stage} · <span className="num">{pct}%</span></div>
-        </div>
       ) : (
         <div className="boot-card">
           <svg viewBox="0 0 32 32" width="64" height="64" fill="none" aria-hidden="true" className="boot-logo">

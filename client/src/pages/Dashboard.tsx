@@ -191,12 +191,12 @@ export default function Dashboard() {
           </div>
           <div className="flex items-center gap-4">
             {report && (
-              <span className="text-xs text-[hsl(var(--muted-foreground))]">
-                Тиждень {report.week_label} · {report.date}
+              <span className="text-xs text-[hsl(var(--muted-foreground))] whitespace-nowrap">
+                Тиждень {report.week_label}{report.date ? ` · ${report.date}` : ""}
               </span>
             )}
             {report?.btc_price && (
-              <span className="num text-sm font-medium text-[hsl(var(--foreground))]">
+              <span className="num text-sm font-medium text-[hsl(var(--foreground))] whitespace-nowrap">
                 BTC ${report.btc_price.toLocaleString("en-US", { maximumFractionDigits: 0 })}
               </span>
             )}

@@ -15,7 +15,7 @@ function LiveClock({ price }: { price?: number | null }) {
   }, []);
   if (!price) return null;
   return (
-    <span className="flex items-center gap-1.5 text-xs font-normal ml-auto">
+    <span className="flex items-center gap-1.5 text-xs font-normal sm:ml-auto whitespace-nowrap">
       <span className={`w-1.5 h-1.5 rounded-full ${sec < 5 ? 'bg-green-400 animate-pulse' : 'bg-green-400/60'}`} />
       <span className="text-green-400">Live OKX · ${price.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
       <span className="text-[hsl(var(--muted-foreground))]">· {sec}s тому</span>
@@ -36,15 +36,15 @@ function Spark({ values }: { values: number[] }) {
   }).join(" ");
   const last = values[values.length - 1];
   const first = values[0];
-  const color = last >= first ? "#34d399" : "#f87171";
+  const color = last >= first ? "var(--chart-up)" : "var(--chart-down)";
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
-      <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
+      <polyline points={pts} fill="none" style={{ stroke: color }} strokeWidth="1.5" strokeLinejoin="round" />
       {values.map((v, i) => {
         const x = pad + (i / (values.length - 1)) * (W - pad * 2);
         const y = H - pad - ((v - min) / range) * (H - pad * 2);
         return i === values.length - 1
-          ? <circle key={i} cx={x} cy={y} r="2.5" fill={color} />
+          ? <circle key={i} cx={x} cy={y} r="2.5" style={{ fill: color }} />
           : null;
       })}
     </svg>
@@ -68,15 +68,15 @@ function EquityChart({ curve }: { curve: { date: string; equity: number; pnl: nu
   const pts = curve.map((c, i) => `${xOf(i)},${yOf(c.equity)}`).join(" ");
   const last = equities[equities.length - 1];
   const first = equities[0];
-  const lineColor = last >= first ? "#34d399" : "#f87171";
+  const lineColor = last >= first ? "var(--chart-up)" : "var(--chart-down)";
   const fillId = "equity-fill";
 
   return (
     <svg width="100%" viewBox={`0 0 ${W} ${H}`} className="overflow-visible">
       <defs>
         <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={lineColor} stopOpacity="0.25" />
-          <stop offset="100%" stopColor={lineColor} stopOpacity="0.02" />
+          <stop offset="0%" style={{ stopColor: lineColor }} stopOpacity="0.25" />
+          <stop offset="100%" style={{ stopColor: lineColor }} stopOpacity="0.02" />
         </linearGradient>
       </defs>
       {/* Grid lines */}
@@ -85,8 +85,8 @@ function EquityChart({ curve }: { curve: { date: string; equity: number; pnl: nu
         const val = max - t * range;
         return (
           <g key={t}>
-            <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="hsl(220 15% 20%)" strokeWidth="0.5" />
-            <text x={padL - 4} y={y + 4} textAnchor="end" fontSize="8" fill="hsl(220 10% 50%)">
+            <line x1={padL} y1={y} x2={W - padR} y2={y} style={{ stroke: "var(--chart-grid)" }} strokeWidth="0.5" />
+            <text x={padL - 4} y={y + 4} textAnchor="end" fontSize="8" style={{ fill: "var(--chart-label)" }}>
               ${val.toLocaleString("en-US", { maximumFractionDigits: 0 })}
             </text>
           </g>
@@ -98,12 +98,12 @@ function EquityChart({ curve }: { curve: { date: string; equity: number; pnl: nu
         fill={`url(#${fillId})`}
       />
       {/* Line */}
-      <polyline points={pts} fill="none" stroke={lineColor} strokeWidth="1.8" strokeLinejoin="round" />
+      <polyline points={pts} fill="none" style={{ stroke: lineColor }} strokeWidth="1.8" strokeLinejoin="round" />
       {/* Dots + labels */}
       {curve.map((c, i) => (
         <g key={i}>
-          <circle cx={xOf(i)} cy={yOf(c.equity)} r="2.5" fill={lineColor} />
-          <text x={xOf(i)} y={H - 6} textAnchor="middle" fontSize="7" fill="hsl(220 10% 50%)">
+          <circle cx={xOf(i)} cy={yOf(c.equity)} r="2.5" style={{ fill: lineColor }} />
+          <text x={xOf(i)} y={H - 6} textAnchor="middle" fontSize="7" style={{ fill: "var(--chart-label)" }}>
             {c.date.slice(5)}
           </text>
         </g>
@@ -239,7 +239,7 @@ export default function TradingSection() {
   const fmt = (v: number | null | undefined) => v == null ? "—" : `$${v.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
 
   return (
-    <div className="p-6 space-y-6 max-w-5xl">
+    <div className="section-wrap w-full max-w-[1800px] mx-auto p-3 sm:p-4 lg:p-6 space-y-6">
 
       {/* ── HEADER STATS ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -279,22 +279,22 @@ export default function TradingSection() {
 
       {/* ── OPEN POSITION ── */}
       <section>
-        <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-3 flex items-center gap-2">
+        <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-3 flex flex-wrap items-center gap-x-2 gap-y-1">
           <Target size={14} className="text-cyan-400" /> Поточна позиція
           <LiveClock price={livePrice} />
         </h2>
 
         {pos && pos.status === "open" ? (
-          <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-5">
-            <div className="flex items-start justify-between mb-5">
-              <div className="flex items-center gap-3">
+          <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-3 sm:p-5">
+            <div className="flex flex-col-reverse sm:flex-row items-start justify-between gap-3 mb-5">
+              <div className="flex items-start sm:items-center gap-3 min-w-0">
                 <DirBadge dir={pos.direction} />
                 <div>
                   <div className="text-xs text-[hsl(var(--muted-foreground))]">BTC-USDT-SWAP · Відкрито {pos.opened_at}</div>
                   <div className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5 italic">{pos.note}</div>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="sm:text-right flex sm:block items-baseline gap-3">
                 <div className={`num text-2xl font-bold ${livePnlUsd >= 0 ? "text-green-400" : "text-red-400"}`}>
                   {livePnlUsd >= 0 ? "+" : ""}${livePnlUsd.toFixed(2)}
                 </div>
@@ -305,7 +305,7 @@ export default function TradingSection() {
             </div>
 
             {/* Position details grid */}
-            <div className="grid grid-cols-3 gap-3 mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 mb-4">
               {[
                 { label: "Середня ціна входу", value: fmt(pos.entry_price), color: "text-[hsl(var(--foreground))]" },
                 { label: "Поточна ціна", value: fmt(curPrice), color: "text-cyan-400" },
@@ -332,7 +332,7 @@ export default function TradingSection() {
                 <div className="text-xs text-[hsl(var(--muted-foreground))] mb-2">
                   Сітка набору · незаповнені лімітки скасовуються {pos.cancel_limits_after}
                 </div>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   {pos.orders.map((o: any) => (
                     <div key={o.level} className={`rounded p-2 border text-xs ${o.status === "filled" ? "border-green-500/30 bg-green-500/5" : o.status === "cancelled" ? "border-[hsl(var(--border))] opacity-50" : "border-cyan-500/30 bg-cyan-500/5"}`}>
                       <div className="font-semibold text-[hsl(var(--foreground))]">{o.level === 0 ? "Ринок" : `L${o.level} · ${o.offset_pct > 0 ? "+" : ""}${o.offset_pct}%`}</div>

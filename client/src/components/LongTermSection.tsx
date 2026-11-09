@@ -30,7 +30,7 @@ export default function LongTermSection() {
   if (isLoading) return <div className="p-6 text-[hsl(var(--muted-foreground))] text-sm">Завантаження...</div>;
 
   return (
-    <div className="p-6 space-y-6 max-w-4xl">
+    <div className="section-wrap w-full max-w-[1800px] mx-auto p-3 sm:p-4 lg:p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-sm font-semibold text-[hsl(var(--foreground))]">🔭 Лонг-терм аналіз</h2>
@@ -49,7 +49,7 @@ export default function LongTermSection() {
       {/* BTC Macro Framework */}
       <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-5 space-y-4">
         <h3 className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider">BTC Macro Framework</h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {((): { label: string; status: string; val: string; note: string }[] => {
             const tips10 = state?.tips_10y;
             const etfAum = state?.etf_aum;

@@ -60,10 +60,10 @@ function MNavGauge({ mnav }: { mnav: number }) {
           style={{
             width: `${pct}%`,
             background: mnav < 1.3
-              ? "hsl(142 76% 36%)"
+              ? "rgb(var(--tw-green-500))"
               : mnav < 2.0
-              ? "hsl(45 93% 47%)"
-              : "hsl(0 72% 51%)",
+              ? "rgb(var(--tw-yellow-500))"
+              : "rgb(var(--tw-red-500))",
           }}
         />
       </div>
@@ -205,7 +205,7 @@ export default function MstrBlock() {
       </h2>
 
       {/* ── Row 1: Stock + BTC NAV overview ── */}
-      <div className="grid grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
         {[
           {
             label: "MSTR ціна",
@@ -241,7 +241,7 @@ export default function MstrBlock() {
       </div>
 
       {/* ── Row 2: 3 key metrics ── */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
 
         {/* mNAV */}
         <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg p-4">

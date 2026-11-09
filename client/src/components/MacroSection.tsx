@@ -11,7 +11,7 @@ function Sparkline({ values, colors }: { values: (number | null)[]; colors?: str
   const range = max - min || 1;
   const chars = "▁▂▃▄▅▆▇█";
   return (
-    <span className="num tracking-wider text-[hsl(var(--cyan,199_80%_52%))]">
+    <span className="num tracking-wider" style={{ color: "var(--spark)" }}>
       {values.map((v, i) => {
         if (v === null) return <span key={i} className="text-[hsl(var(--muted-foreground))]">·</span>;
         const idx = Math.round(((v - min) / range) * 7);
@@ -78,7 +78,7 @@ export default function MacroSection({ report }: { report: Report }) {
   const composite    = (report as any).composite_score as number | undefined;
 
   return (
-    <div className="p-6 space-y-8 max-w-5xl">
+    <div className="section-wrap w-full max-w-[1800px] mx-auto p-3 sm:p-4 lg:p-6 space-y-6 lg:space-y-8">
 
       {/* ── COMPOSITE SCORE ── */}
       {compScore !== undefined && (
@@ -108,7 +108,7 @@ export default function MacroSection({ report }: { report: Report }) {
           </div>
 
           {/* Score breakdown */}
-          <div className="grid grid-cols-3 gap-3 mb-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
             {([
               { label: 'Macro',  score: macroScore,  scoreAdj: macroAdj, weight: '20%', icon: '📊' },
               { label: 'CRYPTO', score: cryptoScore ?? cotScore, scoreAdj: undefined, weight: '30%', icon: '🪙' },
@@ -155,7 +155,7 @@ export default function MacroSection({ report }: { report: Report }) {
 
           {/* MSTR adjustment row */}
           {mstrAdj !== undefined && (
-            <div className="flex items-center gap-3 p-2.5 mb-3 rounded-lg bg-[hsl(var(--muted)/0.3)] border border-[hsl(var(--border))]">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 p-2.5 mb-3 rounded-lg bg-[hsl(var(--muted)/0.3)] border border-[hsl(var(--border))]">
               <span className="text-xs text-[hsl(var(--muted-foreground))]">🟧 MSTR корекція macro:</span>
               <span className={`num text-sm font-bold ${
                 mstrAdj > 0 ? 'text-green-400' : mstrAdj < 0 ? 'text-red-400' : 'text-[hsl(var(--muted-foreground))]'
@@ -190,7 +190,7 @@ export default function MacroSection({ report }: { report: Report }) {
 
           {/* MVRV SHORT filter row */}
           {mvrvVal !== undefined && (
-            <div className="flex items-center gap-3 p-2.5 mb-3 rounded-lg bg-[hsl(var(--muted)/0.3)] border border-[hsl(var(--border))]">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 p-2.5 mb-3 rounded-lg bg-[hsl(var(--muted)/0.3)] border border-[hsl(var(--border))]">
               <span className="text-xs text-[hsl(var(--muted-foreground))]">🔍 MVRV Short-фільтр:</span>
               <span className={`text-xs font-bold num ${
                 mvrvActive ? 'text-yellow-400' : 'text-[hsl(var(--muted-foreground))]'
@@ -210,7 +210,7 @@ export default function MacroSection({ report }: { report: Report }) {
           )}
 
           {/* Score scale */}
-          <div className="flex items-center gap-1 text-xs text-[hsl(var(--muted-foreground))] mb-3">
+          <div className="flex flex-wrap items-center gap-1 text-xs text-[hsl(var(--muted-foreground))] mb-3 [&_span]:whitespace-nowrap">
             <span className="text-red-400">🔴 &lt;38</span>
             <span className="mx-1">·</span>
             <span className="text-orange-400">🟡↓ 38–49</span>
@@ -253,7 +253,7 @@ export default function MacroSection({ report }: { report: Report }) {
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
           <span className="text-blue-400">🔷</span> БЛОК 1 — TIPS / РЕАЛЬНІ ДОХІДНОСТІ
-          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">FRED CSV · {report.date}</span>
+          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">FRED CSV{report.date ? ` · ${report.date}` : ""}</span>
         </h2>
 
         {/* KPI row */}
@@ -593,7 +593,7 @@ export default function MacroSection({ report }: { report: Report }) {
         </div>
 
         {/* Sector heatmap row */}
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-3">
           {(() => {
             const se = (report as any).sector_etfs as Record<string, {price: number, prev_week: number}> | undefined;
             const heatmap = [
@@ -671,7 +671,7 @@ export default function MacroSection({ report }: { report: Report }) {
                 <span className="text-xs text-[hsl(var(--muted-foreground))]">🤗 Composite CRYPTO блок (замість COT у формулі)</span>
                 {cs != null && <span className={`num text-xl font-bold ${csColor}`}>{cs}<span className="text-sm font-normal text-[hsl(var(--muted-foreground))] ml-1">/100</span></span>}
               </div>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="rounded p-2.5 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
                   <div className="text-xs text-[hsl(var(--muted-foreground))] mb-1">ETF BTC 4w MA <span className="opacity-60">(50%)</span></div>
                   <div className={`num font-bold text-sm ${(etf4wM ?? etfM) > 30 ? 'text-green-400' : (etf4wM ?? etfM) < -30 ? 'text-red-400' : 'text-yellow-400'}`}>

@@ -64,27 +64,42 @@ export default function TechnicalSection({ report }: { report: any }) {
     queryFn: async () => {
       const BASE = "https://www.okx.com";
       // Try direct fetch first (works in most browsers), fallback to CORS proxy
+      // fetch із тайм-аутом, щоб мертвий проксі не тримав сторінку в «завантаженні»
+      async function tfetch(url: string, ms = 8000, init: RequestInit = {}) {
+        const c = new AbortController();
+        const t = setTimeout(() => c.abort(), ms);
+        try { return await fetch(url, { ...init, signal: c.signal }); } finally { clearTimeout(t); }
+      }
       async function okxFetch(path: string) {
         try {
-          const r = await fetch(`${BASE}${path}`, { mode: "cors" });
+          const r = await tfetch(`${BASE}${path}`, 8000, { mode: "cors" });
           if (r.ok) return r.json();
         } catch {}
         // Fallback: corsproxy.io
         try {
-          const r = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(BASE + path)}`);
+          const r = await tfetch(`https://corsproxy.io/?url=${encodeURIComponent(BASE + path)}`, 6000);
           if (r.ok) return r.json();
         } catch {}
         // Fallback 2: allorigins
-        const r2 = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(BASE + path)}`);
+        const r2 = await tfetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(BASE + path)}`, 6000);
+        if (!r2.ok) throw new Error(`OKX ${path}: ${r2.status}`);
         return r2.json();
       }
       // ⚠️ Formula v3: weekly candles for EMA21 + RSI14, weekly OI for WoW change
+      // Історія OI (rubik) OKX віддає без CORS-заголовка, а безкоштовні CORS-проксі більше не працюють
+      // (corsproxy.io вимагає ключ, allorigins падає). Тому OI — необовʼязковий: якщо не прийшов,
+      // ціна/EMA/RSI/фандинг усе одно live, а OI береться зі state.json (щоденний крон).
+      const optional = (path: string) => tfetch(`${BASE}${path}`, 6000, { mode: "cors" })
+        .then(r => (r.ok ? r.json() : null))
+        .then(j => (j && Array.isArray(j.data) ? j : { data: [] }))
+        .catch(() => ({ data: [] }));
       const [weeklyCandles, weeklyOiRaw, frRaw, dailyOiRaw] = await Promise.all([
         okxFetch("/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=55"),
-        okxFetch("/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1W&limit=3&instId=BTC-USDT-SWAP"),
+        optional("/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1W&limit=3&instId=BTC-USDT-SWAP"),
         okxFetch("/api/v5/public/funding-rate-history?instId=BTC-USDT-SWAP&limit=21"),
-        okxFetch("/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1D&limit=7&instId=BTC-USDT-SWAP"),
+        optional("/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1D&limit=7&instId=BTC-USDT-SWAP"),
       ]);
+      if (!Array.isArray(weeklyCandles?.data) || !weeklyCandles.data.length || !Array.isArray(frRaw?.data)) throw new Error("OKX: no data");
       const wCloses = weeklyCandles.data.map((c: any) => parseFloat(c[4])).reverse();
       const emaFn = (prices: number[], p: number) => {
         const k = 2 / (p + 1); let e = prices[0];
@@ -130,7 +145,7 @@ export default function TechnicalSection({ report }: { report: any }) {
       })).reverse();
       const oiCur = oiList[oiList.length - 1]?.oi || 0;
       const oiPrev7d = oiList[0]?.oi || 0;
-      const oiChg = oiPrev7d > 0 ? ((oiCur / oiPrev7d - 1) * 100) : 0;
+      const oiChg = oiPrev7d > 0 ? ((oiCur / oiPrev7d - 1) * 100) : (report?.btc_oi_chg_wow ?? 0);
       // Weekly OI change for Formula v3 Tech Score
       const wOiList = weeklyOiRaw.data.map((o: any) => parseFloat(o[1])).reverse();
       const oiChgWeekly = wOiList.length >= 2 && wOiList[0] > 0
@@ -334,7 +349,14 @@ export default function TechnicalSection({ report }: { report: any }) {
             </span>
           )}
         </h2>
-        {d?.oiList && (
+        {d && d.oiList.length === 0 && (
+          <div className="p-3 bg-[hsl(var(--muted))] rounded-lg text-xs text-[hsl(var(--muted-foreground))]">
+            Денна історія OI з OKX у браузері недоступна (OKX не дозволяє її читати з іншого сайту). Зміна за тиждень —
+            зі щоденного оновлення{report?.btc_oi_chg_wow != null && <>: <span className="num text-[hsl(var(--foreground))]">{report.btc_oi_chg_wow > 0 ? "+" : ""}{Number(report.btc_oi_chg_wow).toFixed(2)}%</span></>}.
+            OI по всьому ринку — у блоці «Деривативи по всьому ринку» нижче.
+          </div>
+        )}
+        {d && d.oiList.length > 0 && (
           <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg overflow-hidden">
             <table className="w-full text-sm">
               <thead>

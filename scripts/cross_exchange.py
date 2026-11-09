@@ -9,7 +9,9 @@ Hyperliquid vs CEX, кореляція ≈0.33) показують, де сам�
 Kraken Futures, Deribit, Hyperliquid. Binance і Bybit із середовища заблоковані.
 Опційно CoinMarketCap (безкоштовний план Basic): додає Binance/Bybit та інші біржі і агреговані
 ліквідації лонгів/шортів за 24 год. Ключ НІКОЛИ не зберігається в репозиторії — його підставляє
-захищений проксі під час запуску (pplx credentials run ...). Без ключа CMC-частина просто пропускається.
+захищений проксі під час запуску (pplx credentials run ... -- python3 cross_exchange.py --cmc-fetch).
+Проксі пропускає лише хост CMC, тому CMC береться окремим процесом у файл /tmp/xex_cmc.json.
+Без ключа CMC-частина просто пропускається.
 
 Фандинг нормовано до ставки за 8 год (%). Пороги — загальноприйняті, не калібровані:
   < 0          → «шорти платять»
@@ -123,36 +125,72 @@ DEX = {'Hyperliquid'}
 
 
 # ── CoinMarketCap (опційно, лише з ключем через проксі) ─────────────────────────────────────
+# Захищений проксі пропускає лише хост CMC, тому сирі відповіді CMC береться ОКРЕМИМ процесом
+# (python3 cross_exchange.py --cmc-fetch FILE під pplx credentials run), а xex_block читає файл.
+# З CMC беремо лише перевірені біржі: у списку CMC трапляються явні викиди (напр. OI у трильйони) і дрібні майданчики.
+CMC_WHITELIST = {'Binance': 'Binance', 'Bybit': 'Bybit', 'MEXC': 'MEXC', 'BitMEX': 'BitMEX',
+                 'Coinbase International Exchange': 'Coinbase Intl', 'Bitfinex': 'Bitfinex', 'Phemex': 'Phemex'}
+CMC_MAX_OI = 40e9  # більше — точно помилка даних
+CMC_FILE = '/tmp/xex_cmc.json'
 
-def cmc_block(known):
-    """Біржі, яких немає серед прямих джерел (Binance, Bybit…), + ліквідації. None — якщо ключа немає/помилка."""
-    try:
-        d = _get(f'{CMC}/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_id=1&category=perpetual'
-                 f'&center_type=cex&limit=250&sort=cmc_rank_advanced', tries=1)
-    except Exception as e:
-        return {'status': 'CMC: немає ключа' if '401' in str(e) or '403' in str(e) else f'CMC: {str(e)[:80]}'}
+
+def cmc_fetch(path=CMC_FILE):
+    """Запускати під pplx credentials run: зберігає сирі відповіді CMC у файл. Ключ у файл не потрапляє."""
+    import subprocess
+
+    def curl(u):
+        # curl, а не urllib: захищений проксі — HTTPS-проксі, який urllib не підтримує
+        r = subprocess.run(['curl', '-sS', '--fail-with-body', '-m', '40', '-H', 'Accept: application/json', u],
+                           capture_output=True, text=True, timeout=60)
+        if r.returncode != 0:
+            raise RuntimeError(f'curl {r.returncode}: {(r.stdout or r.stderr)[:100]}')
+        return json.loads(r.stdout)
+
+    out = {}
+    for k, u in [('pairs', f'{CMC}/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_id=1&category=perpetual'
+                           f'&center_type=cex&limit=250&sort=cmc_rank_advanced'),
+                 ('liq', f'{CMC}/v5/derivatives/liquidations/quotes/latest')]:
+        try:
+            out[k] = curl(u)
+        except Exception as e:
+            out[k + '_error'] = str(e)[:120]
+    json.dump(out, open(path, 'w'))
+    return out
+
+
+def cmc_block(known, raw=None):
+    """Біржі з whitelist, яких немає серед прямих джерел (Binance, Bybit…), + ліквідації. None — якщо даних CMC немає."""
+    if raw is None:
+        try:
+            raw = json.load(open(CMC_FILE))
+        except Exception:
+            return None
+    if not raw.get('pairs'):
+        err = raw.get('pairs_error', '')
+        return {'status': 'CMC: немає ключа' if '401' in err or '403' in err else f'CMC: {err[:80] or "немає даних"}'}
     extra = {}
-    for p in (d.get('data') or {}).get('market_pairs') or []:
-        name = ((p.get('exchange') or {}).get('exchange_name') or '').strip()
-        if not name or any(name.lower().startswith(k.lower()) for k in known):
+    for p in (raw['pairs'].get('data') or {}).get('market_pairs') or []:
+        name = CMC_WHITELIST.get(((p.get('exchange') or {}).get('exchange_name') or '').strip())
+        if not name or name in known or p.get('outlier_detected'):
             continue
         q = (p.get('quotes') or [{}])[0]
         rq = (p.get('exchange_reported_quotes') or [{}])[0]
         oi, fr = _f(q.get('open_interest')), _f(rq.get('funding_rate'))
-        if not oi or oi <= 0:
+        if not oi or oi <= 0 or oi > CMC_MAX_OI:
             continue
         e = extra.setdefault(name, {'oi': 0.0, 'fw': 0.0, 'fo': 0.0})
         e['oi'] += oi
-        if fr is not None:
+        if fr is not None and abs(fr) < 0.01:
             e['fw'] += fr * 100 * oi
             e['fo'] += oi
     out = {'status': 'ok', 'extra': [
         {'ex': k, 'oi_usd': v['oi'], 'funding_8h': (v['fw'] / v['fo']) if v['fo'] else None, 'basis': None, 'src': 'CMC'}
-        for k, v in sorted(extra.items(), key=lambda kv: -kv[1]['oi'])[:8]]}
+        for k, v in sorted(extra.items(), key=lambda kv: -kv[1]['oi']) if v['oi'] < CMC_MAX_OI]}
     try:
-        q = _get(f'{CMC}/v5/derivatives/liquidations/quotes/latest', tries=1)['data']['quotes'][0]
+        q = raw['liq']['data']['quotes'][0]
         out['liq'] = {'long_24h': _f(q.get('long_liquidations_24h')), 'short_24h': _f(q.get('short_liquidations_24h')),
-                      'total_24h': _f(q.get('total_liquidations_24h'))}
+                      'total_24h': _f(q.get('total_liquidations_24h')),
+                      'long_4h': _f(q.get('long_liquidations_4h')), 'short_4h': _f(q.get('short_liquidations_4h'))}
     except Exception:
         pass
     return out
@@ -172,7 +210,7 @@ def label_for(f):
     return 'перегрів лонгів'
 
 
-def xex_block(prev=None, use_cmc=True):
+def xex_block(prev=None, use_cmc=True, cmc_raw=None):
     """Ніколи не кидає виняток. prev — поточний state.json (для зміни OI та 30-денної історії)."""
     prev = prev or {}
     today = dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%d')
@@ -188,9 +226,11 @@ def xex_block(prev=None, use_cmc=True):
     if len(rows) < 3:
         return {'xex_status': f'error: лише {len(rows)} бірж відповіли', 'xex_date': today}
 
-    cmc = cmc_block([r['ex'] for r in rows]) if use_cmc else None
+    cmc = cmc_block([r['ex'] for r in rows], cmc_raw) if use_cmc else None
     if cmc and cmc.get('extra'):
         rows += cmc['extra']
+    elif cmc and cmc.get('status') == 'ok':
+        cmc['status'] = 'CMC: біржі з whitelist не знайдено'
     rows.sort(key=lambda r: -r['oi_usd'])
 
     total = sum(r['oi_usd'] for r in rows)
@@ -248,11 +288,16 @@ def xex_block(prev=None, use_cmc=True):
     if liq and liq.get('total_24h'):
         out.update({'xex_liq_long_24h': round(liq['long_24h'] or 0), 'xex_liq_short_24h': round(liq['short_24h'] or 0),
                     'xex_liq_total_24h': round(liq['total_24h']),
-                    'xex_liq_long_share_pct': round((liq['long_24h'] or 0) / liq['total_24h'] * 100, 1)})
+                    'xex_liq_long_share_pct': round((liq['long_24h'] or 0) / liq['total_24h'] * 100, 1),
+                    'xex_liq_long_4h': round(liq.get('long_4h') or 0), 'xex_liq_short_4h': round(liq.get('short_4h') or 0)})
     return out
 
 
 if __name__ == '__main__':
     import sys
-    prev = json.load(open(sys.argv[1])) if len(sys.argv) > 1 else {}
-    print(json.dumps(xex_block(prev), ensure_ascii=False, indent=1))
+    if len(sys.argv) > 1 and sys.argv[1] == '--cmc-fetch':
+        r = cmc_fetch(sys.argv[2] if len(sys.argv) > 2 else CMC_FILE)
+        print('CMC_FETCH', {k: ('ok' if not k.endswith('_error') else v) for k, v in r.items()})
+    else:
+        prev = json.load(open(sys.argv[1])) if len(sys.argv) > 1 else {}
+        print(json.dumps(xex_block(prev), ensure_ascii=False, indent=1))

@@ -1,20 +1,20 @@
 [
   {
-    "id": "mid-2026-11-02",
+    "id": "mid-2026-11-09",
     "type": "mid",
-    "date": "2026-11-02",
+    "date": "2026-11-09",
     "timeframe": "4–8 тижнів",
-    "bias": "neutral",
-    "title": "Мід-терм W45: neutral-down | Composite 45.9",
-    "content": "Composite 45.9/100 (neutral-down). Tech: 59 | Crypto: 33 | Macro: 43. MVRV: 1.447. EMA21: $75,151 (BTC вище). RSI14 weekly: 69.0 — перекупленість.\n\nБазовий: BTC у боковику, composite 45.9 (FLAT зона 38-52).\n\nБичачий: Вихід вище EMA21 (75151) + composite ≥53 → LONG відкривається.\n\nВедмежий: Пробій нижче підтримки + composite <38 → SHORT (якщо MVRV≥1.3)."
+    "bias": "bearish",
+    "title": "Мід-терм W46: risk-off | Composite 34.5",
+    "content": "Composite 34.5/100 (risk-off). Tech: 43 | Crypto: 26 | Macro: 39. MVRV: 1.390. EMA21: $74,326 (BTC нижче). RSI14 weekly: 46.0 — нейтральний.\n\nБазовий: BTC під тиском, composite 34.5 → свінг-SHORT (40% по ринку + лімітки +3/+6/+9%).\n\nMVRV 1.390: SHORT дозволений.\n\nВихід SHORT: composite > 44, MVRV < 1.0 або стоп +12%."
   },
   {
-    "id": "long-2026-11-02",
+    "id": "long-2026-11-09",
     "type": "long",
-    "date": "2026-11-02",
+    "date": "2026-11-09",
     "timeframe": "2–6 місяців",
     "bias": "bullish",
-    "title": "Лонг-терм: Акумуляція | MVRV 1.447",
-    "content": "MVRV 1.447 → фаза: Акумуляція. TIPS 10Y: 2.63% — структурний тиск на BTC (>2%). Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит. BTC ETF сукупний приток: $58.1B — інституційна база зростає. COT: 100% percentile — переповнене ведмеже позиціонування, contrarian bullish для BTC. Умови входу LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30. Умови SHORT: composite <40 + MVRV ≥1.3. Поточний режим: neutral-down."
+    "title": "Лонг-терм: Акумуляція | MVRV 1.390",
+    "content": "MVRV 1.390 → фаза: Акумуляція. TIPS 10Y: 2.63% — структурний тиск на BTC (>2%). Голова ФРС Warsh — hawkish позиція обмежує risk-on апетит. BTC ETF сукупний приток: $56.8B — інституційна база зростає. COT: 100% percentile — переповнене ведмеже позиціонування, contrarian bullish для BTC. Умови входу LONG: composite ≥53 + MVRV ≤3.5 + VIX ≤30. Умови SHORT: composite <40 + MVRV ≥1.3. Вхід сіткою, стоп 12%, ризик 2%, вихід за зміною режиму. Поточний режим: risk-off."
   }
 ]

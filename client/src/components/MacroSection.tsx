@@ -2,6 +2,7 @@ import type { Report } from "@shared/schema";
 import MstrBlock from "./MstrBlock";
 import MomentumFilterBlock from "./MomentumFilterBlock";
 import V4ShadowBlock from "./V4ShadowBlock";
+import CoinbasePremiumBlock from "./CoinbasePremiumBlock";
 
 function Sparkline({ values, colors }: { values: (number | null)[]; colors?: string[] }) {
   const valid = values.filter(v => v !== null) as number[];
@@ -404,6 +405,9 @@ export default function MacroSection({ report }: { report: Report }) {
         })()}
 
       </section>
+
+      {/* ── BLOCK 2.1: COINBASE PREMIUM (info only) ── */}
+      <CoinbasePremiumBlock report={report} />
 
       {/* ── BLOCK 3: MACRO EVENTS (dynamic from state.json) ── */}
       <section>

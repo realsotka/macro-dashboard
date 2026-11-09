@@ -253,7 +253,7 @@ export default function MacroSection({ report }: { report: Report }) {
       <section>
         <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
           <span className="text-blue-400">🔷</span> БЛОК 1 — TIPS / РЕАЛЬНІ ДОХІДНОСТІ
-          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">FRED CSV{report.date ? ` · ${report.date}` : ""}</span>
+          <span className="text-xs font-normal text-[hsl(var(--muted-foreground))] ml-2">{(report as any).yields_source || "FRED CSV"}{((report as any).yields_date || report.date) ? ` · ${(report as any).yields_date || report.date}` : ""}</span>
         </h2>
 
         {/* KPI row */}

@@ -3,7 +3,7 @@ v4 backtest — 2nd iteration, full data (reads scripts/raw_backtest_full.json).
 
 Mirrors PRODUCTION Formula v3 more faithfully than the 1st iteration:
   - weekly candles (OKX 1W) with the in-progress week closed at the current price,
-    EMA21 over last 21 closes, Wilder RSI14 over last 55 closes (as in the cron)
+    EMA21 over the full weekly history (SMA seed, since 2026-11-09), Wilder RSI14 over last 55 closes (as in the cron)
   - FR_cur = latest 8h funding rate (%), OI_chg = newest vs oldest of 3 weekly OI points
   - COT percentile over 52 reports + velocity modifier, ETF 4-week average
   - Macro = 50*0.5 + TIPS_pts*0.3 + VIX_pts*0.2 with REAL daily TIPS 10y
@@ -99,8 +99,9 @@ def prev_day(dt_str, n=1):
 
 # ── production formula pieces ────────────────────────────────────────────
 def ema(prices, p):
-    k = 2 / (p + 1); e = prices[0]
-    for v in prices[1:]:
+    # стандартна EMA (з 2026-11-09): уся історія, старт = SMA перших p значень — як у кроні
+    k = 2 / (p + 1); e = sum(prices[:p]) / p
+    for v in prices[p:]:
         e = v * k + e * (1 - k)
     return e
 
@@ -301,7 +302,7 @@ def snapshot(t):
     price = h1_end.get(t)
     i = w1_close.idx(t)
     closes = w1_close.v[max(0, i - 54): i + 1] + [price]
-    e21 = ema(closes[-21:], 21)
+    e21 = ema(w1_close.v[: i + 1] + [price], 21)   # повна історія тижневих закриттів
     r14 = rsi14(closes[-55:])
     fr = fund.get(t)
     oi_pts = oi1w.window(t, 3)

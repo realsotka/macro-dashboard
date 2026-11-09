@@ -94,7 +94,7 @@ export default function TechnicalSection({ report }: { report: any }) {
         .then(j => (j && Array.isArray(j.data) ? j : { data: [] }))
         .catch(() => ({ data: [] }));
       const [weeklyCandles, weeklyOiRaw, frRaw, dailyOiRaw] = await Promise.all([
-        okxFetch("/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=55"),
+        okxFetch("/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1W&limit=300"),
         optional("/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1W&limit=3&instId=BTC-USDT-SWAP"),
         okxFetch("/api/v5/public/funding-rate-history?instId=BTC-USDT-SWAP&limit=21"),
         optional("/api/v5/rubik/stat/contracts/open-interest-history?ccy=BTC&period=1D&limit=7&instId=BTC-USDT-SWAP"),
@@ -106,21 +106,35 @@ export default function TechnicalSection({ report }: { report: any }) {
         for (const v of prices.slice(1)) e = v * k + e * (1 - k);
         return e;
       };
-      // RSI14 on weekly closes
-      const rsi14Fn = (prices: number[]) => {
-        const last15 = prices.slice(-15);
+      // Повна EMA (старт = SMA перших p свічок) — стандартний розрахунок, як у TradingView.
+      // Використовується лише для показу EMA50; EMA21 лишається як у кроні (правило системи).
+      const emaFullFn = (prices: number[], p: number) => {
+        if (prices.length < p) return 0;
+        const k = 2 / (p + 1);
+        let e = prices.slice(0, p).reduce((a, b) => a + b, 0) / p;
+        for (const v of prices.slice(p)) e = v * k + e * (1 - k);
+        return e;
+      };
+      // RSI14 (Wilder) на останніх 55 тижневих закриттях — так само, як у щоденному кроні
+      const rsi14Fn = (all: number[]) => {
+        const prices = all.slice(-55);
         let avgGain = 0, avgLoss = 0;
         for (let i = 1; i < 15; i++) {
-          const diff = last15[i] - last15[i-1];
+          const diff = prices[i] - prices[i-1];
           if (diff > 0) avgGain += diff; else avgLoss -= diff;
         }
         avgGain /= 14; avgLoss /= 14;
+        for (let i = 15; i < prices.length; i++) {
+          const diff = prices[i] - prices[i-1];
+          avgGain = (avgGain * 13 + Math.max(diff, 0)) / 14;
+          avgLoss = (avgLoss * 13 + Math.max(-diff, 0)) / 14;
+        }
         const rs = avgLoss > 0 ? avgGain / avgLoss : 999;
         return Math.round((100 - 100 / (1 + rs)) * 100) / 100;
       };
       const price = wCloses[wCloses.length - 1];
       const ema21 = emaFn(wCloses.slice(-21), 21);
-      const ema50 = emaFn(wCloses.slice(-50), 50); // kept for price table display only
+      const ema50 = emaFullFn(wCloses, 50); // лише для показу в таблиці
       const rsi14 = rsi14Fn(wCloses);
       // Weekly structure table — use last 9 weekly candles
       const weekly = weeklyCandles.data.slice(0, 9).map((c: any) => {
@@ -184,7 +198,7 @@ export default function TechnicalSection({ report }: { report: any }) {
   const d = okx;
   const price = d?.price ?? report?.btc_price ?? 0;
   const ema21 = d?.ema21 ?? report?.btc_ema21 ?? 0;
-  const ema50 = d?.ema50 ?? report?.btc_ema50 ?? 0;
+  const ema50 = d?.ema50 ?? 0; // збережене btc_ema50 у state застаріле — не показуємо
   const rsi14Live = d?.rsi14 ?? report?.btc_rsi14 ?? 0;
 
   return (

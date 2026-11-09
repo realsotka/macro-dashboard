@@ -105,8 +105,9 @@ export default function CrossExchangeBlock({ report }: { report: any }) {
               <Card title="Ліквідовано лонгів" value={usd(r.xex_liq_long_24h)} cls="text-red-400" sub={`${r.xex_liq_long_share_pct ?? "—"}% від усіх`} />
               <Card title="Ліквідовано шортів" value={usd(r.xex_liq_short_24h)} cls="text-green-400"
                 sub={r.xex_liq_long_share_pct != null ? `${(100 - r.xex_liq_long_share_pct).toFixed(1)}% від усіх` : ""} />
-              <Card title="Перекіс" value={r.xex_liq_long_share_pct == null ? "—" : r.xex_liq_long_share_pct >= 60 ? "змивають лонги" : r.xex_liq_long_share_pct <= 40 ? "змивають шорти" : "рівно"}
-                cls="text-[hsl(var(--foreground))] text-base" sub="поріг 60/40" />
+              <Card title="Перекіс за 24 год" value={r.xex_liq_long_share_pct == null ? "—" : r.xex_liq_long_share_pct >= 60 ? "змивають лонги" : r.xex_liq_long_share_pct <= 40 ? "змивають шорти" : "рівно"}
+                cls="text-[hsl(var(--foreground))] text-base"
+                sub={r.xex_liq_long_4h != null ? <>за 4 год: лонги {usd(r.xex_liq_long_4h)} · шорти {usd(r.xex_liq_short_4h)}</> : "поріг 60/40"} />
             </div>
           )}
 
@@ -151,8 +152,10 @@ export default function CrossExchangeBlock({ report }: { report: any }) {
             розбіжності.{div != null && <> Зараз Hyperliquid (DEX) {div >= 0 ? "дорожчий" : "дешевший"} за централізовані біржі на{" "}
             <span className="num text-[hsl(var(--foreground))]">{fr(Math.abs(div))}</span>
             {Math.abs(div) >= 0.005 ? (div > 0 ? " — на DEX агресивніші лонги." : " — на DEX агресивніші шорти.") : " — суттєвої розбіжності немає."}</>}
-            {" "}Пороги загальноприйняті: 0.01% за 8 год — базова ставка, ≥ 0.03% — перегрів. Binance і Bybit додаються лише через
-            CoinMarketCap; без нього частина ринку не врахована.
+            {" "}Пороги загальноприйняті: 0.01% за 8 год — базова ставка, ≥ 0.03% — перегрів.{" "}
+            {rows.some(x => x.src === "CMC")
+              ? <>Binance, Bybit та інші позначені «CMC» — дані CoinMarketCap (усі USDT/USDC/USD-перпетуали біржі).</>
+              : <>Binance і Bybit зараз не враховані — CoinMarketCap не відповів.</>}
             {hist.length < 7 && <> Історія накопичується: {hist.length} дн.</>}
           </div>
         </>

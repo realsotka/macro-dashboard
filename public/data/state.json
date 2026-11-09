@@ -393,5 +393,137 @@
   },
   "cb_premium_updated": "2026-11-09T11:00:00Z",
   "cb_premium_source": "Coinbase BTC-USD vs OKX BTC-USDT × Coinbase USDT-USD",
-  "cb_premium_status": "ok"
+  "cb_premium_status": "ok",
+  "xex_date": "2026-11-09",
+  "xex_status": "ok",
+  "xex_source": "CMC + 9 бірж напряму",
+  "xex_n_ex": 14,
+  "xex_oi_total_usd": 34939569194,
+  "xex_oi_chg_24h_pct": null,
+  "xex_okx_oi_share_pct": 7.5,
+  "xex_funding_oiw_8h": 0.00837,
+  "xex_funding_7d_8h": 0.00837,
+  "xex_funding_okx_8h": 0.00677,
+  "xex_funding_cex_8h": 0.00821,
+  "xex_funding_hl_8h": 0.01,
+  "xex_funding_min_8h": -0.00111,
+  "xex_funding_max_8h": 0.01276,
+  "xex_funding_pos_n": 13,
+  "xex_funding_n": 14,
+  "xex_basis_oiw_pct": -0.0308,
+  "xex_label": "нейтрально",
+  "xex_exchanges": [
+    {
+      "ex": "Binance",
+      "oi_usd": 10454554064,
+      "funding_8h": 0.00899,
+      "basis": null,
+      "src": "CMC"
+    },
+    {
+      "ex": "Gate",
+      "oi_usd": 4659866004,
+      "funding_8h": 0.0064,
+      "basis": -0.0206,
+      "src": "API"
+    },
+    {
+      "ex": "Hyperliquid",
+      "oi_usd": 3134290008,
+      "funding_8h": 0.01,
+      "basis": -0.0268,
+      "src": "API"
+    },
+    {
+      "ex": "Bybit",
+      "oi_usd": 3015541998,
+      "funding_8h": 0.00682,
+      "basis": null,
+      "src": "CMC"
+    },
+    {
+      "ex": "Bitget",
+      "oi_usd": 2841006312,
+      "funding_8h": 0.0092,
+      "basis": -0.0444,
+      "src": "API"
+    },
+    {
+      "ex": "OKX",
+      "oi_usd": 2636901533,
+      "funding_8h": 0.00677,
+      "basis": -0.0487,
+      "src": "API"
+    },
+    {
+      "ex": "MEXC",
+      "oi_usd": 2474296669,
+      "funding_8h": 0.00977,
+      "basis": null,
+      "src": "CMC"
+    },
+    {
+      "ex": "Phemex",
+      "oi_usd": 1200994455,
+      "funding_8h": 0.00693,
+      "basis": null,
+      "src": "CMC"
+    },
+    {
+      "ex": "HTX",
+      "oi_usd": 1151416543,
+      "funding_8h": 0.01,
+      "basis": null,
+      "src": "API"
+    },
+    {
+      "ex": "BingX",
+      "oi_usd": 1066956385,
+      "funding_8h": 0.0099,
+      "basis": -0.0393,
+      "src": "API"
+    },
+    {
+      "ex": "Deribit",
+      "oi_usd": 711836760,
+      "funding_8h": 0.00375,
+      "basis": 0.0068,
+      "src": "API"
+    },
+    {
+      "ex": "KuCoin",
+      "oi_usd": 707952836,
+      "funding_8h": 0.0099,
+      "basis": -0.0278,
+      "src": "API"
+    },
+    {
+      "ex": "Bitfinex",
+      "oi_usd": 690023374,
+      "funding_8h": 0.01276,
+      "basis": null,
+      "src": "CMC"
+    },
+    {
+      "ex": "Kraken",
+      "oi_usd": 193932254,
+      "funding_8h": -0.00111,
+      "basis": 0.0035,
+      "src": "API"
+    }
+  ],
+  "xex_hist": [
+    {
+      "date": "2026-11-09",
+      "oi_usd": 34939569194,
+      "funding_8h": 0.00837,
+      "okx_funding_8h": 0.00677
+    }
+  ],
+  "xex_liq_long_24h": 1069136383,
+  "xex_liq_short_24h": 115263054,
+  "xex_liq_total_24h": 1184399437,
+  "xex_liq_long_share_pct": 90.3,
+  "xex_liq_long_4h": 12304346,
+  "xex_liq_short_4h": 19127271
 }

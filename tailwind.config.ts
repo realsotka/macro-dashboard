@@ -11,6 +11,16 @@ export default {
         sm: ".1875rem", /* 3px */
       },
       colors: {
+        // Theme-able accent palette (values in client/src/themes.css)
+        cyan: { 300: "rgb(var(--tw-cyan-300) / <alpha-value>)", 400: "rgb(var(--tw-cyan-400) / <alpha-value>)", 500: "rgb(var(--tw-cyan-500) / <alpha-value>)" },
+        green: { 300: "rgb(var(--tw-green-300) / <alpha-value>)", 400: "rgb(var(--tw-green-400) / <alpha-value>)", 500: "rgb(var(--tw-green-500) / <alpha-value>)" },
+        red: { 50: "rgb(var(--tw-red-50) / <alpha-value>)", 300: "rgb(var(--tw-red-300) / <alpha-value>)", 400: "rgb(var(--tw-red-400) / <alpha-value>)", 500: "rgb(var(--tw-red-500) / <alpha-value>)" },
+        yellow: { 300: "rgb(var(--tw-yellow-300) / <alpha-value>)", 400: "rgb(var(--tw-yellow-400) / <alpha-value>)", 500: "rgb(var(--tw-yellow-500) / <alpha-value>)" },
+        orange: { 400: "rgb(var(--tw-orange-400) / <alpha-value>)", 500: "rgb(var(--tw-orange-500) / <alpha-value>)" },
+        amber: { 300: "rgb(var(--tw-amber-300) / <alpha-value>)", 400: "rgb(var(--tw-amber-400) / <alpha-value>)", 500: "rgb(var(--tw-amber-500) / <alpha-value>)" },
+        purple: { 300: "rgb(var(--tw-purple-300) / <alpha-value>)", 500: "rgb(var(--tw-purple-500) / <alpha-value>)" },
+        blue: { 400: "rgb(var(--tw-blue-400) / <alpha-value>)", 500: "rgb(var(--tw-blue-500) / <alpha-value>)" },
+        emerald: { 400: "rgb(var(--tw-emerald-400) / <alpha-value>)" },
         // Flat / base colors (regular buttons)
         background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",

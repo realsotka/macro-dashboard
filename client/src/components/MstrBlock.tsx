@@ -60,10 +60,10 @@ function MNavGauge({ mnav }: { mnav: number }) {
           style={{
             width: `${pct}%`,
             background: mnav < 1.3
-              ? "hsl(142 76% 36%)"
+              ? "rgb(var(--tw-green-500))"
               : mnav < 2.0
-              ? "hsl(45 93% 47%)"
-              : "hsl(0 72% 51%)",
+              ? "rgb(var(--tw-yellow-500))"
+              : "rgb(var(--tw-red-500))",
           }}
         />
       </div>

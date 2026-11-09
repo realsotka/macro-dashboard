@@ -1,0 +1,291 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Dashboard themes. <html data-theme="default|premium|retro|paper">
+   Every theme sets: surface tokens (shadcn HSL), the accent palette used by
+   Tailwind classes (text-cyan-400, bg-green-500/15 …, RGB triples), fonts,
+   chart colors and a few shape rules. "default" = the original look.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Original Tailwind values → default theme is pixel-identical */
+  --tw-cyan-300: 103 232 249;  --tw-cyan-400: 34 211 238;   --tw-cyan-500: 6 182 212;
+  --tw-green-300: 134 239 172; --tw-green-400: 74 222 128;  --tw-green-500: 34 197 94;
+  --tw-red-50: 254 242 242;    --tw-red-300: 252 165 165;   --tw-red-400: 248 113 113; --tw-red-500: 239 68 68;
+  --tw-yellow-300: 253 224 71; --tw-yellow-400: 250 204 21; --tw-yellow-500: 234 179 8;
+  --tw-orange-400: 251 146 60; --tw-orange-500: 249 115 22;
+  --tw-amber-300: 252 211 77;  --tw-amber-400: 251 191 36;  --tw-amber-500: 245 158 11;
+  --tw-purple-300: 216 180 254; --tw-purple-500: 168 85 247;
+  --tw-blue-400: 96 165 250;   --tw-blue-500: 59 130 246;
+  --tw-emerald-400: 52 211 153;
+
+  --font-body: "Inter", sans-serif;
+  --font-brand: var(--font-body);
+  --chart-grid: hsl(220 15% 20%);
+  --chart-label: hsl(220 10% 50%);
+  --chart-up: #34d399;
+  --chart-down: #f87171;
+  --scroll-thumb: hsl(220 15% 25%);
+}
+
+body { font-family: var(--font-body); }
+.brand-name { font-family: var(--font-brand); }
+::-webkit-scrollbar-thumb { background: var(--scroll-thumb) !important; }
+
+/* Retro-only decor is hidden everywhere else */
+html:not([data-theme="retro"]) .retro-only { display: none !important; }
+
+/* ═════════════════════════ 1. ЧОРНИЙ ПРЕМІУМ ═════════════════════════════
+   Pure black, hairline borders, champagne-gold accent, quiet typography.   */
+html[data-theme="premium"] {
+  --background: 0 0% 2%;
+  --foreground: 40 18% 90%;
+  --card: 0 0% 4.5%;
+  --card-foreground: 40 18% 90%;
+  --popover: 0 0% 5%;
+  --popover-foreground: 40 18% 90%;
+  --primary: 39 48% 62%;
+  --primary-foreground: 0 0% 3%;
+  --secondary: 0 0% 10%;
+  --secondary-foreground: 40 10% 75%;
+  --muted: 0 0% 7.5%;
+  --muted-foreground: 38 6% 54%;
+  --accent: 39 48% 62%;
+  --accent-foreground: 0 0% 3%;
+  --border: 38 12% 13%;
+  --input: 0 0% 10%;
+  --ring: 39 48% 62%;
+
+  --tw-cyan-300: 236 214 166;  --tw-cyan-400: 214 182 120;  --tw-cyan-500: 196 160 96;
+  --tw-green-300: 150 222 186; --tw-green-400: 108 200 150; --tw-green-500: 72 176 124;
+  --tw-red-50: 255 244 240;    --tw-red-300: 244 160 150;   --tw-red-400: 228 112 104; --tw-red-500: 206 78 72;
+  --tw-yellow-300: 240 222 170; --tw-yellow-400: 226 198 132; --tw-yellow-500: 206 172 98;
+  --tw-orange-400: 222 150 96; --tw-orange-500: 204 124 70;
+  --tw-amber-300: 240 214 160; --tw-amber-400: 224 190 120; --tw-amber-500: 204 164 88;
+  --tw-purple-300: 206 186 226; --tw-purple-500: 158 128 196;
+  --tw-blue-400: 150 176 210;  --tw-blue-500: 120 150 196;
+  --tw-emerald-400: 108 200 150;
+
+  --font-body: "General Sans", "Inter", sans-serif;
+  --font-mono: "Geist Mono", "IBM Plex Mono", monospace;
+  --font-brand: "Instrument Serif", "General Sans", serif;
+  --chart-grid: hsl(38 10% 14%);
+  --chart-label: hsl(38 6% 46%);
+  --chart-up: rgb(108 200 150);
+  --chart-down: rgb(228 112 104);
+  --scroll-thumb: hsl(38 10% 20%);
+}
+html[data-theme="premium"] body { letter-spacing: 0.005em; }
+html[data-theme="premium"] .rounded-lg { border-radius: 3px; }
+html[data-theme="premium"] .rounded { border-radius: 2px; }
+html[data-theme="premium"] .rounded-full { border-radius: 2px; }
+html[data-theme="premium"] main h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: hsl(39 30% 72%);
+}
+html[data-theme="premium"] .app-sidebar { background: #000; }
+html[data-theme="premium"] .app-header {
+  background: linear-gradient(180deg, hsl(0 0% 3.5%), hsl(0 0% 2%));
+  border-bottom-color: hsl(39 40% 40% / 0.35) !important;
+}
+html[data-theme="premium"] .brand-name { font-size: 1.35rem; font-weight: 400; font-style: italic; line-height: 1; letter-spacing: 0.01em; color: hsl(39 48% 70%); }
+html[data-theme="premium"] .nav-active {
+  background: linear-gradient(90deg, hsl(39 48% 62% / 0.12), transparent) !important;
+  border-color: transparent !important;
+  box-shadow: inset 2px 0 0 hsl(39 48% 62%);
+}
+/* gold hairline on top of every card */
+html[data-theme="premium"] main .rounded-lg.border {
+  box-shadow: inset 0 1px 0 hsl(39 48% 62% / 0.10);
+}
+
+/* ═════════════════════════ 2. РЕТРО ІНТЕРНЕТ ═════════════════════════════
+   Windows-98 desktop: teal backdrop, silver bevelled windows, navy title
+   bars, pixel type, LCD numbers, a marquee ticker and a visitor counter.  */
+html[data-theme="retro"] {
+  --background: 180 100% 25%;
+  --foreground: 0 0% 0%;
+  --card: 0 0% 75%;
+  --card-foreground: 0 0% 0%;
+  --popover: 0 0% 75%;
+  --popover-foreground: 0 0% 0%;
+  --primary: 240 100% 25%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 68%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 0 0% 100%;
+  --muted-foreground: 0 0% 22%;
+  --accent: 240 100% 25%;
+  --accent-foreground: 0 0% 100%;
+  --border: 0 0% 50%;
+  --input: 0 0% 100%;
+  --ring: 240 100% 25%;
+
+  --tw-cyan-300: 0 0 150;    --tw-cyan-400: 0 0 128;    --tw-cyan-500: 0 0 128;
+  --tw-green-300: 0 110 0;   --tw-green-400: 0 112 0;   --tw-green-500: 0 128 0;
+  --tw-red-50: 255 255 255;  --tw-red-300: 170 0 0;     --tw-red-400: 176 0 0;    --tw-red-500: 192 0 0;
+  --tw-yellow-300: 112 84 0; --tw-yellow-400: 116 86 0; --tw-yellow-500: 168 128 0;
+  --tw-orange-400: 150 64 0; --tw-orange-500: 192 96 0;
+  --tw-amber-300: 112 84 0;  --tw-amber-400: 116 86 0;  --tw-amber-500: 168 128 0;
+  --tw-purple-300: 110 0 120; --tw-purple-500: 128 0 128;
+  --tw-blue-400: 0 0 200;    --tw-blue-500: 0 0 170;
+  --tw-emerald-400: 0 112 0;
+
+  --font-body: "Pixelify Sans", "Tahoma", sans-serif;
+  --font-mono: "VT323", "Courier New", monospace;
+  --font-brand: "Pixelify Sans", sans-serif;
+  --chart-grid: #9a9a9a;
+  --chart-label: #202020;
+  --chart-up: #008000;
+  --chart-down: #c00000;
+  --scroll-thumb: #808080;
+}
+html[data-theme="retro"] .num { font-size: 1.05rem; letter-spacing: 0.02em; }
+html[data-theme="retro"] .rounded-lg,
+html[data-theme="retro"] .rounded,
+html[data-theme="retro"] .rounded-full,
+html[data-theme="retro"] .rounded-md { border-radius: 0 !important; }
+/* raised bevel on windows/cards */
+html[data-theme="retro"] main .rounded-lg.border,
+html[data-theme="retro"] .app-header,
+html[data-theme="retro"] .app-sidebar {
+  border-style: solid !important;
+  border-width: 2px !important;
+  border-color: #fff #404040 #404040 #fff !important;
+  box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+}
+html[data-theme="retro"] main .rounded-lg.border { background-color: #c0c0c0; }
+/* sunken fields (the small metric tiles) */
+html[data-theme="retro"] main .rounded.border {
+  border-style: solid !important;
+  border-width: 2px !important;
+  border-color: #808080 #fff #fff #808080 !important;
+  background-color: #fff !important;
+}
+/* section headings become window title bars */
+html[data-theme="retro"] main h2 {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff !important;
+  padding: 3px 8px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+html[data-theme="retro"] main h2 * { color: #fff !important; }
+html[data-theme="retro"] main h2 > span[class*="border"] { background: #c0c0c0 !important; color: #000 !important; border-color: #fff #404040 #404040 #fff !important; }
+html[data-theme="retro"] main h2 > span[class*="border"] * { color: #000 !important; }
+html[data-theme="retro"] .app-sidebar { background: #c0c0c0; margin: 6px 0 6px 6px; }
+html[data-theme="retro"] .app-sidebar .border-b,
+html[data-theme="retro"] .app-sidebar .border-t { border-color: #808080 !important; }
+html[data-theme="retro"] .app-header { background: #c0c0c0; margin: 6px 6px 0 6px; }
+html[data-theme="retro"] main { margin: 0 6px 6px 6px; }
+html[data-theme="retro"] .nav-active {
+  background: #000080 !important;
+  color: #fff !important;
+  border-color: #000080 !important;
+}
+html[data-theme="retro"] .nav-active * { color: #fff !important; }
+html[data-theme="retro"] button.border,
+html[data-theme="retro"] .theme-btn {
+  border-style: solid !important;
+  border-width: 2px !important;
+  border-color: #fff #404040 #404040 #fff !important;
+  background: #c0c0c0 !important;
+  color: #000 !important;
+}
+html[data-theme="retro"] .theme-btn[aria-pressed="true"] { border-color: #404040 #fff #fff #404040 !important; background: #b0b0b0 !important; }
+html[data-theme="retro"] table thead { background: #000080; }
+html[data-theme="retro"] table thead th { color: #fff !important; }
+html[data-theme="retro"] .retro-only { display: block; }
+html[data-theme="retro"] .brand-name { font-weight: 700; font-size: 1rem; }
+
+.retro-titlebar {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 13px;
+  padding: 2px 4px 2px 8px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.retro-titlebar .ctl { display: inline-flex; gap: 2px; }
+.retro-titlebar .ctl span {
+  width: 16px; height: 14px; line-height: 11px; text-align: center; font-size: 11px;
+  background: #c0c0c0; color: #000;
+  border: 1px solid; border-color: #fff #404040 #404040 #fff;
+}
+.retro-marquee {
+  overflow: hidden; white-space: nowrap;
+  background: #000; color: #00ff66;
+  font-family: "VT323", monospace; font-size: 18px; line-height: 22px;
+  border-top: 2px solid #404040;
+}
+.retro-marquee > div { display: inline-block; padding-left: 100%; animation: retro-scroll 38s linear infinite; }
+@keyframes retro-scroll { to { transform: translateX(-100%); } }
+@media (prefers-reduced-motion: reduce) { .retro-marquee > div { animation: none; padding-left: 8px; } }
+.retro-counter {
+  font-family: "VT323", monospace; font-size: 20px; letter-spacing: 3px;
+  background: #000; color: #00ff66; padding: 0 6px; display: inline-block;
+  border: 2px solid; border-color: #808080 #fff #fff #808080;
+}
+
+/* ═════════════════════════ 3. РАНКОВА ГАЗЕТА (на мій смак) ═══════════════
+   Financial-paper look: salmon newsprint, ink text, claret + teal accents,
+   square cards, ruled section heads. A calm, readable light alternative. */
+html[data-theme="paper"] {
+  --background: 28 100% 95%;
+  --foreground: 20 6% 18%;
+  --card: 30 80% 97.5%;
+  --card-foreground: 20 6% 18%;
+  --popover: 30 80% 97.5%;
+  --popover-foreground: 20 6% 18%;
+  --primary: 339 82% 33%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 28 45% 86%;
+  --secondary-foreground: 20 6% 18%;
+  --muted: 28 55% 90%;
+  --muted-foreground: 20 6% 38%;
+  --accent: 339 82% 33%;
+  --accent-foreground: 0 0% 100%;
+  --border: 25 22% 78%;
+  --input: 28 45% 86%;
+  --ring: 339 82% 33%;
+
+  --tw-cyan-300: 13 104 114;  --tw-cyan-400: 13 110 120;  --tw-cyan-500: 13 118 128;
+  --tw-green-300: 8 112 64;   --tw-green-400: 8 116 66;   --tw-green-500: 9 140 80;
+  --tw-red-50: 255 255 255;   --tw-red-300: 168 28 38;    --tw-red-400: 176 30 40;  --tw-red-500: 204 20 30;
+  --tw-yellow-300: 128 88 0;  --tw-yellow-400: 132 90 0;  --tw-yellow-500: 196 140 0;
+  --tw-orange-400: 160 72 8;  --tw-orange-500: 200 100 20;
+  --tw-amber-300: 128 88 0;   --tw-amber-400: 132 90 0;   --tw-amber-500: 196 140 0;
+  --tw-purple-300: 110 40 120; --tw-purple-500: 128 50 150;
+  --tw-blue-400: 30 80 160;   --tw-blue-500: 30 80 160;
+  --tw-emerald-400: 8 116 66;
+
+  --font-body: "Switzer", "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-brand: "Instrument Serif", Georgia, serif;
+  --chart-grid: hsl(25 22% 82%);
+  --chart-label: hsl(20 6% 40%);
+  --chart-up: rgb(8 116 66);
+  --chart-down: rgb(176 30 40);
+  --scroll-thumb: hsl(25 20% 70%);
+}
+html[data-theme="paper"] .rounded-lg,
+html[data-theme="paper"] .rounded { border-radius: 0; }
+html[data-theme="paper"] .rounded-full { border-radius: 2px; }
+html[data-theme="paper"] main h2 {
+  border-top: 3px solid hsl(20 6% 18%);
+  padding-top: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+html[data-theme="paper"] .app-sidebar { background: hsl(28 60% 92%); }
+html[data-theme="paper"] .brand-name { font-size: 1.6rem; font-weight: 400; line-height: 1; }
+html[data-theme="paper"] .app-header h1 { font-family: var(--font-brand); font-size: 1.5rem; font-weight: 400; }
+html[data-theme="paper"] .nav-active {
+  background: hsl(30 80% 97.5%) !important;
+  border-color: hsl(25 22% 78%) !important;
+  box-shadow: inset 3px 0 0 hsl(339 82% 33%);
+}
+html[data-theme="paper"] main .rounded-lg.border { box-shadow: none; }
+html[data-theme="paper"] table thead { border-bottom: 2px solid hsl(20 6% 18%); }

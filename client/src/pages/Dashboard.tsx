@@ -8,6 +8,7 @@ import MidTermSection from "@/components/MidTermSection";
 import LongTermSection from "@/components/LongTermSection";
 import TradingSection from "@/components/TradingSection";
 import ReportModal from "@/components/ReportModal";
+import { useTheme, THEMES } from "@/lib/theme";
 
 type Section = "macro" | "technical" | "mid" | "long" | "trading";
 
@@ -50,6 +51,7 @@ export default function Dashboard() {
   const [reportOpen, setReportOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const queryClient = useQueryClient();
+  const { theme, setTheme } = useTheme();
 
   const { data: report, isLoading } = useQuery({
     queryKey: ["state"],
@@ -67,17 +69,18 @@ export default function Dashboard() {
   return (
     <div className="dashboard flex h-full bg-[hsl(var(--background))]">
       {/* Sidebar */}
-      <aside className="w-56 flex-shrink-0 border-r border-[hsl(var(--border))] flex flex-col">
+      <aside className="app-sidebar w-56 flex-shrink-0 border-r border-[hsl(var(--border))] flex flex-col">
+        <div className="retro-only retro-titlebar"><span>Macro 98</span><span className="ctl"><span>_</span><span>□</span><span>×</span></span></div>
         {/* Logo */}
         <div className="p-5 border-b border-[hsl(var(--border))]">
           <div className="flex items-center gap-2.5">
             <svg viewBox="0 0 32 32" width="28" height="28" fill="none" aria-label="Macro Dashboard">
-              <rect width="32" height="32" rx="8" fill="hsl(199 80% 52% / 0.15)" />
-              <path d="M6 22 L11 14 L16 18 L21 10 L26 14" stroke="hsl(199 80% 52%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <circle cx="26" cy="14" r="2" fill="hsl(199 80% 52%)" />
+              <rect width="32" height="32" rx="8" style={{ fill: "hsl(var(--primary) / 0.15)" }} />
+              <path d="M6 22 L11 14 L16 18 L21 10 L26 14" style={{ stroke: "hsl(var(--primary))" }} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="26" cy="14" r="2" style={{ fill: "hsl(var(--primary))" }} />
             </svg>
             <div>
-              <div className="text-sm font-semibold text-[hsl(var(--foreground))]">Macro</div>
+              <div className="brand-name text-sm font-semibold text-[hsl(var(--foreground))]">Macro</div>
               <div className="text-xs text-[hsl(var(--muted-foreground))]">BTC Dashboard</div>
             </div>
           </div>
@@ -92,7 +95,7 @@ export default function Dashboard() {
               onClick={() => setActive(item.id)}
               className={`w-full flex items-start gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
                 active === item.id
-                  ? "bg-[hsl(199_80%_52%/0.12)] border border-[hsl(199_80%_52%/0.25)] text-[hsl(var(--foreground))]"
+                  ? "nav-active bg-[hsl(var(--primary)/0.12)] border border-[hsl(var(--primary)/0.25)] text-[hsl(var(--foreground))]"
                   : "hover:bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border border-transparent"
               }`}
             >
@@ -107,8 +110,33 @@ export default function Dashboard() {
           ))}
         </nav>
 
+        {/* Theme switcher */}
+        <div className="px-3 pt-3 border-t border-[hsl(var(--border))]">
+          <div className="text-[11px] uppercase tracking-wider text-[hsl(var(--muted-foreground))] mb-1.5">Тема</div>
+          <div className="grid grid-cols-2 gap-1" role="group" aria-label="Тема оформлення">
+            {THEMES.map(t => (
+              <button
+                key={t.id}
+                data-testid={`theme-${t.id}`}
+                aria-pressed={theme === t.id}
+                onClick={() => setTheme(t.id)}
+                className={`theme-btn px-2 py-1 rounded text-xs border transition-colors ${
+                  theme === t.id
+                    ? "border-[hsl(var(--primary)/0.6)] bg-[hsl(var(--primary)/0.14)] text-[hsl(var(--foreground))]"
+                    : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <div className="retro-only mt-2 text-[11px] text-[hsl(var(--muted-foreground))]">
+            Відвідувачів: <span className="retro-counter">004517</span>
+          </div>
+        </div>
+
         {/* Report button */}
-        <div className="p-3 border-t border-[hsl(var(--border))]">
+        <div className="p-3">
           {report && (
             <button
               data-testid="btn-open-report"
@@ -125,7 +153,13 @@ export default function Dashboard() {
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar */}
-        <header className="h-14 flex items-center justify-between px-6 border-b border-[hsl(var(--border))] flex-shrink-0">
+        <div className="retro-only">
+          <div className="retro-titlebar" style={{ margin: "6px 6px 0 6px" }}>
+            <span>C:\MACRO\DASHBOARD.EXE — {NAV_ITEMS.find(n => n.id === active)?.label}</span>
+            <span className="ctl"><span>_</span><span>□</span><span>×</span></span>
+          </div>
+        </div>
+        <header className="app-header h-14 flex items-center justify-between px-6 border-b border-[hsl(var(--border))] flex-shrink-0">
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-sm font-semibold text-[hsl(var(--foreground))]">
               {NAV_ITEMS.find(n => n.id === active)?.label}
@@ -178,6 +212,17 @@ export default function Dashboard() {
             </button>
           </div>
         </header>
+
+        {/* Retro ticker */}
+        {theme === "retro" && report && (
+          <div className="retro-marquee" style={{ margin: "0 6px" }} aria-hidden="true">
+            <div>
+              ★ Ласкаво просимо на мою домашню сторінку! ★ BTC ${report.btc_price?.toLocaleString("en-US", { maximumFractionDigits: 0 })}
+              {" "}★ Composite {report.composite_score}/100 ★ Режим: {report.market_regime} ★ MVRV {report.mvrv?.toFixed(2)} ★ VIX {report.vix}
+              {" "}★ Найкраще дивитись у Netscape Navigator 4.0 при 800×600 ★ Оновлено {report.last_updated_daily ?? report.date} ★
+            </div>
+          </div>
+        )}
 
         {/* Section content */}
         <main className="flex-1 overflow-y-auto overscroll-contain">

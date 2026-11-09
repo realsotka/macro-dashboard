@@ -36,15 +36,15 @@ function Spark({ values }: { values: number[] }) {
   }).join(" ");
   const last = values[values.length - 1];
   const first = values[0];
-  const color = last >= first ? "#34d399" : "#f87171";
+  const color = last >= first ? "var(--chart-up)" : "var(--chart-down)";
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
-      <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
+      <polyline points={pts} fill="none" style={{ stroke: color }} strokeWidth="1.5" strokeLinejoin="round" />
       {values.map((v, i) => {
         const x = pad + (i / (values.length - 1)) * (W - pad * 2);
         const y = H - pad - ((v - min) / range) * (H - pad * 2);
         return i === values.length - 1
-          ? <circle key={i} cx={x} cy={y} r="2.5" fill={color} />
+          ? <circle key={i} cx={x} cy={y} r="2.5" style={{ fill: color }} />
           : null;
       })}
     </svg>
@@ -68,15 +68,15 @@ function EquityChart({ curve }: { curve: { date: string; equity: number; pnl: nu
   const pts = curve.map((c, i) => `${xOf(i)},${yOf(c.equity)}`).join(" ");
   const last = equities[equities.length - 1];
   const first = equities[0];
-  const lineColor = last >= first ? "#34d399" : "#f87171";
+  const lineColor = last >= first ? "var(--chart-up)" : "var(--chart-down)";
   const fillId = "equity-fill";
 
   return (
     <svg width="100%" viewBox={`0 0 ${W} ${H}`} className="overflow-visible">
       <defs>
         <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={lineColor} stopOpacity="0.25" />
-          <stop offset="100%" stopColor={lineColor} stopOpacity="0.02" />
+          <stop offset="0%" style={{ stopColor: lineColor }} stopOpacity="0.25" />
+          <stop offset="100%" style={{ stopColor: lineColor }} stopOpacity="0.02" />
         </linearGradient>
       </defs>
       {/* Grid lines */}
@@ -85,8 +85,8 @@ function EquityChart({ curve }: { curve: { date: string; equity: number; pnl: nu
         const val = max - t * range;
         return (
           <g key={t}>
-            <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="hsl(220 15% 20%)" strokeWidth="0.5" />
-            <text x={padL - 4} y={y + 4} textAnchor="end" fontSize="8" fill="hsl(220 10% 50%)">
+            <line x1={padL} y1={y} x2={W - padR} y2={y} style={{ stroke: "var(--chart-grid)" }} strokeWidth="0.5" />
+            <text x={padL - 4} y={y + 4} textAnchor="end" fontSize="8" style={{ fill: "var(--chart-label)" }}>
               ${val.toLocaleString("en-US", { maximumFractionDigits: 0 })}
             </text>
           </g>
@@ -98,12 +98,12 @@ function EquityChart({ curve }: { curve: { date: string; equity: number; pnl: nu
         fill={`url(#${fillId})`}
       />
       {/* Line */}
-      <polyline points={pts} fill="none" stroke={lineColor} strokeWidth="1.8" strokeLinejoin="round" />
+      <polyline points={pts} fill="none" style={{ stroke: lineColor }} strokeWidth="1.8" strokeLinejoin="round" />
       {/* Dots + labels */}
       {curve.map((c, i) => (
         <g key={i}>
-          <circle cx={xOf(i)} cy={yOf(c.equity)} r="2.5" fill={lineColor} />
-          <text x={xOf(i)} y={H - 6} textAnchor="middle" fontSize="7" fill="hsl(220 10% 50%)">
+          <circle cx={xOf(i)} cy={yOf(c.equity)} r="2.5" style={{ fill: lineColor }} />
+          <text x={xOf(i)} y={H - 6} textAnchor="middle" fontSize="7" style={{ fill: "var(--chart-label)" }}>
             {c.date.slice(5)}
           </text>
         </g>

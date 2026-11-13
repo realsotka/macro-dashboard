@@ -1,18 +1,18 @@
 {
   "bias_text": "🔴 Risk-Off",
-  "breakeven_10y": 2.2,
-  "btc_ema21": 76295.59,
-  "btc_ema50": 78184.34,
+  "breakeven_10y": 2.24,
+  "btc_ema21": 76054.45,
+  "btc_ema50": 78080.31,
   "btc_fr_avg_7d": 0.0027,
-  "btc_fr_cur": 0.0061,
+  "btc_fr_cur": 0.01,
   "btc_fr_current": 0.0065,
-  "btc_oi_chg_wow": 1.09,
-  "btc_oi_cur": 3489337,
+  "btc_oi_chg_wow": 7.37,
+  "btc_oi_cur": 3706144,
   "btc_oi_current": 2741797.0,
-  "btc_price": 74087.7,
+  "btc_price": 71435.1,
   "btc_weekly_structure": "LH/LL — спадна",
-  "composite_score": 32.7,
-  "confidence": 35,
+  "composite_score": 29.7,
+  "confidence": 41,
   "cot_btc_net_pos": -7052,
   "cot_btc_oi": 20019.0,
   "cot_btc_oi_trend_pct": 5.6,
@@ -42,7 +42,7 @@
   "etf_cumulative": 56.79,
   "etf_weekly_flow": -1.2817,
   "last_run": "2026-09-21",
-  "last_updated_daily": "2026-11-12",
+  "last_updated_daily": "2026-11-13",
   "macro_score": 39,
   "market_regime": "risk-off",
   "oversold_bounce": false,
@@ -97,10 +97,10 @@
   },
   "qqq_close": 656.1,
   "spy_close": 735.29,
-  "tech_score": 37,
-  "tips_10y": 2.78,
-  "tips_5y": 2.56,
-  "ust_10y": 4.98,
+  "tech_score": 27,
+  "tips_10y": 2.86,
+  "tips_5y": 2.64,
+  "ust_10y": 5.1,
   "vix": 25.64,
   "mstr_mnav_cur": 1.1465,
   "mstr_mnav_prev": 1.106,
@@ -110,7 +110,7 @@
   "macro_score_adj": 39,
   "fomc_hike_prob": 34,
   "fomc_date": "2026-09-16",
-  "mvrv": 1.3666,
+  "mvrv": 1.3697,
   "trade_signal": "risk-off",
   "formula_version": "v4-lite",
   "cot_net_lev": -2591,
@@ -128,18 +128,18 @@
   "eth_etf_cumulative": 12.75,
   "btc_eth_flow_ratio": 3.51,
   "tech_detail": {
-    "ema21_adj": -8,
+    "ema21_adj": -12,
     "rsi_adj": -3,
     "fr_cur_adj": -2,
-    "oi_adj": 0,
-    "pct_vs_ema21": -2.89,
-    "rsi14": 45.91
+    "oi_adj": -6,
+    "pct_vs_ema21": -6.07,
+    "rsi14": 42.78
   },
   "crypto_score": 26,
-  "btc_rsi14": 45.91,
+  "btc_rsi14": 42.78,
   "week_label": "W46 2026",
-  "nominal_10y": 4.98,
-  "sofr": 3.88,
+  "nominal_10y": 5.1,
+  "sofr": 3.89,
   "etf_history_4w": [
     -228.4,
     301.2,
@@ -241,12 +241,12 @@
   "mstr_shares_outstanding": 560000000,
   "vix_prev": 19.06,
   "mstr_purchased_week": 0.0,
-  "composite_v3": 33.7,
+  "composite_v3": 29.7,
   "strategy": "v4-lite swing grid",
   "stables_score": 0.0,
-  "stables_nf30_pct": -4.3,
-  "stables_supply_total": 248870291191.0,
-  "stables_netflow_30d": -11183395325.0,
+  "stables_nf30_pct": -4.408,
+  "stables_supply_total": 248479563116.0,
+  "stables_netflow_30d": -11457434124.0,
   "stables_status": "ok",
   "options_score_fixed": 50.0,
   "formula_weights": {
@@ -257,18 +257,14 @@
     "stables": 0.08
   },
   "btc_4w_avg_flow_M": -352.8,
-  "cb_premium_pct": -0.0095,
-  "cb_premium_24h": -0.0033,
-  "cb_premium_7d": -0.0102,
-  "cb_premium_pos_hours_7d": 19,
+  "cb_premium_pct": -0.0257,
+  "cb_premium_24h": -0.0063,
+  "cb_premium_7d": -0.0095,
+  "cb_premium_pos_hours_7d": 24,
   "cb_premium_hours_7d": 168,
   "cb_premium_label": "weak",
   "cb_premium_pctile": 15,
   "cb_premium_history": [
-    {
-      "d": "2026-10-13",
-      "v": 0.0013
-    },
     {
       "d": "2026-10-14",
       "v": -0.0068
@@ -384,6 +380,10 @@
     {
       "d": "2026-11-11",
       "v": -0.0034
+    },
+    {
+      "d": "2026-11-12",
+      "v": -0.0051
     }
   ],
   "cb_premium_thresholds": {
@@ -391,124 +391,124 @@
     "strong": 0.003,
     "calibrated": "2026-11-09"
   },
-  "cb_premium_updated": "2026-11-12T00:00:00Z",
+  "cb_premium_updated": "2026-11-13T00:00:00Z",
   "cb_premium_source": "Coinbase BTC-USD vs OKX BTC-USDT × Coinbase USDT-USD",
   "cb_premium_status": "ok",
-  "xex_date": "2026-11-12",
+  "xex_date": "2026-11-13",
   "xex_status": "ok",
   "xex_source": "CMC + 9 бірж напряму",
   "xex_n_ex": 14,
-  "xex_oi_total_usd": 33658493620,
-  "xex_oi_chg_24h_pct": -3.07,
+  "xex_oi_total_usd": 34195199078,
+  "xex_oi_chg_24h_pct": 1.59,
   "xex_okx_oi_share_pct": 7.7,
-  "xex_funding_oiw_8h": 0.00537,
-  "xex_funding_7d_8h": 0.00776,
-  "xex_funding_okx_8h": 0.00609,
-  "xex_funding_cex_8h": 0.00575,
-  "xex_funding_hl_8h": 0.00143,
-  "xex_funding_min_8h": 0.00011,
-  "xex_funding_max_8h": 0.01,
+  "xex_funding_oiw_8h": 0.00996,
+  "xex_funding_7d_8h": 0.0082,
+  "xex_funding_okx_8h": 0.01,
+  "xex_funding_cex_8h": 0.00995,
+  "xex_funding_hl_8h": 0.01,
+  "xex_funding_min_8h": 0.0043,
+  "xex_funding_max_8h": 0.01322,
   "xex_funding_pos_n": 14,
   "xex_funding_n": 14,
-  "xex_basis_oiw_pct": -0.0395,
+  "xex_basis_oiw_pct": -0.0202,
   "xex_label": "нейтрально",
   "xex_exchanges": [
     {
       "ex": "Binance",
-      "oi_usd": 10361810656,
-      "funding_8h": 0.00422,
+      "oi_usd": 10409894480,
+      "funding_8h": 0.01,
       "basis": null,
       "src": "CMC"
     },
     {
       "ex": "Gate",
-      "oi_usd": 4265946299,
+      "oi_usd": 4834673893,
       "funding_8h": 0.01,
-      "basis": -0.0355,
-      "src": "API"
-    },
-    {
-      "ex": "Hyperliquid",
-      "oi_usd": 2983532709,
-      "funding_8h": 0.00143,
-      "basis": -0.0486,
+      "basis": -0.0242,
       "src": "API"
     },
     {
       "ex": "Bybit",
-      "oi_usd": 2911491245,
+      "oi_usd": 2976154474,
       "funding_8h": 0.01,
       "basis": null,
       "src": "CMC"
     },
     {
       "ex": "Bitget",
-      "oi_usd": 2782665132,
-      "funding_8h": 0.0031,
-      "basis": -0.0481,
+      "oi_usd": 2850242615,
+      "funding_8h": 0.01,
+      "basis": -0.0213,
+      "src": "API"
+    },
+    {
+      "ex": "Hyperliquid",
+      "oi_usd": 2831939398,
+      "funding_8h": 0.01,
+      "basis": -0.0182,
       "src": "API"
     },
     {
       "ex": "OKX",
-      "oi_usd": 2584088685,
-      "funding_8h": 0.00609,
-      "basis": -0.0424,
+      "oi_usd": 2648690270,
+      "funding_8h": 0.01,
+      "basis": -0.0275,
       "src": "API"
     },
     {
       "ex": "MEXC",
-      "oi_usd": 2533706103,
-      "funding_8h": 0.00352,
+      "oi_usd": 2310912409,
+      "funding_8h": 0.01,
       "basis": null,
       "src": "CMC"
     },
     {
       "ex": "Phemex",
-      "oi_usd": 1187223632,
-      "funding_8h": 0.00011,
+      "oi_usd": 1180978500,
+      "funding_8h": 0.01,
       "basis": null,
       "src": "CMC"
     },
     {
       "ex": "HTX",
-      "oi_usd": 1078150019,
+      "oi_usd": 1028807671,
       "funding_8h": 0.01,
       "basis": null,
       "src": "API"
     },
     {
-      "ex": "BingX",
-      "oi_usd": 718648787,
-      "funding_8h": 0.009,
-      "basis": -0.0475,
+      "ex": "KuCoin",
+      "oi_usd": 855458898,
+      "funding_8h": 0.01,
+      "basis": -0.0121,
       "src": "API"
     },
     {
-      "ex": "KuCoin",
-      "oi_usd": 700012686,
-      "funding_8h": 0.0038,
-      "basis": -0.0411,
+      "ex": "BingX",
+      "oi_usd": 745026114,
+      "funding_8h": 0.01,
+      "basis": -0.0337,
       "src": "API"
     },
     {
       "ex": "Deribit",
-      "oi_usd": 684039810,
-      "funding_8h": 0.00172,
-      "basis": 0.0201,
+      "oi_usd": 698251270,
+      "funding_8h": 0.0043,
+      "basis": 0.027,
       "src": "API"
     },
     {
       "ex": "Bitfinex",
-      "oi_usd": 676238600,
-      "funding_8h": 0.00733,
+      "oi_usd": 640712782,
+      "funding_8h": 0.01322,
       "basis": null,
       "src": "CMC"
     },
     {
       "ex": "Kraken",
-      "oi_usd": 190939256,
-      "funding_8h": 0.00795,
-      "basis": 0.0033,
+      "oi_usd": 183456304,
+      "funding_8h": 0.0123,
+      "basis": 0.0121,
       "src": "API"
     }
   ],
@@ -536,21 +536,27 @@
       "oi_usd": 33658493620,
       "funding_8h": 0.00537,
       "okx_funding_8h": 0.00609
+    },
+    {
+      "date": "2026-11-13",
+      "oi_usd": 34195199078,
+      "funding_8h": 0.00996,
+      "okx_funding_8h": 0.01
     }
   ],
-  "xex_liq_long_24h": 160453420,
-  "xex_liq_short_24h": 115944041,
-  "xex_liq_total_24h": 276397460,
-  "xex_liq_long_share_pct": 58.1,
-  "xex_liq_long_4h": 100418068,
-  "xex_liq_short_4h": 7044422,
+  "xex_liq_long_24h": 511732290,
+  "xex_liq_short_24h": 73075957,
+  "xex_liq_total_24h": 584808247,
+  "xex_liq_long_share_pct": 87.5,
+  "xex_liq_long_4h": 8048797,
+  "xex_liq_short_4h": 5334909,
   "yields_source": "FRED + US Treasury",
-  "yields_date": "2026-11-10",
+  "yields_date": "2026-11-12",
   "yields_detail": {
-    "tips_5y": "US Treasury 2026-11-10",
-    "tips_10y": "US Treasury 2026-11-10",
-    "breakeven_10y": "FRED 2026-11-10",
-    "nominal_10y": "US Treasury 2026-11-10",
-    "sofr": "FRED 2026-11-09"
+    "tips_5y": "US Treasury 2026-11-12",
+    "tips_10y": "US Treasury 2026-11-12",
+    "breakeven_10y": "FRED 2026-11-12",
+    "nominal_10y": "US Treasury 2026-11-12",
+    "sofr": "FRED 2026-11-10"
   }
 }
